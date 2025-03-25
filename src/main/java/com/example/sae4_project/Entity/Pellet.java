@@ -18,6 +18,12 @@ public class Pellet extends Entity {
         this.circle = circle;
     }
 
+    public Pellet(double x, double y) {
+        Circle circle = new Circle(x, y, 5);
+        circle.setFill(Color.BLUE);
+        this.circle = circle;
+    }
+
     public Circle getCircle() {
         return this.circle;
     }

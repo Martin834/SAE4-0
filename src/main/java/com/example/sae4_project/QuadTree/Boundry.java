@@ -41,7 +41,7 @@ public class Boundry {
         if(coordinate.getX() < this.coordinate.getX()) return false;
         if(coordinate.getY() < this.coordinate.getY()) return false;
         if(coordinate.getX() >= this.coordinate.getX() + this.length) return false;
-        if(coordinate.getX() >= this.coordinate.getY() + this.height) return false;
+        if(coordinate.getY() >= this.coordinate.getY() + this.height) return false;
         return true;
     }
 

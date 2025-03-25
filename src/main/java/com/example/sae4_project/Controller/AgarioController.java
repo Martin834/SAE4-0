@@ -1,14 +1,12 @@
 package com.example.sae4_project.Controller;
 
-import com.example.sae4_project.Entity.CreatorPellet;
-import com.example.sae4_project.Entity.CreatorPlayer;
-import com.example.sae4_project.Entity.Pellet;
-import com.example.sae4_project.Entity.Player;
+import com.example.sae4_project.Entity.*;
 import com.example.sae4_project.QuadTree.Camera;
 import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
 import com.example.sae4_project.QuadTree.QuadTree;
 import javafx.animation.AnimationTimer;
+import javafx.beans.binding.Bindings;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class AgarioController extends Controller {
@@ -55,17 +54,28 @@ public class AgarioController extends Controller {
 
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        for (int i=0; i<100 ; i++) {
-            Pellet pellet = new CreatorPellet().create();
-            Circle circlePellet = pellet.getCircle();
-            addCircle(circlePellet);
+        ArrayList<Entity> liste = new ArrayList<>();
+        map.getAllEntities(map.getQuadTree(), liste);
+
+        for(Entity elm : liste){
+            Pellet pellet = (Pellet) elm;
+            addCircle(pellet.getCircle());
         }
 
         this.player = new CreatorPlayer().create();
         Circle circle = this.player.getCircle();
         addCircle(circle);
 
+        System.out.println(conteneurGlobal.widthProperty().doubleValue());
 
+        cam.getCoordinate().XProperty().bind( Bindings.add(
+                Bindings.multiply(-1,
+                        Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty())); //circle.centerXProperty()));
+        cam.getCoordinate().YProperty().bind(Bindings.add(
+                Bindings.multiply(-1,
+                        Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty())); // circle.centerYProperty()));
+        terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
+        terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
 
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
 
@@ -75,7 +85,6 @@ public class AgarioController extends Controller {
     EventHandler handler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            System.out.println(mouseEvent.getX() + ", " + mouseEvent.getY());
             posX = mouseEvent.getX();
             posY = mouseEvent.getY();
 
@@ -86,7 +95,9 @@ public class AgarioController extends Controller {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
+                System.out.println(conteneurGlobal.widthProperty().doubleValue());
                 player.moveTowards(posX, posY);
+
             }
         };
         timer.start();

@@ -1,5 +1,10 @@
 package com.example.sae4_project.QuadTree;
 
+import com.example.sae4_project.Entity.Entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Map {
 
     public QuadTree getQuadTree() {
@@ -29,6 +34,20 @@ public class Map {
             return toFind;
         }
         return findQuadTree( toFind.getChild(toFind.where(coordinateToFind)) , coordinateToFind);
+    }
+
+    public void getAllEntities(QuadTree toFind, ArrayList<Entity> liste) {
+        if(toFind.getDepth() == 0){
+            for(Entity elm : toFind.getEntities()){
+                liste.add(elm);
+            }
+        } else {
+            getAllEntities(toFind.getChild(Orientation.NORTH_WEST), liste);
+            getAllEntities(toFind.getChild(Orientation.NORTH_EAST), liste);
+            getAllEntities(toFind.getChild(Orientation.SOUTH_WEST), liste);
+            getAllEntities(toFind.getChild(Orientation.SOUTH_EAST), liste);
+        }
+
     }
 
 }

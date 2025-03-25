@@ -1,9 +1,12 @@
 package com.example.sae4_project.QuadTree;
 
+import com.example.sae4_project.Entity.Entity;
+import com.example.sae4_project.Entity.Pellet;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class QuadTree {
 
@@ -19,7 +22,15 @@ public class QuadTree {
     private Boundry boundry;
     private QuadTree parent;
 
-    private ArrayList<Circle> entities;
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(ArrayList<Entity> entities) {
+        this.entities = entities;
+    }
+
+    private ArrayList<Entity> entities = new ArrayList<>();
 
     private HashMap<Orientation, QuadTree> children;
 
@@ -38,14 +49,18 @@ public class QuadTree {
         }
 
         this.children = new HashMap<>();
-        this.entities = new ArrayList<>();
-
 
         if(depth > 0){
             this.children.put(Orientation.NORTH_EAST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX(), coordinate.getY() + this.boundry.getLength()/2)));
             this.children.put(Orientation.NORTH_WEST, new QuadTree(depth - 1, this, coordinate));
             this.children.put(Orientation.SOUTH_EAST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX() + this.boundry.getLength()/2, coordinate.getY() +this.boundry.getLength()/2)));
             this.children.put(Orientation.SOUTH_WEST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX() + this.boundry.getLength()/2, coordinate.getY())));
+        } else {
+            Random r = new Random();
+            this.entities.add(new Pellet(
+                    r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
+                            r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())
+                    ));
         }
     }
 
@@ -65,20 +80,18 @@ public class QuadTree {
         this.parent = parent;
     }
 
-    public void addEntity(Circle c){
-        this.entities.add(c);
-    }
 
     public Orientation where(Coordinate coordinateToFind){
 
         Orientation orientation = Orientation.NONE;
 
         for(Orientation key : this.children.keySet()){
+
             if(this.children.get(key).boundry.contains(coordinateToFind)){
                 orientation = key;
             }
         }
-        System.out.println(orientation);
+
         return orientation;
     }
 
@@ -90,14 +103,6 @@ public class QuadTree {
     @Override
     public String toString() {
         String texte = this.getBoundry().getCoordinate().getX() + " : " + this.getBoundry().getCoordinate().getY();
-
-        for(Orientation key : this.children.keySet()){
-            for(int i = 0; i < this.children.get(key).getDepth(); i++){
-                texte += "\n\t";
-            }
-             texte += this.children.get(key);
-        }
-
         return texte;
     }
 }

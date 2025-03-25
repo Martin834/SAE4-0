@@ -1,5 +1,6 @@
 package com.example.sae4_project.Entity;
 
+import com.example.sae4_project.QuadTree.Coordinate;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -7,6 +8,7 @@ import java.util.Map;
 
 public class Player extends Entity {
 
+    private Coordinate coordinate;
     private double speed;
     private double radius;
     private Circle circle;
@@ -18,6 +20,10 @@ public class Player extends Entity {
         Circle circle = new Circle(400-this.radius/2, 300-this.radius/2, this.radius);
         circle.setFill(Color.RED);
         this.circle = circle;
+    }
+
+    public Player(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
     public void moveTowards(double posXMouse, double posYMouse) {
