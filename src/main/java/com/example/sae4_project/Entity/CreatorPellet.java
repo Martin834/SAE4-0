@@ -1,8 +1,12 @@
-package com.example.sae4_project;
+package com.example.sae4_project.Entity;
 
-public class CreatorPellet extends Creator{
+public class CreatorPellet extends Creator {
+
+    public CreatorPellet() {
+        this.create();
+    }
     @Override
-    public Entity create() {
+    public Pellet create() {
         return new Pellet();
     }
 }

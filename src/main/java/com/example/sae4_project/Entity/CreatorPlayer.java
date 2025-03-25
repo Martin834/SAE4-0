@@ -1,8 +1,13 @@
-package com.example.sae4_project;
+package com.example.sae4_project.Entity;
 
 public class CreatorPlayer extends Creator{
+
+    public CreatorPlayer() {
+        this.create();
+    }
+
     @Override
-    public Entity create() {
+    public Player create() {
         return new Player();
     }
 }

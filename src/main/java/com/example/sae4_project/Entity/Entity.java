@@ -1,4 +1,4 @@
-package com.example.sae4_project;
+package com.example.sae4_project.Entity;
 
 public abstract class Entity {
 
