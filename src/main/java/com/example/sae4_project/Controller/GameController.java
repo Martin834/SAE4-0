@@ -1,5 +1,6 @@
 package com.example.sae4_project.Controller;
 
+import com.example.sae4_project.QuadTree.Map;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -21,6 +22,8 @@ public class GameController extends Controller {
     private Pane miniMap;
     @FXML
     private AnchorPane conteneurGlobal;
+
+    private Map map = Map.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

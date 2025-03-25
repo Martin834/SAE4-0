@@ -3,6 +3,7 @@ package com.example.sae4_project.QuadTree;
 public class Map {
 
     private QuadTree quadTree;
+    private Camera cam;
     private static Map instance;
 
     public static Map getInstance() {
@@ -15,5 +16,7 @@ public class Map {
     private Map(){
         this.quadTree = new QuadTree(6, null);
     }
+
+
 
 }
