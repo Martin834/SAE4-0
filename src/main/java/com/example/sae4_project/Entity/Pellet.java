@@ -25,6 +25,13 @@ public class Pellet extends Entity {
 
     }
 
+    public Pellet(double x, double y) {
+        Circle circle = new Circle(x, y, 5);
+        circle.setFill(Color.BLUE);
+        this.circle = circle;
+        this.mass = 1;
+    }
+
     public Circle getCircle() {
         return circle;
     }

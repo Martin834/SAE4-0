@@ -1,5 +1,6 @@
 package com.example.sae4_project.Entity;
 
+import com.example.sae4_project.QuadTree.Coordinate;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 public class Player extends MoveableBody {
 
+
     public Player() {
         super();
         this.mass = 5;
@@ -16,9 +18,10 @@ public class Player extends MoveableBody {
         circle.setFill(Color.RED);
     }
 
+
     public Pellet detectPellet(ArrayList<Pellet> all) {
         double test = this.circle.getCenterX();
-        for(Pellet pellet : all ){
+        for (Pellet pellet : all) {
             Shape intersect = Circle.intersect(this.circle, pellet.getCircle());
             if (intersect.getBoundsInLocal().getWidth() != -1) {
                 return pellet;
@@ -26,6 +29,10 @@ public class Player extends MoveableBody {
         }
         return null;
     }
+
+
+
+
 
     public Circle getCircle() {
         return circle;
