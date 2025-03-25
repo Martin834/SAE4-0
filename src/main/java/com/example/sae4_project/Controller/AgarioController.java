@@ -28,6 +28,7 @@ public class AgarioController implements Initializable {
 
     @FXML
     private void addCircle(Circle circle) {
+        System.out.println("efjsndjgvksrnvkjsd");
         this.terrain.getChildren().add(circle);
     }
 
@@ -56,7 +57,6 @@ public class AgarioController implements Initializable {
     EventHandler handler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            System.out.println(mouseEvent.getX() + ", " + mouseEvent.getY());
             posX = mouseEvent.getX();
             posY = mouseEvent.getY();
 
