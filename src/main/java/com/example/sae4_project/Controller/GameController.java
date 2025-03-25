@@ -1,5 +1,6 @@
 package com.example.sae4_project.Controller;
 
+
 import com.example.sae4_project.QuadTree.Camera;
 import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
@@ -29,6 +30,7 @@ public class GameController extends Controller {
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0,0));
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -39,8 +41,6 @@ public class GameController extends Controller {
 
         this.terrain.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        this.miniMap.setLayoutX(conteneurGlobal.getWidth());
-        this.miniMap.setLayoutY(conteneurGlobal.getHeight());
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         QuadTree zone = this.map.findQuadTree(map.getQuadTree(), new Coordinate(834,834));
