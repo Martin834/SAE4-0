@@ -15,14 +15,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class AgarioController implements Initializable {
     @FXML
     private Pane terrain;
-
     private Player player;
-
+    private Pellet touchedPellet;
+    private ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
     private double posX;
     private double posY;
 
@@ -37,22 +38,16 @@ public class AgarioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        for (int i=0; i<100 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             Pellet pellet = new CreatorPellet().create();
             Circle circlePellet = pellet.getCircle();
             addCircle(circlePellet);
+            this.allPellets.add(pellet);
         }
 
         this.player = new CreatorPlayer().create();
         Circle circle = this.player.getCircle();
-
-        if (circle == null) {
-            System.out.println("efjsndjgvksrnvkjsd");
-        }
-
         addCircle(circle);
-
-
 
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
 
@@ -73,6 +68,15 @@ public class AgarioController implements Initializable {
             @Override
             public void handle(long l) {
                 player.moveTowards(posX, posY);
+
+                touchedPellet = player.detectPellet(allPellets);
+                if (touchedPellet != null) {
+                    //System.out.println(touchedPellet.getIdentifier());
+                    player.makeFatter(touchedPellet);
+                    terrain.getChildren().remove(touchedPellet.getCircle());
+                    allPellets.remove(touchedPellet);
+                }
+                touchedPellet = null;
             }
         };
         timer.start();

@@ -8,4 +8,6 @@ public abstract class Entity {
     protected double mass;
     protected Circle circle;
 
+
+
 }

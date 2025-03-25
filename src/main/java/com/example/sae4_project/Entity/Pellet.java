@@ -7,19 +7,30 @@ import javafx.scene.shape.Circle;
 import java.util.Random;
 
 public class Pellet extends Entity {
-    private Circle circle;
+    private int posX;
+    private int posY;
 
     public Pellet() {
+        super();
+
         Random r = new Random();
-        int xAleatoire = r.nextInt(801);
-        int yAleatoire = r.nextInt(801);
-        Circle circle = new Circle(xAleatoire, yAleatoire, 5);
+        this.posX = r.nextInt(801);
+        this.posY = r.nextInt(801);
+        this.mass = 1;
+        circle = new Circle(this.posX, this.posY, 5);
         circle.setFill(Color.BLUE);
-        this.circle = circle;
+
+        this.identifier = this.posX * this.posY * r.nextInt(834);
+
+
     }
 
     public Circle getCircle() {
-        return this.circle;
+        return circle;
+    }
+
+    public int getIdentifier() {
+        return this.identifier;
     }
 
 }
