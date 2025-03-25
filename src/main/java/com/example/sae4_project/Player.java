@@ -21,22 +21,6 @@ public class Player extends Entity {
         return 0.0;
     }
 
-    public void toRight() {
-        //TODO A IMPLEMENTER
-    }
-
-    public void toLeft() {
-        //TODO A IMPLEMENTER
-    }
-
-    public void toTop() {
-        //TODO A IMPLEMENTER
-    }
-
-    public void toBottom() {
-        //TODO A IMPLEMENTER
-    }
-
     public double calculateMaxSpeed() {
         //TODO A IMPLEMENTER
         return 0.0;
@@ -55,6 +39,4 @@ public class Player extends Entity {
         //TODO A IMPLEMENTER
         return 0.0;
     }
-
-
 }
