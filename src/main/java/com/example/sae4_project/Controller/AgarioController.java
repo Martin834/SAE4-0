@@ -71,12 +71,32 @@ public class AgarioController extends Controller {
 
         cam.getCoordinate().XProperty().bind( Bindings.add(
                 Bindings.multiply(-1,
-                        Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty())); //circle.centerXProperty()));
+                        Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
         cam.getCoordinate().YProperty().bind(Bindings.add(
                 Bindings.multiply(-1,
-                        Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty())); // circle.centerYProperty()));
+                        Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
+
+        terrain.translateXProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.doubleValue() - oldValue.doubleValue() > 0.5 || newValue.doubleValue() - oldValue.doubleValue() < -0.5) {
+            }
+            else{
+                System.out.println("valX:" + (newValue.doubleValue() - oldValue.doubleValue()));
+                posX -= newValue.doubleValue() - oldValue.doubleValue();
+            }
+
+        });
+        terrain.translateYProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.doubleValue() - oldValue.doubleValue() > 0.5 || newValue.doubleValue() - oldValue.doubleValue() < -0.5) {
+            }
+            else{
+
+                System.out.println("valY:" + (newValue.doubleValue() - oldValue.doubleValue()));
+                posY -= newValue.doubleValue() - oldValue.doubleValue();
+            }
+
+        });
 
 
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
