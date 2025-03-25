@@ -1,6 +1,9 @@
 package com.example.sae4_project.Controller;
 
+import com.example.sae4_project.QuadTree.Camera;
+import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
+import com.example.sae4_project.QuadTree.QuadTree;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -24,6 +27,7 @@ public class GameController extends Controller {
     private AnchorPane conteneurGlobal;
 
     private Map map = Map.getInstance();
+    private Camera cam = new Camera(new Coordinate(0,0));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -34,11 +38,14 @@ public class GameController extends Controller {
         this.terrain.setLayoutY(0);
 
         this.terrain.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-        System.out.println(conteneurGlobal.widthProperty().doubleValue());
 
         this.miniMap.setLayoutX(conteneurGlobal.getWidth());
         this.miniMap.setLayoutY(conteneurGlobal.getHeight());
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        QuadTree zone = this.map.findQuadTree(map.getQuadTree(), new Coordinate(834,834));
+        System.out.println(zone.getBoundry().getCoordinate().getX());
+        System.out.println(zone.getBoundry().getCoordinate().getY());
     }
 
 }

@@ -6,6 +6,10 @@ public class Camera extends Boundry{
 
     private SimpleDoubleProperty zoom = new SimpleDoubleProperty();
 
+    public Camera(Coordinate coordinate) {
+        super(coordinate);
+    }
+
     public SimpleDoubleProperty zoomProperty() {
         return this.zoom;
     }

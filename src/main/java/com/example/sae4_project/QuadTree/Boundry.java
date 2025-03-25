@@ -6,6 +6,10 @@ public class Boundry {
 
     private Coordinate coordinate;
 
+    public Boundry(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
+
     public Coordinate getCoordinate() {
         return coordinate;
     }
@@ -32,5 +36,13 @@ public class Boundry {
 
     private double length;
     private double height;
+
+    public boolean contains(Coordinate coordinate){
+        if(coordinate.getX() < this.coordinate.getX()) return false;
+        if(coordinate.getY() < this.coordinate.getY()) return false;
+        if(coordinate.getX() >= this.coordinate.getX() + this.length) return false;
+        if(coordinate.getX() >= this.coordinate.getY() + this.height) return false;
+        return true;
+    }
 
 }
