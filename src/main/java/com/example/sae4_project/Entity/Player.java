@@ -10,49 +10,40 @@ public class Player extends Entity {
     private double speed;
     private double radius;
     private Circle circle;
-    private double posX;
-    private double posY;
+    private double smoothing = 80;
 
     public Player() {
         this.radius=25;
-        this.posX = 400-this.radius/2;
-        this.posY = 300-this.radius/2;
 
-        Circle circle = new Circle(this.posX, this.posY, this.radius);
+        Circle circle = new Circle(400-this.radius/2, 300-this.radius/2, this.radius);
         circle.setFill(Color.RED);
         this.circle = circle;
     }
 
     public void moveTowards(double posXMouse, double posYMouse) {
-        if (posXMouse > this.posX) {
-            this.posX++;
-            this.circle.setCenterX(this.posX);
+
+        double[] velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
+        double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1])) / this.smoothing;
+
+        velocity = normalizeDouble(velocity);
+
+        this.circle.setCenterX(this.circle.getCenterX() + velocity[0]);
+        this.circle.setCenterY(this.circle.getCenterY() + velocity[1]);
+    }
+
+    public double[] normalizeDouble(double[] array){
+
+        double magnitude = Math.sqrt( (array[0] * array[0]) + (array[1] * array[1]) );
+
+        if (array[0] != 0 || array[1] != 0 ){
+            return new double[]{array[0] / magnitude, array[1] / magnitude};
         }
-        else if (posXMouse < this.posX) {
-            this.posX--;
-            this.circle.setCenterX(this.posX);
-        }
-        if (posYMouse > this.posY) {
-            this.posY++;
-            this.circle.setCenterY(this.posY);
-        }
-        else if (posYMouse < this.posY) {
-            this.posY--;
-            this.circle.setCenterY(this.posY);
-        }
+        return new double[]{0,0};
     }
 
 
     public Circle getCircle() {
         return this.circle;
-    }
-
-    public double getPosX() {
-        return this.posX;
-    }
-
-    public double getPosY() {
-        return this.posY;
     }
 
     public double calculateRadius() {

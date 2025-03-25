@@ -4,6 +4,7 @@ import com.example.sae4_project.Entity.CreatorPellet;
 import com.example.sae4_project.Entity.CreatorPlayer;
 import com.example.sae4_project.Entity.Pellet;
 import com.example.sae4_project.Entity.Player;
+import javafx.animation.AnimationTimer;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,6 +22,9 @@ public class AgarioController implements Initializable {
     private Pane terrain;
 
     private Player player;
+
+    private double posX;
+    private double posY;
 
     @FXML
     private void addCircle(Circle circle) {
@@ -45,15 +49,28 @@ public class AgarioController implements Initializable {
 
 
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
+
+        this.gameLoop();
     }
 
     EventHandler handler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             System.out.println(mouseEvent.getX() + ", " + mouseEvent.getY());
-            player.moveTowards(mouseEvent.getX(), mouseEvent.getY());
-            //player.getCircle().setCenterX(player.getPosX());
-            //player.getCircle().setCenterY(player.getPosY());
+            posX = mouseEvent.getX();
+            posY = mouseEvent.getY();
+
         }
     };
+
+    private void gameLoop() {
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                player.moveTowards(posX, posY);
+            }
+        };
+        timer.start();
+    }
+
 }
