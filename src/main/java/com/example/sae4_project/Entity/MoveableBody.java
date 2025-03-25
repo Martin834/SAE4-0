@@ -2,7 +2,7 @@ package com.example.sae4_project.Entity;
 
 public abstract class MoveableBody extends Entity {
 
-    public double speed = 1;
+    public double speed = 5;
     public double smoothing = 80;
 
     public void moveTowards(double posXMouse, double posYMouse) {

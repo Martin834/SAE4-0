@@ -10,11 +10,15 @@ public class Pellet extends Entity {
     private Circle circle;
 
     public Pellet() {
-        Random r = new Random();
-        int xAleatoire = r.nextInt(801);
-        int yAleatoire = r.nextInt(801);
+        Random random = new Random();
+        int xAleatoire = random.nextInt(801);
+        int yAleatoire = random.nextInt(801);
         Circle circle = new Circle(xAleatoire, yAleatoire, 5);
-        circle.setFill(Color.BLUE);
+        Random rand = new Random();
+        int r = rand.nextInt(256);
+        int g = rand.nextInt(256);
+        int b = rand.nextInt(256);
+        circle.setFill(Color.rgb(r,g,b));
         this.circle = circle;
     }
 
