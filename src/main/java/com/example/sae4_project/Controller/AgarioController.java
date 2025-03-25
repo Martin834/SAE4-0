@@ -13,10 +13,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.math.MathContext;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -75,19 +77,35 @@ public class AgarioController extends Controller {
         cam.getCoordinate().YProperty().bind(Bindings.add(
                 Bindings.multiply(-1,
                         Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
+        cam.zoomProperty().bind(Bindings.divide(5,Bindings.createDoubleBinding(()-> Math.sqrt(player.massProperty().get()), player.massProperty())));
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
+        terrain.scaleXProperty().bind(cam.zoomProperty());
+        terrain.scaleYProperty().bind(cam.zoomProperty());
 
 
-        this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
+        this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
+        this.terrain.addEventHandler(ScrollEvent.SCROLL, handlerScrolled);
 
         this.gameLoop();
     }
 
-    EventHandler handler = new EventHandler<MouseEvent>() {
+    EventHandler handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             player.moveTowards( mouseEvent.getX(), mouseEvent.getY());
+
+        }
+    };
+
+    EventHandler handlerScrolled = new EventHandler<ScrollEvent>() {
+        @Override
+        public void handle(ScrollEvent scrollEvent) {
+            if(scrollEvent.getDeltaY() > 0){
+                System.out.println("haut");
+            }else {
+                System.out.println("bas");
+            }
 
         }
     };
@@ -98,7 +116,7 @@ public class AgarioController extends Controller {
             public void handle(long l) {
 
                 player.move();
-
+                System.out.println(terrain.scaleXProperty());
 
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
