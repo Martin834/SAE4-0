@@ -3,10 +3,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-
-<AnchorPane fx:id="conteneurGlobal" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="conteneurGlobal" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane fx:id="terrain" layoutX="200.0" layoutY="63.0" prefHeight="200.0" prefWidth="200.0" />
-      <Pane fx:id="miniMap" layoutX="492.0" layoutY="286.0" prefHeight="100.0" prefWidth="100.0" />
+      <Pane fx:id="miniMap" layoutX="492.0" layoutY="286.0" prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
    </children>
 </AnchorPane>

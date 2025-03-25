@@ -1,5 +1,6 @@
 package com.example.sae4_project.Controller;
 
+import com.example.sae4_project.QuadTree.Map;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -22,6 +23,8 @@ public class GameController extends Controller {
     @FXML
     private AnchorPane conteneurGlobal;
 
+    private Map map = Map.getInstance();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -33,8 +36,6 @@ public class GameController extends Controller {
         this.terrain.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
         System.out.println(conteneurGlobal.widthProperty().doubleValue());
 
-        this.miniMap.setLayoutX(conteneurGlobal.getWidth());
-        this.miniMap.setLayoutY(conteneurGlobal.getHeight());
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
