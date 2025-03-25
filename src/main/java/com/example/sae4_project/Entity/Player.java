@@ -9,9 +9,8 @@ public class Player extends MoveableBody {
 
     public Player() {
         super();
-        Circle circle = new Circle(400-25/2, 300-25/2, 25);
+        circle = new Circle(400-25/2, 300-25/2, 25);
         circle.setFill(Color.RED);
-
     }
 
 

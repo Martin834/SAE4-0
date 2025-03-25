@@ -28,7 +28,7 @@ public class AgarioController implements Initializable {
 
     @FXML
     private void addCircle(Circle circle) {
-        System.out.println("efjsndjgvksrnvkjsd");
+
         this.terrain.getChildren().add(circle);
     }
 
@@ -45,6 +45,11 @@ public class AgarioController implements Initializable {
 
         this.player = new CreatorPlayer().create();
         Circle circle = this.player.getCircle();
+
+        if (circle == null) {
+            System.out.println("efjsndjgvksrnvkjsd");
+        }
+
         addCircle(circle);
 
 
