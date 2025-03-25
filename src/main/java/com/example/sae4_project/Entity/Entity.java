@@ -6,6 +6,6 @@ public abstract class Entity {
 
     protected int identifier;
     protected double mass;
-    protected Circle circle;
+    public Circle circle;
 
 }
