@@ -6,7 +6,7 @@ public class Camera extends Boundry{
 
     private SimpleDoubleProperty zoom = new SimpleDoubleProperty();
 
-    public SimpleDoubleProperty propertyZoom() {
+    public SimpleDoubleProperty zoomProperty() {
         return this.zoom;
     }
 

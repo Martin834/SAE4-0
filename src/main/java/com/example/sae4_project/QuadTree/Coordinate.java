@@ -8,7 +8,7 @@ public class Coordinate {
 
     private SimpleDoubleProperty Y = new SimpleDoubleProperty();
 
-    public SimpleDoubleProperty propertyX(){
+    public SimpleDoubleProperty XProperty(){
         return this.X;
     }
 
@@ -28,7 +28,7 @@ public class Coordinate {
         Y.set(y);
     }
 
-    public SimpleDoubleProperty propertyY(){
+    public SimpleDoubleProperty YProperty(){
         return this.Y;
     }
 
