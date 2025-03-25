@@ -1,8 +1,11 @@
 package com.example.sae4_project.Entity;
 
+import javafx.scene.shape.Circle;
+
 public abstract class Entity {
 
-    private int identifier;
-    private double mass;
+    protected int identifier;
+    protected double mass;
+    protected Circle circle;
 
 }
