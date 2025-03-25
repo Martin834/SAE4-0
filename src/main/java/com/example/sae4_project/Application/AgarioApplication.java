@@ -1,4 +1,4 @@
-package com.example.sae4_project;
+package com.example.sae4_project.Application;
 
 import com.example.sae4_project.Controller.Controller;
 import com.example.sae4_project.Controller.GameController;
@@ -10,13 +10,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+
+public class AgarioApplication extends Application {
 
     private static Scene scene;
+
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("game", new GameController()), 800, 600 );
-        stage.setTitle("Hello!");
+        stage.setTitle("agar.io");
         stage.setScene(scene);
         stage.show();
     }
@@ -26,7 +28,7 @@ public class HelloApplication extends Application {
     }
 
     private static Parent loadFXML(String fxml, Controller controller) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AgarioApplication.class.getResource("/com/example/sae4_project/"+fxml + ".fxml"));
         fxmlLoader.setController(controller);
         return fxmlLoader.load();
     }
