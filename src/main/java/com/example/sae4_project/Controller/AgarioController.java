@@ -78,26 +78,6 @@ public class AgarioController extends Controller {
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
 
-        terrain.translateXProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.doubleValue() - oldValue.doubleValue() > 0.5 || newValue.doubleValue() - oldValue.doubleValue() < -0.5) {
-            }
-            else{
-                System.out.println("valX:" + (newValue.doubleValue() - oldValue.doubleValue()));
-                posX -= newValue.doubleValue() - oldValue.doubleValue();
-            }
-
-        });
-        terrain.translateYProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.doubleValue() - oldValue.doubleValue() > 0.5 || newValue.doubleValue() - oldValue.doubleValue() < -0.5) {
-            }
-            else{
-
-                System.out.println("valY:" + (newValue.doubleValue() - oldValue.doubleValue()));
-                posY -= newValue.doubleValue() - oldValue.doubleValue();
-            }
-
-        });
-
 
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
 
@@ -107,8 +87,7 @@ public class AgarioController extends Controller {
     EventHandler handler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            posX = mouseEvent.getX();
-            posY = mouseEvent.getY();
+            player.moveTowards( mouseEvent.getX(), mouseEvent.getY());
 
         }
     };
@@ -118,7 +97,7 @@ public class AgarioController extends Controller {
             @Override
             public void handle(long l) {
 
-                player.moveTowards(posX, posY);
+                player.move();
 
 
                 touchedPellet = player.detectPellet(allPellets);
