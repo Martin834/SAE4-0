@@ -15,22 +15,23 @@ public class ServerManager extends Thread {
 
     private ServerSocket socket;
     private Server server;
-    private boolean running;
+    private boolean running = true;
 
     public ServerManager(Server server) {
         this.server = server;
     }
-
     public void run() {
         super.run();
         try {
 
-            socket = new ServerSocket(834);
+            socket = new ServerSocket(10000);
 
             while(running){
+                System.out.println("En attente de connexion...");
                 Socket income = socket.accept();
                 this.server.addClient(income);
 
+                System.out.println("Client connecté");
             }
 
             socket.close();
@@ -56,5 +57,9 @@ public class ServerManager extends Thread {
             throw new RuntimeException(e);
         }
     }
-
+/*
+    public static void main(String[] args) {
+        ServerManager s = new ServerManager(null);
+        s.start();
+    }*/
 }
