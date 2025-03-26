@@ -8,20 +8,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class AgarioApplication extends Application {
 
     private static Scene scene;
+    public static ArrayList<Thread> threads = new ArrayList<>();
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("connection", new ConnectionController()), 800, 600 );
+        Controller controller = new ConnectionController();
+        scene = new Scene(loadFXML("connection", controller), 800, 600 );
         stage.setTitle("agar.io");
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest((WindowEvent event) ->
+        {
+            for(Thread th : threads){
+                th.interrupt();
+            }
+        });
     }
 
     public static void setRoot(String fxml, Controller controller) throws IOException {
@@ -37,4 +47,6 @@ public class AgarioApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+
 }
