@@ -35,12 +35,12 @@ public class Enemy extends MoveableBody{
 
     private void assignRandomStrategy() {
         Random random = new Random();
-        int choice = random.nextInt(3); // 0, 1 ou 2
+        int choice = random.nextInt(2); // 0, 1 ou 2
 
         switch (choice) {
             case 0 -> strategy = new RandomAI();
             case 1 -> strategy = new HunterAI();
-            case 2 -> strategy = new CollectorAI();
+            //case 2 -> strategy = new CollectorAI();
         }
     }
 
