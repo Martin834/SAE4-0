@@ -20,6 +20,8 @@ public class Map {
     private QuadTree quadTree;
     private static Map instance;
 
+    public static double size = 4000;
+
     public static Map getInstance() {
         if(instance == null){
             instance = new Map();

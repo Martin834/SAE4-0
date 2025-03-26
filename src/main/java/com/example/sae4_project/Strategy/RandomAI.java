@@ -12,9 +12,9 @@ public class RandomAI implements AIStrategy {
     @Override
     public void execute(Enemy enemy) {
         long now = System.nanoTime();
-        if (now - lastChangeTime > 2_000_000_000L) { // Change de direction toutes les 2 secondes
+        if (now - lastChangeTime > 2_000_000_000L) {
             double angle = random.nextDouble() * 2 * Math.PI;
-            double speed = 1 + random.nextDouble() * 2; // Vitesse aléatoire
+            double speed = 1 + random.nextDouble() * 2;
             enemy.velocity[0] = Math.cos(angle) * speed;
             enemy.velocity[1] = Math.sin(angle) * speed;
             lastChangeTime = now;
