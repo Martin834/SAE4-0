@@ -13,10 +13,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -34,7 +31,7 @@ public class AgarioController extends Controller {
     @FXML
     private AnchorPane conteneurGlobal;
 
-
+    private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
     private Player player;
     private Pellet touchedPellet;
     private ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
@@ -50,16 +47,21 @@ public class AgarioController extends Controller {
         this.terrain.getChildren().add(circle);
     }
 
-
+    @FXML
+    private void removeCircle(Circle circle) {
+        this.terrain.getChildren().remove(circle);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
 
         this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
         this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
         this.terrain.setLayoutY(0);
+        this.terrain.setFocusTraversable(true);
+        this.terrain.requestFocus();
+
 
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -70,7 +72,7 @@ public class AgarioController extends Controller {
         }
 
         this.player = new CreatorPlayer().create();
-        Circle circle = this.player.getCircle();
+        Circle circle = player.getCirclesList().get(0);
         addCircle(circle);
 
         cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
@@ -90,15 +92,19 @@ public class AgarioController extends Controller {
         terrain.scaleYProperty().bind(cam.zoomProperty());
 
 
+
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
         this.terrain.addEventHandler(ScrollEvent.SCROLL, handlerScrolled);
+        this.terrain.addEventHandler(KeyEvent.KEY_PRESSED, handlerSpace);
+
         this.gameLoop();
+
     }
 
     EventHandler handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            player.moveTowards( mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
+            player.moveTowards(mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
         }
     };
 
@@ -111,6 +117,24 @@ public class AgarioController extends Controller {
                 System.out.println("bas");
             }
 
+        }
+    };
+
+
+    EventHandler handlerSpace = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent keyEvent) {
+            if (keyEvent.getCode() == KeyCode.SPACE) {
+                player.divideItself();
+
+                for (Circle circle : player.getCirclesList()) {
+                    removeCircle(circle);
+                }
+
+                for (Circle circle : player.getCirclesList()) {
+                    addCircle(circle);
+                }
+            }
         }
     };
 
