@@ -59,7 +59,6 @@ public class AgarioController implements Initializable {
         public void handle(MouseEvent mouseEvent) {
             posX = mouseEvent.getX();
             posY = mouseEvent.getY();
-
         }
     };
 
