@@ -12,6 +12,8 @@ public class Map {
         return quadTree;
     }
 
+    public static double size = 4000;
+
     public void setQuadTree(QuadTree quadTree) {
         this.quadTree = quadTree;
     }

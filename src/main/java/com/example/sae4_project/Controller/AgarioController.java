@@ -4,19 +4,15 @@ import com.example.sae4_project.Entity.*;
 import com.example.sae4_project.QuadTree.Camera;
 import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
-import com.example.sae4_project.QuadTree.QuadTree;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,7 +24,7 @@ public class AgarioController extends Controller {
     @FXML
     private Pane miniMap;
     @FXML
-    private AnchorPane conteneurGlobal;
+    private AnchorPane globalPane;
 
 
     private Player player;
@@ -49,86 +45,68 @@ public class AgarioController extends Controller {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Lier la taille du terrain à la taille du conteneur global
-        this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
-        this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
+        // Binding the terrain's size and the globalPane's size
+        this.terrain.prefHeightProperty().bind(globalPane.heightProperty());
+        this.terrain.prefWidthProperty().bind(globalPane.widthProperty());
         this.terrain.setLayoutX(0);
         this.terrain.setLayoutY(0);
 
-        // Charger les pellets et les afficher sur la carte principale
+        // Load pellets and display themm on the map
         map.getAllPellet(map.getQuadTree(), allPellets);
         for (Pellet elm : allPellets) {
             addCircle(elm.getCircle());
         }
 
-        // Création du joueur et ajout sur la carte
+        // Add the player on the map
         this.player = new CreatorPlayer().create();
         Circle circle = this.player.getCircle();
         addCircle(circle);
 
-        // Liaison de la caméra avec le joueur
+        // Bindings for the camera
         cam.getCoordinate().XProperty().bind(Bindings.add(
-                Bindings.multiply(-1, Bindings.divide(conteneurGlobal.widthProperty(), 2)),
+                Bindings.multiply(-1, Bindings.divide(globalPane.widthProperty(), 2)),
                 circle.centerXProperty()));
         cam.getCoordinate().YProperty().bind(Bindings.add(
-                Bindings.multiply(-1, Bindings.divide(conteneurGlobal.heightProperty(), 2)),
+                Bindings.multiply(-1, Bindings.divide(globalPane.heightProperty(), 2)),
                 circle.centerYProperty()));
 
         terrain.translateXProperty().bind(Bindings.multiply(-1, cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1, cam.getCoordinate().YProperty()));
 
-        // Gestion du mouvement du joueur
+        // Handle mouse event to change the direction of the player
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
 
-        // Lancer la boucle de jeu
+        // Game loop starts
         this.gameLoop();
 
-        // Configuration de la minimap
+        // Setup of the minimap
         miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        // Création du joueur sur la minimap
-        miniPlayer = new Circle(player.getCircle().getRadius(), Color.RED);
+        // Creation of the player on the minimap
+        Circle miniPlayer = new Circle(player.getCircle().getRadius(), Color.RED);
         miniMap.getChildren().add(miniPlayer);
 
-        // Ajouter les pellets sur la minimap
-        for (Pellet pellet : allPellets) {
-            Circle miniPellet = new Circle(pellet.getCircle().getRadius(), Color.BLUE);
-            miniMap.getChildren().add(miniPellet);
-        }
 
-        // Mettre à jour les échelles et les positions des objets sur la minimap
-        updateMiniMapScale();
+        //Listen to the player to update the minimap
+        player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+        player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
 
-        // Écouteurs pour mettre à jour les dimensions de la minimap dynamiquement
-        terrain.widthProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale());
-        terrain.heightProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale());
-        miniMap.widthProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale());
-        miniMap.heightProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale());
     }
 
     /**
-     * Met à jour l'échelle et la position des objets sur la minimap
+     * Update the minimap
      */
-    private void updateMiniMapScale() {
-        double scaleX = miniMap.getWidth() / terrain.getWidth();
-        double scaleY = miniMap.getHeight() / terrain.getHeight();
+    private void updateMiniMapScale(Circle miniPlayer) {
+        System.out.println("1:"+miniPlayer.getRadius());
+        double scale = miniMap.getWidth() / Map.size;
 
-        // Mise à jour du joueur sur la minimap
-        miniPlayer.setRadius(player.getCircle().getRadius() * scaleX);
-        miniPlayer.centerXProperty().bind(player.getCircle().centerXProperty().multiply(scaleX));
-        miniPlayer.centerYProperty().bind(player.getCircle().centerYProperty().multiply(scaleY));
 
-        // Mise à jour des pellets sur la minimap
-        int index = 1; // Commence à 1 car le miniPlayer est à l'index 0
-        for (Pellet pellet : allPellets) {
-            if (index < miniMap.getChildren().size()) {
-                Circle miniPellet = (Circle) miniMap.getChildren().get(index);
-                miniPellet.setRadius(pellet.getCircle().getRadius() * scaleX);
-                miniPellet.centerXProperty().bind(pellet.getCircle().centerXProperty().multiply(scaleX));
-                miniPellet.centerYProperty().bind(pellet.getCircle().centerYProperty().multiply(scaleY));
-            }
-            index++;
-        }
+        // Update the player on the minimap
+        miniPlayer.setRadius(player.getCircle().getRadius() * scale);
+        miniPlayer.centerXProperty().bind(player.getCircle().centerXProperty().multiply(scale));
+        miniPlayer.centerYProperty().bind(player.getCircle().centerYProperty().multiply(scale));
+
+
     }
 
 
