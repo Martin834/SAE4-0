@@ -12,7 +12,7 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-
+    <Label text="AGAR.IO" style="-fx-font-size: 36px; -fx-font-weight: bold;"/>
     <Button fx:id="playLocalButton" text="Jouer en Local" onAction="#playLocal"/>
     <Button text="Jouer en Ligne" onAction="#playOnline"/>
     <Button text="Quitter" onAction="#exitGame"/>
