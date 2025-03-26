@@ -69,42 +69,15 @@ public class Enemy extends MoveableBody {
         Pellet closestPellet = null;
         double minDistance = Double.MAX_VALUE;
 
-        // Parcourez les pelotes et vérifiez seulement celles qui sont proches de l'ennemi
         for (Pellet pellet : allPellets) {
-            // Calculer la distance entre l'ennemi et la pelote
             double distance = getDistanceTo(pellet);
 
-            // Si l'ennemi est proche de la pelote, on garde la pelote la plus proche
             if (distance < minDistance && distance <= circle.getRadius()) {
                 minDistance = distance;
                 closestPellet = pellet;
             }
         }
-
-        // Si une pelote est à une distance acceptable, la retourner
         return closestPellet;
     }
-
-    public void makeFatter(Pellet pellet) {
-        // Vérifiez que la taille de l'ennemi augmente correctement
-        double pelletSize = pellet.getMass();  // Taille de la pelote
-        if (pelletSize > 0) {
-            // Augmenter le rayon de l'ennemi directement via le Circle
-            double newRadius = circle.getRadius() + pelletSize;
-            circle.setRadius(newRadius); // Mise à jour du rayon de l'ennemi
-        }
-    }
-    /*public void makeFatter(MoveableBody other) {
-        double otherMass = Math.PI * Math.pow(other.circle.getRadius(), 2); // Surface du cercle
-        double myMass = Math.PI * Math.pow(this.circle.getRadius(), 2);
-
-        double newMass = myMass + otherMass; // On additionne les masses
-        double newRadius = Math.sqrt(newMass / Math.PI); // Conversion en rayon
-
-        this.circle.setRadius(newRadius); // Mise à jour du rayon
-    }*/
-
-
-
 
 }

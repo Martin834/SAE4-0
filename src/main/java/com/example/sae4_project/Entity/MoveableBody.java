@@ -61,7 +61,7 @@ public abstract class MoveableBody extends Entity {
         return distance < (this.circle.getRadius() + other.circle.getRadius()); // Vérifie si les cercles se chevauchent
     }
 
-    public void makeFatter(MoveableBody other) {
+    public void makeFatter(Entity other) {
         // Calculer la masse des deux entités
         double otherMass = Math.PI * Math.pow(other.circle.getRadius(), 2); // Surface du cercle de l'autre entité
         double myMass = Math.PI * Math.pow(this.circle.getRadius(), 2); // Surface du cercle de cette entité

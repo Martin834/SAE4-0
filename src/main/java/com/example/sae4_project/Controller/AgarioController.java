@@ -140,7 +140,6 @@ public class AgarioController extends Controller {
             public void handle(long now) {
                 player.move();
 
-                // Gestion de la nourriture du joueur
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
                     player.makeFatter(touchedPellet);
@@ -152,7 +151,6 @@ public class AgarioController extends Controller {
                     Enemy enemy = allEnemy.get(i);
                     enemy.executeStrategy(now);
 
-                    // Gestion de la nourriture des ennemis
                     touchedByEnemy = enemy.detectPellet(allPellets);
                     if (touchedByEnemy != null) {
                         enemy.makeFatter(touchedByEnemy);
@@ -162,35 +160,38 @@ public class AgarioController extends Controller {
 
                     enemy.move();
 
-                    // Collision IA vs IA
                     for (int j = i + 1; j < allEnemy.size(); j++) {
                         Enemy otherEnemy = allEnemy.get(j);
                         if (enemy.isColliding(otherEnemy)) {
                             if (enemy.circle.getRadius() > otherEnemy.circle.getRadius()) {
-                                enemy.makeFatter(otherEnemy); // Utilisation de la méthode générique
+                                enemy.makeFatter(otherEnemy);
                                 terrain.getChildren().remove(otherEnemy.getCircle());
                                 allEnemy.remove(j);
-                                j--; // Ajuste l'index après suppression
+                                j--;
                             } else if (enemy.circle.getRadius() < otherEnemy.circle.getRadius()) {
-                                otherEnemy.makeFatter(enemy); // Utilisation de la méthode générique
+                                otherEnemy.makeFatter(enemy);
                                 terrain.getChildren().remove(enemy.getCircle());
                                 allEnemy.remove(i);
-                                i--; // Ajuste l'index après suppression
-                                break; // Sortir de la boucle pour éviter des erreurs
+                                i--;
+                                break;
                             }
                         }
                     }
 
-                    // Collision Joueur vs Ennemi
                     if (player.isColliding(enemy)) {
-                        if (player.circle.getRadius() > enemy.circle.getRadius()) {
-                            player.makeFatter(enemy); // Utilisation de la méthode générique
+                        double playerMass = player.getMass();
+                        double enemyMass = enemy.getMass();
+
+                        if (playerMass >= enemyMass * 1.33) {
+                           System.out.println("ssfbksdfsbdfilshfiulsshfdliifhiv");
+                            player.makeFatter(enemy);
                             terrain.getChildren().remove(enemy.getCircle());
                             allEnemy.remove(i);
-                            i--; // Ajuste l'index après suppression
-                        } else {
+                            i--;
+                        }
+                        else if (enemyMass >= playerMass * 1.33) {
                             System.out.println("Game Over ! Tu t'es fait manger.");
-                            stop(); // Arrête le jeu
+                            stop();
                         }
                     }
                 }
@@ -198,6 +199,9 @@ public class AgarioController extends Controller {
         };
         timer.start();
     }
+
+
+
 
 
     public void spawnPellets(int count) {

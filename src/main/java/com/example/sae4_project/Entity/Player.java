@@ -61,4 +61,6 @@ public class Player extends MoveableBody {
         double radius = this.calculateRadius();
         this.circle.setRadius(radius);
     }
+
+
 }
