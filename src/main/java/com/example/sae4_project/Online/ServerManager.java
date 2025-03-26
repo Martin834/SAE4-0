@@ -13,44 +13,27 @@ public class ServerManager extends Thread {
         return socket;
     }
 
-    public void setSocket(ServerSocket socket) {
-        this.socket = socket;
-    }
-
-    public ArrayList<PrintWriter> getGuests() {
-        return guests;
-    }
-
-    public void setGuests(ArrayList<PrintWriter> guests) {
-        this.guests = guests;
-    }
-
     private ServerSocket socket;
-    private ArrayList<PrintWriter> guests;
+    private Server server;
     private boolean running;
 
-    public ServerManager() {
+    public ServerManager(Server server) {
+        this.server = server;
     }
 
     public void run() {
         super.run();
         try {
 
-            this.socket = new ServerSocket();
-
-            InetAddress adresseServer = InetAddress.getLocalHost();
-            this.socket.bind(new InetSocketAddress(adresseServer, 834));
+            socket = new ServerSocket(834);
 
             while(running){
-                Socket guest = this.socket.accept();
-                ClientHandler th = new ClientHandler(guest);
-                AgarioApplication.threads.add(th);
-                th.start();
-                this.guests.add(new PrintWriter(th.getSocket().getOutputStream()));
-                System.out.println(guests.size());
+                Socket income = socket.accept();
+                this.server.addClient(income);
+
             }
 
-
+            socket.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -61,7 +44,6 @@ public class ServerManager extends Thread {
     }
 
     public void disconnect() throws IOException {
-        this.socket.close();
         running = false;
     }
 

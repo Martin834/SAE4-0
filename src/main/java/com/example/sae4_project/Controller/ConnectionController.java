@@ -1,8 +1,8 @@
 package com.example.sae4_project.Controller;
 
 import com.example.sae4_project.Application.AgarioApplication;
-import com.example.sae4_project.Online.ClientManager;
 import com.example.sae4_project.Online.OnlineState;
+import com.example.sae4_project.Online.Server;
 import com.example.sae4_project.Online.ServerManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,8 +35,8 @@ public class ConnectionController extends Controller{
     @FXML
     private TextField port;
 
-    ServerManager server;
-    ClientManager client;
+    Server server;
+    Socket client;
 
 
     OnlineState onlineState;
@@ -63,9 +64,8 @@ public class ConnectionController extends Controller{
         @Override
         public void handle(ActionEvent event) {
             try {
-                server = new ServerManager();
+                server = new Server();
                 server.start();
-                AgarioApplication.threads.add(server);
                 changeState(OnlineState.HOST);
             } catch (Exception e) {
                 changeState(OnlineState.ERROR);
@@ -79,11 +79,7 @@ public class ConnectionController extends Controller{
             try {
                 String hostName = ip.getText();
                 int hostPort = Integer.parseInt(port.getText());
-
-
-                client = new ClientManager(hostName, hostPort);
-                client.start();
-                AgarioApplication.threads.add(client);
+                client = new Socket(hostName, hostPort);
                 changeState(OnlineState.GUEST);
 
             } catch (Exception e) {
@@ -101,7 +97,7 @@ public class ConnectionController extends Controller{
                     server = null;
                 }
                 if(client != null){
-                    client.disconnect();
+                    client.close();
                     client = null;
                 }
 
@@ -128,7 +124,8 @@ public class ConnectionController extends Controller{
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Connection information : ");
                 alert.setHeaderText("Succesful connection");
-                alert.setContentText("You are now hosting a game : \n IP : " + server.getSocket().getInetAddress() + "\n Port : " + server.getSocket().getLocalPort());
+                alert.setContentText("You are now hosting a game : \n IP : " + server.getServerManager().getSocket().getInetAddress() +
+                        "\n Port : " + server.getServerManager().getSocket().getLocalPort());
                 alert.showAndWait();
 
                 host.setDisable(true);
