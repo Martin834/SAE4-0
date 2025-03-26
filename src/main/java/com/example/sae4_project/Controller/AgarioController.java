@@ -4,21 +4,19 @@ import com.example.sae4_project.Entity.*;
 import com.example.sae4_project.QuadTree.Camera;
 import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
-import com.example.sae4_project.QuadTree.QuadTree;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.input.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.math.MathContext;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -43,7 +41,6 @@ public class AgarioController extends Controller {
 
     @FXML
     private void addCircle(Circle circle) {
-
         this.terrain.getChildren().add(circle);
     }
 
@@ -54,14 +51,12 @@ public class AgarioController extends Controller {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
         this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
         this.terrain.setLayoutY(0);
         this.terrain.setFocusTraversable(true);
         this.terrain.requestFocus();
-
 
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -79,8 +74,8 @@ public class AgarioController extends Controller {
                 Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
         cam.getCoordinate().YProperty().bind(Bindings.add(Bindings.multiply(-1,
                 Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
-        cam.zoomProperty().bind(Bindings.divide(5,
-                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(10*player.massProperty().get())), player.massProperty())));
+        cam.zoomProperty().bind(Bindings.divide(7,
+                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(Math.sqrt(6*player.massProperty().get()))), player.massProperty())));
 
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
@@ -91,37 +86,20 @@ public class AgarioController extends Controller {
         terrain.scaleXProperty().bind(cam.zoomProperty());
         terrain.scaleYProperty().bind(cam.zoomProperty());
 
-
-
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
-        this.terrain.addEventHandler(ScrollEvent.SCROLL, handlerScrolled);
         this.terrain.addEventHandler(KeyEvent.KEY_PRESSED, handlerSpace);
 
         this.gameLoop();
-
     }
 
-    EventHandler handlerMouseMoved = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             player.moveTowards(mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
         }
     };
 
-    EventHandler handlerScrolled = new EventHandler<ScrollEvent>() {
-        @Override
-        public void handle(ScrollEvent scrollEvent) {
-            if(scrollEvent.getDeltaY() > 0){
-                System.out.println("haut");
-            }else {
-                System.out.println("bas");
-            }
-
-        }
-    };
-
-
-    EventHandler handlerSpace = new EventHandler<KeyEvent>() {
+    EventHandler<KeyEvent> handlerSpace = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent keyEvent) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
@@ -146,12 +124,16 @@ public class AgarioController extends Controller {
 
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
-                    player.makeFatter(touchedPellet);
-                    terrain.getChildren().remove(touchedPellet.getCircle());
-                    allPellets.remove(touchedPellet);
+                    for (Circle circle : player.getCirclesList()) {
+                        if (circle.getBoundsInLocal().intersects(touchedPellet.getCircle().getBoundsInLocal())) {
+                            player.makeFatter(touchedPellet, circle);
+                            terrain.getChildren().remove(touchedPellet.getCircle());
+                            allPellets.remove(touchedPellet);
+                            break;
+                        }
+                    }
                 }
                 touchedPellet = null;
-
             }
         };
         timer.start();
