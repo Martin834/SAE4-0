@@ -9,11 +9,14 @@ import java.io.IOException;
 
 public class AgarioApplication extends Application {
 
+    private static Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AgarioApplication.class.getResource("/com/example/sae4_project/agario-view.fxml"));
+        primaryStage = stage;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/sae4_project/menu.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-        stage.setTitle("agar.io");
+        stage.setTitle("Agar.io - Menu");
         stage.setScene(scene);
         stage.show();
     }

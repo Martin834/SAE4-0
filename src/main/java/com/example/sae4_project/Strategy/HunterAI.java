@@ -12,7 +12,7 @@ public class HunterAI implements AIStrategy {
         double minDistance = Double.MAX_VALUE;
 
         Player target = null;
-        if (player.calculateRadius()*1.33 < enemy.calculateRadius()) { // Ne chasse que les plus petits
+        if (player.calculateRadius() <= enemy.calculateRadius()) { // Ne chasse que les plus petits
             double distance = enemy.getDistanceTo(player);
             if (distance < minDistance) {
                 minDistance = distance;

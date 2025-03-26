@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="176e3f47-130e-43a1-a17d-528c96c9f354" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/HunterAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/HunterAI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/RandomAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/RandomAI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +18,7 @@
       <list>
         <option value="Interface" />
         <option value="Class" />
+        <option value="FxmlFile" />
       </list>
     </option>
   </component>
