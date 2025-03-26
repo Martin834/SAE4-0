@@ -80,6 +80,7 @@ public class ConnectionController extends Controller{
                 String hostName = ip.getText();
                 int hostPort = Integer.parseInt(port.getText());
 
+
                 client = new ClientManager(hostName, hostPort);
                 client.start();
                 AgarioApplication.threads.add(client);

@@ -12,9 +12,9 @@ public class ClientManager extends Thread{
     boolean running;
 
     public ClientManager(String host, int port) throws IOException {
-        socket = new Socket();
-        SocketAddress addressIp = new InetSocketAddress(host, port);
-        socket.connect(addressIp);
+        System.out.println("1");
+        socket = new Socket(host, port);
+        System.out.println("2");
     }
 
     @Override
