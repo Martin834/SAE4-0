@@ -30,6 +30,7 @@ public class Pellet extends Entity {
         circle.setFill(Color.BLUE);
         this.circle = circle;
         this.setMass(1);
+
     }
 
     public Circle getCircle() {

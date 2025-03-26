@@ -4,14 +4,12 @@ import com.example.sae4_project.Entity.*;
 import com.example.sae4_project.QuadTree.Camera;
 import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
-import com.example.sae4_project.QuadTree.QuadTree;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
@@ -32,7 +30,7 @@ public class AgarioController extends Controller {
     @FXML
     private Pane miniMap;
     @FXML
-    private AnchorPane conteneurGlobal;
+    private AnchorPane globalPane;
 
 
     private Player player;
@@ -42,7 +40,7 @@ public class AgarioController extends Controller {
     private double posY;
 
     private Map map = Map.getInstance();
-    private Camera cam = new Camera(new Coordinate(0,0));
+    private Camera cam = new Camera(new Coordinate(0, 0));
 
     @FXML
     private void addCircle(Circle circle) {
@@ -51,32 +49,29 @@ public class AgarioController extends Controller {
     }
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-        this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
-        this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
+        // Binding the terrain's size and the globalPane's size
+        this.terrain.prefHeightProperty().bind(globalPane.heightProperty());
+        this.terrain.prefWidthProperty().bind(globalPane.widthProperty());
         this.terrain.setLayoutX(0);
         this.terrain.setLayoutY(0);
 
-        this.miniMap.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-
+        // Load pellets and display themm on the map
         map.getAllPellet(map.getQuadTree(), allPellets);
-
-        for(Pellet elm : allPellets){
+        for (Pellet elm : allPellets) {
             addCircle(elm.getCircle());
         }
 
+        // Add the player on the map
         this.player = new CreatorPlayer().create();
         Circle circle = this.player.getCircle();
         addCircle(circle);
 
         cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
-                Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
+                Bindings.divide( globalPane.widthProperty(), 2)) , circle.centerXProperty()));
         cam.getCoordinate().YProperty().bind(Bindings.add(Bindings.multiply(-1,
-                Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
+                Bindings.divide( globalPane.heightProperty(), 2)), circle.centerYProperty()));
         cam.zoomProperty().bind(Bindings.divide(5,
                 Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(10*player.massProperty().get())), player.massProperty())));
 
@@ -92,8 +87,27 @@ public class AgarioController extends Controller {
 
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
         this.terrain.addEventHandler(ScrollEvent.SCROLL, handlerScrolled);
+
+
+
+
+
         this.gameLoop();
+
+        // Setup of the minimap
+        miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        // Creation of the player on the minimap
+        Circle miniPlayer = new Circle(player.getCircle().getRadius(), Color.RED);
+        miniMap.getChildren().add(miniPlayer);
+
+
+        //Listen to the player to update the minimap
+        player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+        player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+
     }
+
 
     EventHandler handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
@@ -105,14 +119,30 @@ public class AgarioController extends Controller {
     EventHandler handlerScrolled = new EventHandler<ScrollEvent>() {
         @Override
         public void handle(ScrollEvent scrollEvent) {
-            if(scrollEvent.getDeltaY() > 0){
+            if (scrollEvent.getDeltaY() > 0) {
                 System.out.println("haut");
-            }else {
+            } else {
                 System.out.println("bas");
             }
-
         }
     };
+
+    /**
+     * Update the minimap
+     */
+    private void updateMiniMapScale(Circle miniPlayer) {
+        System.out.println("1:"+miniPlayer.getRadius());
+        double scale = miniMap.getWidth() / Map.size;
+
+
+        // Update the player on the minimap
+        miniPlayer.setRadius(player.getCircle().getRadius() * scale);
+        miniPlayer.centerXProperty().bind(player.getCircle().centerXProperty().multiply(scale));
+        miniPlayer.centerYProperty().bind(player.getCircle().centerYProperty().multiply(scale));
+
+
+    }
+
 
     private void gameLoop() {
         AnimationTimer timer = new AnimationTimer() {
@@ -132,5 +162,6 @@ public class AgarioController extends Controller {
         };
         timer.start();
     }
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.sae4_project.Entity;
 
+import com.example.sae4_project.QuadTree.Map;
+
 public abstract class MoveableBody extends Entity {
 
     public double smoothing = 80;
@@ -29,8 +31,12 @@ public abstract class MoveableBody extends Entity {
     }
 
     public void move() {
-        this.circle.setCenterX(this.circle.getCenterX() + velocity[0]);
-        this.circle.setCenterY(this.circle.getCenterY() + velocity[1]);
+        if(this.circle.getCenterX() + velocity[0] >= 0 && this.circle.getCenterX() + velocity[0] <= Map.size) {
+            this.circle.setCenterX(this.circle.getCenterX() + velocity[0]);
+        }
+        if(this.circle.getCenterY() + velocity[1] >= 0 && this.circle.getCenterY() + velocity[1] <= Map.size){
+            this.circle.setCenterY(this.circle.getCenterY() + velocity[1]);
+        }
     }
 
     public double[] normalizeDouble(double[] array){

@@ -41,8 +41,8 @@ public class QuadTree {
 
         this.boundry = new Boundry(coordinate);
         if(this.parent == null){
-            boundry.setHeight(4000);
-            boundry.setLength(4000);
+            boundry.setHeight(Map.size);
+            boundry.setLength(Map.size);
         } else {
             boundry.setHeight(this.parent.boundry.getHeight()/2);
             boundry.setLength(this.parent.boundry.getLength()/2);
