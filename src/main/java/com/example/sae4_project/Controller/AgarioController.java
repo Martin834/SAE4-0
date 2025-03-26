@@ -17,14 +17,19 @@ import java.util.*;
 public class AgarioController implements Initializable {
     @FXML
     private Pane terrain;
+    private static List<Pellet> pellets = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
     private Map<Enemy, double[]> enemyVelocities = new HashMap<>();
 
 
-    private Player player;
+    private static Player player;
 
     private double posX;
     private double posY;
+
+    public static Player getPlayer() {
+        return player;
+    }
 
     @FXML
     private void addCircle(Circle circle) {
@@ -41,42 +46,34 @@ public class AgarioController implements Initializable {
         // Création et ajout des ennemis
         for (int i = 0; i < 10; i++) {
             Enemy enemy = new CreatorEnemy().create();
-            Circle circleEnemy = enemy.getCircle();
-            addCircle(circleEnemy);
-
-            // Position aléatoire au spawn
-            double randX = r.nextDouble() * 800;
-            double randY = r.nextDouble() * 600;
-            enemy.getCircle().setCenterX(randX);
-            enemy.getCircle().setCenterY(randY);
-
-            // Direction aléatoire (vitesse X et Y)
-            double angle = r.nextDouble() * 2 * Math.PI;
-            double speed = 1 + r.nextDouble() * 2; // Entre 1 et 3 pixels/frame
-            enemyVelocities.put(enemy, new double[]{Math.cos(angle) * speed, Math.sin(angle) * speed});
-
+            enemy.getCircle().setCenterX(r.nextDouble() * 800);
+            enemy.getCircle().setCenterY(r.nextDouble() * 600);
             enemies.add(enemy);
+            addCircle(enemy.getCircle());
         }
 
         // Création des pastilles
         for (int i = 0; i < 100; i++) {
             Pellet pellet = new CreatorPellet().create();
-            Circle circlePellet = pellet.getCircle();
-            addCircle(circlePellet);
+            addCircle(pellet.getCircle());
+            pellets.add(pellet);
         }
 
         // Création du joueur
         this.player = new CreatorPlayer().create();
-        Circle circle = this.player.getCircle();
-        addCircle(circle);
+        addCircle(this.player.getCircle());
 
         // Capture des mouvements de la souris
-        this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
+        this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, mouseEvent -> {
+            posX = mouseEvent.getX();
+            posY = mouseEvent.getY();
+        });
 
         // Lancement de la boucle du jeu
         this.gameLoop();
     }
 
+    public static List<Pellet> getPellets(){ return pellets; }
 
 
     EventHandler handler = new EventHandler<MouseEvent>() {
@@ -90,37 +87,29 @@ public class AgarioController implements Initializable {
 
     private void gameLoop() {
         AnimationTimer timer = new AnimationTimer() {
+            private long lastUpdateTime = 0; // Stocke le dernier moment où la mise à jour a été faite
+            private final long updateInterval = 33_000_000L; // 33 ms en nanosecondes
+
             @Override
-            public void handle(long l) {
+            public void handle(long now) {
+                if (now - lastUpdateTime < updateInterval) {
+                    return; // Attendre 33ms avant la prochaine mise à jour
+                }
+                lastUpdateTime = now;
+
                 // Déplacement du joueur vers la souris
                 player.moveTowards(posX, posY);
 
-                // Mise à jour des ennemis
+                // Exécute la stratégie de chaque ennemi toutes les 33ms
                 for (Enemy enemy : enemies) {
-                    double[] velocity = enemyVelocities.get(enemy);
-                    if (velocity == null) continue;
-
-                    double newX = enemy.getCircle().getCenterX() + velocity[0];
-                    double newY = enemy.getCircle().getCenterY() + velocity[1];
-
-                    // Vérifier les collisions avec les bords et inverser la direction si nécessaire
-                    if (newX - enemy.getCircle().getRadius() < 0 || newX + enemy.getCircle().getRadius() > 800) {
-                        velocity[0] = -velocity[0]; // Inversion de la vitesse X
-                    }
-                    if (newY - enemy.getCircle().getRadius() < 0 || newY + enemy.getCircle().getRadius() > 600) {
-                        velocity[1] = -velocity[1]; // Inversion de la vitesse Y
-                    }
-
-                    // Appliquer le mouvement
-                    enemy.getCircle().setCenterX(enemy.getCircle().getCenterX() + velocity[0]);
-                    enemy.getCircle().setCenterY(enemy.getCircle().getCenterY() + velocity[1]);
-
-                    enemyVelocities.put(enemy, velocity); // Mettre à jour la vitesse
+                    enemy.executeStrategy(now);
                 }
             }
         };
         timer.start();
     }
+
+
 
 
 }

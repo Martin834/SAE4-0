@@ -5,6 +5,8 @@ public abstract class MoveableBody extends Entity {
     public double speed = 5;
     public double smoothing = 80;
 
+
+
     public void moveTowards(double posXMouse, double posYMouse) {
 
         double[] velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
@@ -26,4 +28,15 @@ public abstract class MoveableBody extends Entity {
         return new double[]{0,0};
     }
 
+    public double getDistanceTo(Pellet pellet) {
+        double dx = this.circle.getCenterX() - pellet.getCircle().getCenterX();
+        double dy = this.circle.getCenterY() - pellet.getCircle().getCenterY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public double getDistanceTo(Player player) {
+        double dx = this.circle.getCenterX() - player.getCircle().getCenterX();
+        double dy = this.circle.getCenterY() - player.getCircle().getCenterY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 }

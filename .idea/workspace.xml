@@ -11,6 +11,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/HunterAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/HunterAI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/RandomAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/RandomAI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -105,7 +106,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="Alix" />
+                        <option value="Strategy" />
                       </list>
                     </value>
                   </entry>

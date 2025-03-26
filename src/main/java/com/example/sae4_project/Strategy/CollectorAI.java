@@ -11,7 +11,7 @@ import java.util.List;
 public class CollectorAI implements AIStrategy{
     @Override
     public void execute(Enemy enemy) {
-        /*List<Pellet> pellets = AgarioController.getPellets();
+        List<Pellet> pellets = AgarioController.getPellets();
         Pellet closestPellet = null;
         double minDistance = Double.MAX_VALUE;
 
@@ -25,6 +25,6 @@ public class CollectorAI implements AIStrategy{
 
         if (closestPellet != null) {
             enemy.moveTowards(closestPellet.getCircle().getCenterX(), closestPellet.getCircle().getCenterY());
-        }*/
+        }
     }
 }
