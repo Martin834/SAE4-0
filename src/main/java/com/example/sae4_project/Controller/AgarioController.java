@@ -7,11 +7,14 @@ import com.example.sae4_project.QuadTree.Map;
 import com.example.sae4_project.QuadTree.QuadTree;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
@@ -70,7 +73,6 @@ public class AgarioController extends Controller {
         Circle circle = this.player.getCircle();
         addCircle(circle);
 
-
         cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
                 Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
         cam.getCoordinate().YProperty().bind(Bindings.add(Bindings.multiply(-1,
@@ -80,6 +82,10 @@ public class AgarioController extends Controller {
 
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
+
+        terrain.translateXProperty().bind(Bindings.multiply(terrain.scaleXProperty(), Bindings.multiply(-1,cam.getCoordinate().XProperty())));
+        terrain.translateYProperty().bind(Bindings.multiply(terrain.scaleYProperty(),Bindings.multiply(-1,cam.getCoordinate().YProperty())));
+
         terrain.scaleXProperty().bind(cam.zoomProperty());
         terrain.scaleYProperty().bind(cam.zoomProperty());
 
@@ -112,8 +118,8 @@ public class AgarioController extends Controller {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-
                 player.move();
+
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
                     player.makeFatter(touchedPellet);
