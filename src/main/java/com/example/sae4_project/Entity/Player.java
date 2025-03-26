@@ -39,7 +39,7 @@ public class Player extends MoveableBody {
     }
 
     public double calculateMaxSpeed() {
-        return this.massProperty().doubleValue()*0.2;
+        return (1 / this.massProperty().doubleValue()) * 60;
     }
 
     public boolean canEat(Player player) {

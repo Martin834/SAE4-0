@@ -78,7 +78,7 @@ public class AgarioController extends Controller {
         cam.getCoordinate().YProperty().bind(Bindings.add(Bindings.multiply(-1,
                 Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
         cam.zoomProperty().bind(Bindings.divide(5,
-                Bindings.createDoubleBinding(()-> Math.sqrt(player.massProperty().get()), player.massProperty())));
+                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(10*player.massProperty().get())), player.massProperty())));
 
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));

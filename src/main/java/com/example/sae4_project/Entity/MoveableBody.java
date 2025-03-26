@@ -4,7 +4,7 @@ public abstract class MoveableBody extends Entity {
 
     public double smoothing = 80;
 
-    public double speed = 5;
+    public double speed = 1;
 
     public double[] velocity = new double[2];
 
