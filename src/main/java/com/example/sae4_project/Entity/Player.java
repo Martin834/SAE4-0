@@ -13,8 +13,8 @@ public class Player extends MoveableBody {
 
     public Player() {
         super();
-        this.mass = 5;
-        circle = new Circle(400-this.mass/2, 300-this.mass/2, 25);
+        this.setMass(5);
+        circle = new Circle(400-this.getMass()/2, 300-this.getMass()/2, 25);
         circle.setFill(Color.RED);
     }
 
@@ -30,26 +30,16 @@ public class Player extends MoveableBody {
         return null;
     }
 
-
-
-
-
     public Circle getCircle() {
         return circle;
     }
 
     public double calculateRadius() {
-        return 10 * Math.sqrt(this.mass);
-    }
-
-    public double calculateSpeed() {
-        //TODO A IMPLEMENTER
-        return 0.0;
+        return 10 * Math.sqrt(this.getMass());
     }
 
     public double calculateMaxSpeed() {
-        //TODO A IMPLEMENTER
-        return 0.0;
+        return (1 / this.massProperty().doubleValue()) * 60;
     }
 
     public boolean canEat(Player player) {
@@ -67,8 +57,7 @@ public class Player extends MoveableBody {
     }
 
     public void makeFatter(Entity entity) {
-        System.out.println(entity.mass+","+this.mass);
-        this.mass += entity.mass;
+        this.setMass(this.getMass() +  entity.getMass());
         double radius = this.calculateRadius();
         this.circle.setRadius(radius);
     }

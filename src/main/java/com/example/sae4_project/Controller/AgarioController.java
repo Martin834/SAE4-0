@@ -7,16 +7,21 @@ import com.example.sae4_project.QuadTree.Map;
 import com.example.sae4_project.QuadTree.QuadTree;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.math.MathContext;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -68,27 +73,43 @@ public class AgarioController extends Controller {
         Circle circle = this.player.getCircle();
         addCircle(circle);
 
+        cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
+                Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
+        cam.getCoordinate().YProperty().bind(Bindings.add(Bindings.multiply(-1,
+                Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
+        cam.zoomProperty().bind(Bindings.divide(5,
+                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(10*player.massProperty().get())), player.massProperty())));
 
-        cam.getCoordinate().XProperty().bind( Bindings.add(
-                Bindings.multiply(-1,
-                        Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty())); //circle.centerXProperty()));
-        cam.getCoordinate().YProperty().bind(Bindings.add(
-                Bindings.multiply(-1,
-                        Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty())); // circle.centerYProperty()));
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
 
+        terrain.translateXProperty().bind(Bindings.multiply(terrain.scaleXProperty(), Bindings.multiply(-1,cam.getCoordinate().XProperty())));
+        terrain.translateYProperty().bind(Bindings.multiply(terrain.scaleYProperty(),Bindings.multiply(-1,cam.getCoordinate().YProperty())));
 
-        this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handler);
+        terrain.scaleXProperty().bind(cam.zoomProperty());
+        terrain.scaleYProperty().bind(cam.zoomProperty());
 
+
+        this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
+        this.terrain.addEventHandler(ScrollEvent.SCROLL, handlerScrolled);
         this.gameLoop();
     }
 
-    EventHandler handler = new EventHandler<MouseEvent>() {
+    EventHandler handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            posX = mouseEvent.getX();
-            posY = mouseEvent.getY();
+            player.moveTowards( mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
+        }
+    };
+
+    EventHandler handlerScrolled = new EventHandler<ScrollEvent>() {
+        @Override
+        public void handle(ScrollEvent scrollEvent) {
+            if(scrollEvent.getDeltaY() > 0){
+                System.out.println("haut");
+            }else {
+                System.out.println("bas");
+            }
 
         }
     };
@@ -97,13 +118,10 @@ public class AgarioController extends Controller {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-
-                player.moveTowards(posX, posY);
-
+                player.move();
 
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
-                    //System.out.println(touchedPellet.getIdentifier());
                     player.makeFatter(touchedPellet);
                     terrain.getChildren().remove(touchedPellet.getCircle());
                     allPellets.remove(touchedPellet);

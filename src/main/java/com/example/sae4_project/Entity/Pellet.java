@@ -16,7 +16,7 @@ public class Pellet extends Entity {
         Random r = new Random();
         this.posX = r.nextInt(801);
         this.posY = r.nextInt(801);
-        this.mass = 1;
+        this.setMass(1);
         circle = new Circle(this.posX, this.posY, 5);
         circle.setFill(Color.BLUE);
 
@@ -29,7 +29,7 @@ public class Pellet extends Entity {
         Circle circle = new Circle(x, y, 5);
         circle.setFill(Color.BLUE);
         this.circle = circle;
-        this.mass = 1;
+        this.setMass(1);
     }
 
     public Circle getCircle() {

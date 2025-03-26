@@ -2,16 +2,33 @@ package com.example.sae4_project.Entity;
 
 public abstract class MoveableBody extends Entity {
 
-    public double speed = 1;
     public double smoothing = 80;
 
-    public void moveTowards(double posXMouse, double posYMouse) {
+    public double speed = 1;
 
-        double[] velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
-        double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1])) / this.smoothing;
+    public double[] velocity = new double[2];
+
+    public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
+
+        velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
+
+        double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1]));
+
+        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed);
+
+        if (euclidianDistance > 4) {
+            euclidianDistance = 4 * speed;
+        }
 
         velocity = normalizeDouble(velocity);
 
+        velocity[0] *= adjustedSpeed;
+        velocity[1] *= adjustedSpeed;
+
+        System.out.println(adjustedSpeed);
+    }
+
+    public void move() {
         this.circle.setCenterX(this.circle.getCenterX() + velocity[0]);
         this.circle.setCenterY(this.circle.getCenterY() + velocity[1]);
     }
