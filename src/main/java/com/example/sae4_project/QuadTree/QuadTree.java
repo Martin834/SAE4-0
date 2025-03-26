@@ -58,7 +58,7 @@ public class QuadTree {
         } else {
             Random r = new Random();
             int baobab = r.nextInt(3);
-            if (baobab == 2) {
+            if (baobab == 1) {
                 this.entities.add(new Pellet(
                         r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())

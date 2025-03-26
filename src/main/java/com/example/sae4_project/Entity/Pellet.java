@@ -16,7 +16,7 @@ public class Pellet extends Entity {
         Random r = new Random();
         this.posX = r.nextInt(801);
         this.posY = r.nextInt(801);
-        this.setMass(1);
+        this.setMass(2);
         circle = new Circle(this.posX, this.posY, 5);
         circle.setFill(Color.BLUE);
 

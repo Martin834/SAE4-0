@@ -40,16 +40,25 @@ public class Player extends MoveableBody {
     }
 
     public double calculateMaxSpeed() {
-        return (1 / this.massProperty().doubleValue()) * 200;
+        return (1 / this.massProperty().doubleValue()) * 10000;
     }
+
 
     public void divideItself() {
         List<CircleComponent> tempCirclesList = new ArrayList<>();
         for (Circle circle : circleComposite.getCircles()) {
-            tempCirclesList.add(new CircleLeaf(circle));
+            System.out.println("mon rayon est de ;"+circle.getRadius());
+            if (circle.getRadius() >= 16) {
+                System.out.println("je suis ajoute ;" +circle.getRadius());
+                tempCirclesList.add(new CircleLeaf(circle));
+            }
         }
-        circleComposite = new CircleComposite();
+        if (tempCirclesList.isEmpty()) {
+            return;
+        }
+        circleComposite = new CircleComposite(); // probleme ici parceque quand je redivise un circle, celui qui se divise pas ne bouge plus
         double angleIncrement = 2 * Math.PI / tempCirclesList.size();
+
         for (int i = 0; i < tempCirclesList.size(); i++) {
             CircleComponent component = tempCirclesList.get(i);
             Circle originalCircle = component.getCircles().get(0);
@@ -66,6 +75,7 @@ public class Player extends MoveableBody {
             circleComposite.add(new CircleLeaf(originalCircle));
             circleComposite.add(new CircleLeaf(newCircle));
         }
+
         adjustCirclePositions();
     }
 

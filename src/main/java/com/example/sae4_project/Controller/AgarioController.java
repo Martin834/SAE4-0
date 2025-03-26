@@ -104,11 +104,9 @@ public class AgarioController extends Controller {
         public void handle(KeyEvent keyEvent) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
                 player.divideItself();
-
                 for (Circle circle : player.getCirclesList()) {
                     removeCircle(circle);
                 }
-
                 for (Circle circle : player.getCirclesList()) {
                     addCircle(circle);
                 }

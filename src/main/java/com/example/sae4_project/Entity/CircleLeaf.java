@@ -18,7 +18,7 @@ public class CircleLeaf implements CircleComponent {
 
         double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1]));
 
-        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed);
+        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed * (1 / (circle.getRadius() * circle.getRadius())));
 
         if (euclidianDistance > 4) {
             euclidianDistance = 4;
@@ -29,6 +29,7 @@ public class CircleLeaf implements CircleComponent {
         velocity[0] *= adjustedSpeed;
         velocity[1] *= adjustedSpeed;
     }
+
 
     @Override
     public void move() {
