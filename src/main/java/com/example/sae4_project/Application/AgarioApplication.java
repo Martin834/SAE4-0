@@ -1,6 +1,7 @@
 package com.example.sae4_project.Application;
 
 import com.example.sae4_project.Controller.AgarioController;
+import com.example.sae4_project.Controller.ConnectionController;
 import com.example.sae4_project.Controller.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ public class AgarioApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("agario-view", new AgarioController()), 800, 600 );
+        scene = new Scene(loadFXML("connection", new ConnectionController()), 800, 600 );
         stage.setTitle("agar.io");
         stage.setScene(scene);
         stage.show();
