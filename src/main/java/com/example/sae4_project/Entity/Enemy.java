@@ -18,14 +18,14 @@ public class Enemy extends MoveableBody {
 
     public Enemy(double x, double y) {
         super();
-        circle = new Circle(x,y, 25);
+        this.setMass(5);
+        circle = new Circle(x,y,calculateRadius());
         Random rand = new Random();
         int r = rand.nextInt(256);
         int g = rand.nextInt(256);
         int b = rand.nextInt(256);
         circle.setFill(Color.rgb(r, g, b));
         assignRandomStrategy();
-        //this.strategy = new RandomAI();
     }
 
     public Circle getCircle() {

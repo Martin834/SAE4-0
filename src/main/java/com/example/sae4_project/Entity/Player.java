@@ -56,11 +56,11 @@ public class Player extends MoveableBody {
         return 0.0;
     }
 
-    public void makeFatter(Entity entity) {
+   /* public void makeFatter(Entity entity) {
         this.setMass(this.getMass() +  entity.getMass());
         double radius = this.calculateRadius();
         this.circle.setRadius(radius);
-    }
+    }*/
 
 
 }

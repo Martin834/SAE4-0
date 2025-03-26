@@ -60,19 +60,18 @@ public abstract class MoveableBody extends Entity {
         double distance = Math.sqrt(dx * dx + dy * dy);
         return distance < (this.circle.getRadius() + other.circle.getRadius()); // Vérifie si les cercles se chevauchent
     }
+    public double calculateRadius() {
+        double mass = this.mass.get();
+        return 10 * Math.sqrt(mass);
+    }
 
     public void makeFatter(Entity other) {
-        // Calculer la masse des deux entités
-        double otherMass = Math.PI * Math.pow(other.circle.getRadius(), 2); // Surface du cercle de l'autre entité
-        double myMass = Math.PI * Math.pow(this.circle.getRadius(), 2); // Surface du cercle de cette entité
+        double otherMass = other.getMass();
+        double myMass = this.getMass();
 
-        // Additionner les masses
         double newMass = myMass + otherMass;
-        double newRadius = Math.sqrt(newMass / Math.PI); // Conversion de la masse en rayon (formule inverse de la surface)
-
-        // Mettre à jour le rayon de l'entité
-        this.circle.setRadius(newRadius);
-       // this.setMass(newMass);
+        this.setMass(newMass);
+        this.circle.setRadius(calculateRadius());
     }
 
 }
