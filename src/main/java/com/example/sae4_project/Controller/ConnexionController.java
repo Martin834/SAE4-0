@@ -1,4 +1,4 @@
-package Controller;
+package com.example.sae4_project.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
