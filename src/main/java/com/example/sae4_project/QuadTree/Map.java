@@ -1,5 +1,6 @@
 package com.example.sae4_project.QuadTree;
 
+import com.example.sae4_project.Entity.Enemy;
 import com.example.sae4_project.Entity.Entity;
 import com.example.sae4_project.Entity.Pellet;
 
@@ -52,5 +53,23 @@ public class Map {
         }
 
     }
+
+    public void getAllEnemies(QuadTree toFind, ArrayList<Enemy> enemiesList) {
+        if(toFind.getDepth() == 0) {
+            for(Entity elm : toFind.getEntities()) {
+                if(elm instanceof Enemy) {
+                    enemiesList.add((Enemy) elm);
+                }
+            }
+        } else {
+            // Récupérer les ennemis dans les 4 sous-arbres
+            getAllEnemies(toFind.getChild(Orientation.NORTH_WEST), enemiesList);
+            getAllEnemies(toFind.getChild(Orientation.NORTH_EAST), enemiesList);
+            getAllEnemies(toFind.getChild(Orientation.SOUTH_WEST), enemiesList);
+            getAllEnemies(toFind.getChild(Orientation.SOUTH_EAST), enemiesList);
+        }
+    }
+
+
 
 }
