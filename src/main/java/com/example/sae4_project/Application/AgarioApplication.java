@@ -21,8 +21,8 @@ public class AgarioApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Controller controller = new ConnectionController();
-        scene = new Scene(loadFXML("connection", controller), 800, 600 );
+        Controller controller = new AgarioController();
+        scene = new Scene(loadFXML("agario-view", controller), 800, 600 );
         stage.setTitle("agar.io");
         stage.setScene(scene);
         stage.show();
