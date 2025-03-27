@@ -25,7 +25,7 @@ public class ClientHandler extends Thread{
 
     Socket socket;
 
-    byte[] read;
+    byte[] read = new byte[4096];
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -34,13 +34,17 @@ public class ClientHandler extends Thread{
     @Override
     public void run() {
 
+           /* int bytesRead = 0;
+
             while(running){
                 try {
-                    read = this.socket.getInputStream().readAllBytes();
+                    bytesRead = this.socket.getInputStream().read(read);
+                    System.out.println(new String(read, 0, bytesRead));
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
+            }*/
 
     }
 

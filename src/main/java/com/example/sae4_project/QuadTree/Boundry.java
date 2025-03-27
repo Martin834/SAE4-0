@@ -1,6 +1,8 @@
 package com.example.sae4_project.QuadTree;
 
-public class Boundry {
+import java.io.Serializable;
+
+public class Boundry implements Serializable {
 
     private QuadTree quadTree;
 

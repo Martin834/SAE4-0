@@ -3,6 +3,7 @@ package com.example.sae4_project.Online;
 import com.example.sae4_project.Application.AgarioApplication;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Server {
         return updateWorld;
     }
 
-    public ArrayList<PrintWriter> getClientWriters() {
+    public ArrayList<ObjectOutputStream> getClientWriters() {
         return clientWriters;
     }
 
@@ -28,7 +29,7 @@ public class Server {
     }
 
     private UpdateWorld updateWorld;
-    private ArrayList<PrintWriter> clientWriters = new ArrayList<>();
+    private ArrayList<ObjectOutputStream> clientWriters = new ArrayList<>();
 
     private ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     public Server() {
@@ -48,7 +49,9 @@ public class Server {
 
     public void addClient(Socket client) throws IOException {
 
-        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+
+        System.out.println("connected");
+        ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
         synchronized (this.clientWriters){
             clientWriters.add(out);
         }

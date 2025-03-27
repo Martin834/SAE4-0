@@ -1,6 +1,9 @@
 package com.example.sae4_project.Online;
 
+import com.example.sae4_project.QuadTree.Map;
+
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 
 public class UpdateWorld extends Thread{
@@ -21,17 +24,20 @@ public class UpdateWorld extends Thread{
         while(running){
             try {
                 this.sleep(33);
-                System.out.println("Update");
 
                 synchronized(server.getClientWriters()){
 
-                    for(PrintWriter writer : server.getClientWriters()){
-                        writer.write("test");
+                    for(ObjectOutputStream writer : server.getClientWriters()){
+                        System.out.println(writer.toString());
+                        writer.writeObject(Map.getInstance());
+                        writer.flush();
                     }
                 }
 
 
             } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 

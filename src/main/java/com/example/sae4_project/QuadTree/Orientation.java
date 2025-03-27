@@ -1,6 +1,8 @@
 package com.example.sae4_project.QuadTree;
 
-public enum Orientation {
+import java.io.Serializable;
+
+public enum Orientation implements Serializable {
     NORTH_EAST,
     NORTH_WEST,
     SOUTH_EAST,

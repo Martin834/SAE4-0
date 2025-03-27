@@ -1,6 +1,8 @@
 package com.example.sae4_project.Entity;
 
-public class CreatorPellet extends Creator {
+import java.io.Serializable;
+
+public class CreatorPellet extends Creator implements Serializable {
 
     public CreatorPellet() {
         this.create();

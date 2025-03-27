@@ -4,9 +4,10 @@ import com.example.sae4_project.Entity.Entity;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Pellet extends Entity {
+public class Pellet extends Entity implements Serializable {
     private int posX;
     private int posY;
 

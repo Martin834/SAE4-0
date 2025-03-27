@@ -2,7 +2,9 @@ package com.example.sae4_project.Entity;
 
 import com.example.sae4_project.QuadTree.Map;
 
-public abstract class MoveableBody extends Entity {
+import java.io.Serializable;
+
+public abstract class MoveableBody extends Entity implements Serializable {
 
     public double smoothing = 80;
 
