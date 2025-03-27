@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DataPlayer implements Serializable {
+
     private int id;
 
     public int getId() {

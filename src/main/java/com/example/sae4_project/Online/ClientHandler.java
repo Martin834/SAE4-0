@@ -8,11 +8,11 @@ public class ClientHandler extends Thread{
 
     boolean running = true;
 
-    ObjectInputStream in;
+    Socket socket;
 
     public ClientHandler(Socket socket) throws IOException {
+        this.socket = socket;
 
-        this.in = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
@@ -21,9 +21,8 @@ public class ClientHandler extends Thread{
             while(running){
 
                 try {
-
-                    Object obj = in.readObject();
-                    DataPlayer dataPlayer = (DataPlayer) obj;
+                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                    DataPlayer dataPlayer = (DataPlayer) in.readObject();
                     System.out.println("======================   " + dataPlayer + "   ==================================");
 
                 } catch (IOException e) {
