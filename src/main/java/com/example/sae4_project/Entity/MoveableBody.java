@@ -27,7 +27,7 @@ public abstract class MoveableBody extends Entity {
         velocity[0] *= adjustedSpeed;
         velocity[1] *= adjustedSpeed;
 
-        System.out.println(adjustedSpeed);
+        //System.out.println(adjustedSpeed);
     }
 
     public void move() {

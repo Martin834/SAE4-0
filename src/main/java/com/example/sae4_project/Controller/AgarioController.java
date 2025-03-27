@@ -42,6 +42,7 @@ public class AgarioController extends Controller {
 
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
+    private  static int rectangleSizeMinimap = 10;
 
     @FXML
     private void addCircle(Circle circle) {
@@ -111,8 +112,8 @@ public class AgarioController extends Controller {
         // Creation of the rectangle representing the visible area on the minimap
        Rectangle rectangle = new Rectangle();
         rectangle.setStroke(Color.BLACK);
-        rectangle.setWidth(10);
-        rectangle.setHeight(10);
+        rectangle.setWidth(miniPlayer.getScaleX() * rectangleSizeMinimap);
+        rectangle.setHeight(miniPlayer.getScaleY() * rectangleSizeMinimap);
         rectangle.setFill(Color.TRANSPARENT);
        rectangle.setStrokeWidth(1);
         miniMap.getChildren().add(rectangle);
@@ -136,9 +137,9 @@ public class AgarioController extends Controller {
         @Override
         public void handle(ScrollEvent scrollEvent) {
             if (scrollEvent.getDeltaY() > 0) {
-                System.out.println("haut");
+                //System.out.println("haut");
             } else {
-                System.out.println("bas");
+                //System.out.println("bas");
             }
         }
     };
@@ -147,7 +148,7 @@ public class AgarioController extends Controller {
      * Update the minimap
      */
     private void updateMiniMapScale(Circle miniPlayer) {
-        System.out.println("1:"+miniPlayer.getRadius());
+      // System.out.println("1:"+miniPlayer.getRadius());
         double scale = miniMap.getWidth() / Map.size;
 
 
@@ -180,12 +181,16 @@ public class AgarioController extends Controller {
     }
 
   private void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
-        //double scale = miniMap.getWidth() / Map.size;
 
 
-//Link the position of the rectangle with that of the miniPlayer
+
+    //Link the position of the rectangle with that of the miniPlayer
       rectangle.layoutXProperty().bind(miniPlayer.centerXProperty().subtract(rectangle.getWidth() / 2));
       rectangle.layoutYProperty().bind(miniPlayer.centerYProperty().subtract(rectangle.getHeight() / 2));
+
+      //adapt the rectangle and the player
+      rectangle.setHeight(miniPlayer.getRadius() * rectangleSizeMinimap);
+      rectangle.setWidth(miniPlayer.getRadius() * rectangleSizeMinimap);
 
   }
 
