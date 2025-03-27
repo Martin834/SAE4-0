@@ -25,6 +25,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.scene.shape.Rectangle;
+import java.math.MathContext;
 import java.net.URL;
 import java.util.*;
 import java.util.random.RandomGenerator;
@@ -49,6 +51,7 @@ public class AgarioController extends Controller {
 
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
+    private  static int rectangleSizeMinimap = 10;
 
     public static Player getPlayer() {
         return player;
@@ -144,6 +147,20 @@ public class AgarioController extends Controller {
 
         this.gameLoop();
 
+
+        // Creation of the rectangle representing the visible area on the minimap
+       Rectangle rectangle = new Rectangle();
+        rectangle.setStroke(Color.BLACK);
+        rectangle.setWidth(miniPlayer.getScaleX() * rectangleSizeMinimap);
+        rectangle.setHeight(miniPlayer.getScaleY() * rectangleSizeMinimap);
+        rectangle.setFill(Color.TRANSPARENT);
+       rectangle.setStrokeWidth(1);
+        miniMap.getChildren().add(rectangle);
+
+        for(Circle circle1 : player.circlesList) {
+            circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+            circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+        }
     }
 
     EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
@@ -174,16 +191,12 @@ public class AgarioController extends Controller {
     private void updateMiniMapScale(Circle miniPlayer) {
         double scale = miniMap.getWidth() / Map.size;
 
-
         // Update the player on the minimap
         for (Circle circle : player.getCirclesList()) {
             miniPlayer.setRadius(circle.getRadius() * scale);
             miniPlayer.centerXProperty().bind(circle.centerXProperty().multiply(scale));
             miniPlayer.centerYProperty().bind(circle.centerYProperty().multiply(scale));
         }
-
-
-
     }
 
     private void gameLoop() {
@@ -193,7 +206,7 @@ public class AgarioController extends Controller {
                 player.move();
                 Random random = new Random();
                 int enemysize = allEnemy.size();
-                if (enemysize < 65) {
+                if (enemysize < 15) {
                     spawnEnemies();
                 }
                 //System.out.println(allEnemy.size());
@@ -255,7 +268,6 @@ public class AgarioController extends Controller {
 
                         for (Circle circle : player.getCirclesList()) {
                             String s = "joueur : "+(circle.getRadius() * circle.getRadius()) / 100 + " advsersaire = " + (enemy.getCircle().getRadius() * enemy.getCircle().getRadius()) / 100 * 1.33;
-                            System.out.println("hooooooo");
                             if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
                                 player.makeFatter(enemy, player.circle);
                                 //player.circle.setFill(Color.BLACK);
@@ -286,15 +298,24 @@ public class AgarioController extends Controller {
         timer.start();
     }
 
-    public void eatingAnimation(double oldMass, double newMass){
 
+    public void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
+    //Link the position of the rectangle with that of the miniPlayer
+      rectangle.layoutXProperty().bind(miniPlayer.centerXProperty().subtract(rectangle.getWidth() / 2));
+      rectangle.layoutYProperty().bind(miniPlayer.centerYProperty().subtract(rectangle.getHeight() / 2));
+
+      //adapt the rectangle and the player
+      rectangle.setHeight(miniPlayer.getRadius() * rectangleSizeMinimap);
+      rectangle.setWidth(miniPlayer.getRadius() * rectangleSizeMinimap);
     }
+
     public void spawnEnemies() {
         Random random = new Random();
         Enemy e = new CreatorEnemy().create(random.nextDouble(0,Map.size),random.nextDouble(0,Map.size));
         allEnemy.add(e);
         addCircle(e.getCircle());
     }
+
     public void spawnPellets() {
         Random random = new Random();
         Pellet p = new Pellet(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
