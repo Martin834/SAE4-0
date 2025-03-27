@@ -1,55 +1,46 @@
 package com.example.sae4_project.Online;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 
 public class ClientHandler extends Thread{
 
     boolean running = true;
 
-    public Socket getSocket() {
-        return socket;
-    }
+    ObjectInputStream in;
 
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
+    public ClientHandler(Socket socket) throws IOException {
 
-    public byte[] getRead() {
-        return read;
-    }
-
-    public void setRead(byte[] read) {
-        this.read = read;
-    }
-
-    Socket socket;
-
-    byte[] read = new byte[4096];
-
-    public ClientHandler(Socket socket) {
-        this.socket = socket;
+        this.in = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
     public void run() {
 
-           /* int bytesRead = 0;
-
             while(running){
+
                 try {
-                    bytesRead = this.socket.getInputStream().read(read);
-                    System.out.println(new String(read, 0, bytesRead));
+                    Object obj = in.readObject();
+
+                    if(obj instanceof DataPlayer){
+                        DataPlayer dataPlayer = (DataPlayer) obj;
+                        System.out.println("======================   " + dataPlayer + "   ==================================");
+                    }
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
                 }
-            }*/
+
+
+
+            }
 
     }
 
     public void disconnect() throws IOException {
-        this.socket.close();
         running = false;
     }
 
