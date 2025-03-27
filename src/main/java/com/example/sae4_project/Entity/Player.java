@@ -145,14 +145,13 @@ public class Player extends MoveableBody {
         }
 
         Circle baseCircle = this.circlesList.get(0);
-        
+
         this.circlesList.clear();
         this.circlesList.add(baseCircle);
 
-        circleComposite = new CircleComposite();
-        circleComposite.add(new CircleLeaf(baseCircle));
+        this.circle = null;
 
-        adjustCirclePositions();
+        circleComposite.add(new CircleLeaf(baseCircle));
     }
 
    /* public void makeFatter(Entity entity) {
