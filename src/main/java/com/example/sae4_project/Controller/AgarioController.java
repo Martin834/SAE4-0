@@ -116,10 +116,11 @@ public class AgarioController extends Controller {
        rectangle.setStrokeWidth(1);
         miniMap.getChildren().add(rectangle);
 
-// Écoute les changements du joueur pour mettre à jour la minimap
-   /*     player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
-        player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
-*/
+
+
+    player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+    player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+
     }
 
 
@@ -177,18 +178,15 @@ public class AgarioController extends Controller {
         timer.start();
     }
 
- /*  private void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
-        double scale = miniMap.getWidth() / Map.size;
+  private void updateMiniMapScale(Circle circle, Rectangle rectangle) {
+
+      //double scale = miniMap.getWidth() / Map.size;
 
 
-       // Lier dynamiquement les positions à celles du joueur avec l'échelle
-       miniPlayer.centerXProperty().bind(player.getCircle().centerXProperty().multiply(scale));
-       miniPlayer.centerYProperty().bind(player.getCircle().centerYProperty().multiply(scale));
 
-       // Mise à jour du joueur sur la minimap
-        miniPlayer.setRadius(player.getCircle().getRadius() * scale);
-        miniPlayer.setCenterX(player.getCircle().getCenterX() * scale);
-        miniPlayer.setCenterY(player.getCircle().getCenterY() * scale);
-    }*/
+    rectangle.layoutXProperty().bind(cam.getCoordinate().XProperty());
+      rectangle.layoutYProperty().bind(cam.getCoordinate().YProperty());
+  }
+
 
 }
