@@ -13,6 +13,7 @@ public class Player extends MoveableBody {
         super();
         this.setMass(5);
         Circle circle = new Circle(400 - this.getMass() / 2, 300 - this.getMass() / 2, 15);
+        circlesList.add(circle);
         circle.setFill(Color.RED);
         this.circleComposite = new CircleComposite();
         this.circleComposite.add(new CircleLeaf(circle));
@@ -80,6 +81,7 @@ public class Player extends MoveableBody {
 
             circleComposite.add(new CircleLeaf(originalCircle));
             circleComposite.add(new CircleLeaf(newCircle));
+            this.circlesList.add(newCircle);
             for (CircleComponent circle : temptempCirclesList) {
                 circleComposite.add(circle);
             }

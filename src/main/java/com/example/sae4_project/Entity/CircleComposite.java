@@ -30,9 +30,9 @@ public class CircleComposite implements CircleComponent {
     }
 
     @Override
-    public void makeFatter(Entity entity) {
+    public void makeFatter(Entity entity , Circle circle) {
         for (CircleComponent component : circleComponents) {
-            component.makeFatter(entity);
+            component.makeFatter(entity , circle);
         }
     }
 

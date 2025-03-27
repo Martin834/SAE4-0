@@ -18,7 +18,7 @@ public class CircleLeaf implements CircleComponent {
 
         double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1]));
 
-        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed * (1 / (circle.getRadius() * circle.getRadius())));
+        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed * (1 / (circle.getRadius() * circle.getRadius()))*15);
 
         if (euclidianDistance > 4) {
             euclidianDistance = 4;
@@ -38,7 +38,7 @@ public class CircleLeaf implements CircleComponent {
     }
 
     @Override
-    public void makeFatter(Entity entity) {
+    public void makeFatter(Entity entity, Circle circle) {
         double newRadius = Math.sqrt(circle.getRadius() * circle.getRadius() + entity.getMass());
         circle.setRadius(newRadius);
     }

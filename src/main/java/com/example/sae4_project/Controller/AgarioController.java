@@ -88,7 +88,6 @@ public class AgarioController extends Controller {
 
         for(Enemy elm : allEnemy){
             addCircle(elm.getCircle());
-            //System.out.println(elm.getStrategy());
         }
 
         this.player = new CreatorPlayer().create();
@@ -173,7 +172,6 @@ public class AgarioController extends Controller {
      * Update the minimap
      */
     private void updateMiniMapScale(Circle miniPlayer) {
-        System.out.println("1:"+miniPlayer.getRadius());
         double scale = miniMap.getWidth() / Map.size;
 
 
@@ -256,14 +254,15 @@ public class AgarioController extends Controller {
                         double enemyMass = enemy.getMass();
 
                         for (Circle circle : player.getCirclesList()) {
-                            if (circle.getRadius() >= enemy.getCircle().getRadius() * 1.33) {
-                                //System.out.println("ssfbksdfsbdfilshfiulsshfdliifhiv");
+                            String s = "joueur : "+(circle.getRadius() * circle.getRadius()) / 100 + " advsersaire = " + (enemy.getCircle().getRadius() * enemy.getCircle().getRadius()) / 100 * 1.33;
+                            System.out.println("hooooooo");
+                            if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
                                 player.makeFatter(enemy, player.circle);
                                 //player.circle.setFill(Color.BLACK);
                                 terrain.getChildren().remove(enemy.getCircle());
                                 allEnemy.remove(i);
                                 i--;
-                            } else if (enemy.getCircle().getRadius() >= circle.getRadius() * 1.33) {
+                            } else if ((enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 >= (circle.getRadius()*circle.getRadius())/100 * 1.33) {
                                 System.out.println("Game Over ! Tu t'es fait manger.");
                                 stop();
                                 Platform.runLater(() -> {
@@ -298,7 +297,7 @@ public class AgarioController extends Controller {
     }
     public void spawnPellets() {
         Random random = new Random();
-        Pellet p = new CreatorPellet().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+        Pellet p = new Pellet(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
         allPellets.add(p);
         addCircle(p.getCircle());
     }

@@ -6,6 +6,6 @@ import java.util.List;
 public interface CircleComponent {
     void moveTowards(double posXMouse, double posYMouse, double maxSpeed);
     void move();
-    void makeFatter(Entity entity);
+    void makeFatter(Entity entity , Circle circle);
     List<Circle> getCircles();
 }
