@@ -18,6 +18,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 import java.math.MathContext;
 import java.net.URL;
@@ -106,6 +107,19 @@ public class AgarioController extends Controller {
         player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
 
+        // Création du rectangle représentant la zone visible sur la minimap
+       Rectangle rectangle = new Rectangle();
+        rectangle.setStroke(Color.BLACK);
+        rectangle.setWidth(10);
+        rectangle.setHeight(10);
+        rectangle.setFill(Color.TRANSPARENT);
+       rectangle.setStrokeWidth(1);
+        miniMap.getChildren().add(rectangle);
+
+// Écoute les changements du joueur pour mettre à jour la minimap
+   /*     player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+        player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+*/
     }
 
 
@@ -163,5 +177,18 @@ public class AgarioController extends Controller {
         timer.start();
     }
 
+ /*  private void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
+        double scale = miniMap.getWidth() / Map.size;
+
+
+       // Lier dynamiquement les positions à celles du joueur avec l'échelle
+       miniPlayer.centerXProperty().bind(player.getCircle().centerXProperty().multiply(scale));
+       miniPlayer.centerYProperty().bind(player.getCircle().centerYProperty().multiply(scale));
+
+       // Mise à jour du joueur sur la minimap
+        miniPlayer.setRadius(player.getCircle().getRadius() * scale);
+        miniPlayer.setCenterX(player.getCircle().getCenterX() * scale);
+        miniPlayer.setCenterY(player.getCircle().getCenterY() * scale);
+    }*/
 
 }
