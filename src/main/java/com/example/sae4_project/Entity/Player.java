@@ -5,10 +5,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Player extends MoveableBody {
+public class Player extends MoveableBody implements Serializable {
 
 
     public Player() {

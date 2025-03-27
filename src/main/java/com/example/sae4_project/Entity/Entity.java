@@ -3,7 +3,9 @@ package com.example.sae4_project.Entity;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.shape.Circle;
 
-public abstract class Entity {
+import java.io.Serializable;
+
+public abstract class Entity implements Serializable {
 
     protected int identifier;
 
