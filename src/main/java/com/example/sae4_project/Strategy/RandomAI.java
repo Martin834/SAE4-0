@@ -13,9 +13,10 @@ public class RandomAI implements AIStrategy {
         long now = System.nanoTime();
         if (now - lastChangeTime > 2_000_000_000L) {
             double angle = random.nextDouble() * 2 * Math.PI;
-            double speed = 1 + random.nextDouble() * 2;
-            enemy.velocity[0] = Math.cos(angle) * speed;
-            enemy.velocity[1] = Math.sin(angle) * speed;
+            enemy.speed = enemy.calculateMaxSpeed()*0.7;
+            enemy.moveTowards(random.nextDouble(600), random.nextDouble(400));
+            enemy.velocity[0] = Math.cos(angle) * enemy.calculateMaxSpeed();
+            enemy.velocity[1] = Math.sin(angle) * enemy.calculateMaxSpeed();
             lastChangeTime = now;
         }
     }

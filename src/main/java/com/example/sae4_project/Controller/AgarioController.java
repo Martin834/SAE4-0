@@ -178,7 +178,7 @@ public class AgarioController extends Controller {
 
                 if (touchedSpecialPellet != null) {
                     player.makeFatter(touchedSpecialPellet);
-                    player.speed = player.calculateMaxSpeed();
+                    //player.speed = player.calculateMaxSpeed();
                     touchedSpecialPellet.applyEffect(player);
                     terrain.getChildren().remove(touchedSpecialPellet.getCircle());
                     allSpecialPellets.remove(touchedSpecialPellet);
@@ -204,11 +204,11 @@ public class AgarioController extends Controller {
                     }
                     if (touchedSpecialPellet != null) {
                         enemy.makeFatter(touchedByEnemy);
-                        enemy.speed = enemy.calculateMaxSpeed();
+                        //enemy.speed = enemy.calculateMaxSpeed();
 
                         touchedSpecialPellet.applyEffect(enemy);
                         terrain.getChildren().remove(touchedSpecialPellet.getCircle());
-                        allPellets.remove(touchedSpecialPellet);
+                        allSpecialPellets.remove(touchedSpecialPellet);
                     }
 
                     enemy.move();
@@ -277,7 +277,6 @@ public class AgarioController extends Controller {
     }
     public void spawnPellets() {
         Random random = new Random();
-        System.out.println("-------------------------------------------");
         if (random.nextDouble() < 0.2) {
             SpecialPellets sp = new CreatorSpecialPellets().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
             allSpecialPellets.add(sp);

@@ -50,6 +50,6 @@ public class Player extends MoveableBody {
     }
 
     public double calculateMaxSpeed() {
-        return (1 / this.massProperty().doubleValue()) * 60;
+        return (1 / this.massProperty().doubleValue()) * 700;
     }
 }
