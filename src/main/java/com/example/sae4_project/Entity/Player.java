@@ -135,26 +135,29 @@ public class Player extends MoveableBody {
         adjustCirclePositions();
     }
 
-    public void rassembling() {
-        System.out.println("RASSEMBLEMENT GENERAL§/§/");
-
+    public Circle rassembling(ArrayList<Circle> circle) {
+        Circle c = circle.get(circle.size()-1);
+        circle.get(0).setRadius(10*Math.sqrt((this.circlesList.get(0).getRadius()*this.circlesList.get(0).getRadius())/100+(c.getRadius()*c.getRadius())/100));
+        return c ;
+    }
+        /*
         double totalMassRetain  = 0.0;
-
         for (Circle circle1 : this.getCirclesList()) {
             totalMassRetain += circle1.getRadius();
         }
 
         Circle baseCircle = this.circlesList.get(0);
+        Circle newCircle = new Circle(baseCircle.getCenterX(), baseCircle.getCenterY(), totalMassRetain);
 
         this.circlesList.clear();
-        this.circlesList.add(baseCircle);
+        this.circlesList.add(newCircle);
 
-        this.circle = null;
+        this.circle = newCircle;
 
-        circleComposite.add(new CircleLeaf(baseCircle));
+        circleComposite.add(new CircleLeaf(newCircle));
     }
 
-   /* public void makeFatter(Entity entity) {
+    public void makeFatter(Entity entity) {
         this.setMass(this.getMass() +  entity.getMass());
         double radius = this.calculateRadius();
         this.circle.setRadius(radius);

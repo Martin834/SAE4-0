@@ -50,6 +50,7 @@ public class AgarioController extends Controller {
     private long t = -1;
     private boolean isTaskCompleted = false;
     private double cptFrames = 0.0;
+    boolean test = false;
 
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
@@ -200,12 +201,10 @@ public class AgarioController extends Controller {
                 if (enemysize < 15) {
                     spawnEnemies();
                 }
-                //System.out.println(allEnemy.size());
                 int pelletsNB = allPellets.size();
                 if (pelletsNB < 1500) {
                     spawnPellets();
                 }
-                //System.out.println(allPellets.size());
                 //.getAllEnemies(map.getQuadTree(), allEnemy);
                 //QuadTree zone = map.findQuadTree(map.getQuadTree(), new Coordinate(12,12));
                 //zone.getEntities().add(enemi);
@@ -258,8 +257,6 @@ public class AgarioController extends Controller {
                         double enemyMass = enemy.getMass();
 
                         for (Circle circle : player.getCirclesList()) {
-                            String s = "joueur : "+(circle.getRadius() * circle.getRadius()) / 100 + " advsersaire = " + (enemy.getCircle().getRadius() * enemy.getCircle().getRadius()) / 100 * 1.33;
-                            System.out.println("hooooooo");
                             if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
                                 player.makeFatter(enemy, player.circle);
                                 //player.circle.setFill(Color.BLACK);
@@ -267,7 +264,6 @@ public class AgarioController extends Controller {
                                 allEnemy.remove(i);
                                 i--;
                             } else if ((enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 >= (circle.getRadius()*circle.getRadius())/100 * 1.33) {
-                                System.out.println("Game Over ! Tu t'es fait manger.");
                                 stop();
                                 Platform.runLater(() -> {
                                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -284,17 +280,29 @@ public class AgarioController extends Controller {
                         }
                     }
                 }
+                System.out.println("-0 : "+player.circlesList.toString());
+                System.out.println(player.circlesList.size());
+                if (player.circlesList.size() >= 2 && !test) {
+                    System.out.println(" list :" +player.circlesList.toString());
+                    test = true;
+                    double timeBeforeRassembling = getTimeBeforeRassembling(player.circlesList.get(0));
+                    long startTime = System.currentTimeMillis();
 
-                if (player.circlesList.size() >= 2) {
-                    t = (long) getTimeBeforeRassembling(player.circlesList.get(0));
                     AnimationTimer timer1 = new AnimationTimer() {
                         @Override
-                        public void handle(long l) {
-                            if (cptFrames >= t * 3000) {
-                                player.rassembling();
+                        public void handle(long now) {
+                            System.out.println("temps : "+(System.currentTimeMillis() - startTime)+"  temps : "+ timeBeforeRassembling * 1000);
+                            if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 1000) {
+                                System.out.println("cc");
+                                System.out.println("1 : "+player.circlesList.toString());
+                                Circle c = player.rassembling(player.circlesList);
+                                terrain.getChildren().remove(c);
+                                player.circlesList.remove(c);
+                                System.out.println("2 : "+player.circlesList.toString());
+                                System.out.println("3 : "+player.circlesList.toString());
+                                stop();
+                                test = false;
                             }
-                            System.out.println(cptFrames);
-                            cptFrames += 0.3;
                         }
                     };
                     timer1.start();
@@ -304,13 +312,14 @@ public class AgarioController extends Controller {
         timer.start();
     }
 
+    public double getTimeBeforeRassembling(Circle dividedCircle) {
+        return this.constTemps + dividedCircle.getRadius()/100;
+    }
     public void eatingAnimation(double oldMass, double newMass){
 
     }
 
-    public double getTimeBeforeRassembling(Circle dividedCircle) {
-        return this.constTemps + dividedCircle.getRadius()/100;
-    }
+
 
     public void spawnEnemies() {
         Random random = new Random();
