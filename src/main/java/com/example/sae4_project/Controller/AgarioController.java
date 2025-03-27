@@ -107,7 +107,8 @@ public class AgarioController extends Controller {
         player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
 
-        // Création du rectangle représentant la zone visible sur la minimap
+
+        // Creation of the rectangle representing the visible area on the minimap
        Rectangle rectangle = new Rectangle();
         rectangle.setStroke(Color.BLACK);
         rectangle.setWidth(10);
@@ -178,14 +179,14 @@ public class AgarioController extends Controller {
         timer.start();
     }
 
-  private void updateMiniMapScale(Circle circle, Rectangle rectangle) {
-
-      //double scale = miniMap.getWidth() / Map.size;
-
+  private void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
+        //double scale = miniMap.getWidth() / Map.size;
 
 
-    rectangle.layoutXProperty().bind(cam.getCoordinate().XProperty());
-      rectangle.layoutYProperty().bind(cam.getCoordinate().YProperty());
+//Link the position of the rectangle with that of the miniPlayer
+      rectangle.layoutXProperty().bind(miniPlayer.centerXProperty().subtract(rectangle.getWidth() / 2));
+      rectangle.layoutYProperty().bind(miniPlayer.centerYProperty().subtract(rectangle.getHeight() / 2));
+
   }
 
 
