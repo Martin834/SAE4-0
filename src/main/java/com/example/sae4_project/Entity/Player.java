@@ -13,7 +13,7 @@ public class Player extends MoveableBody {
 
     public Player() {
         super();
-        this.setMass(5);
+        this.setMass(3);
         circle = new Circle(400-this.getMass()/2, 300-this.getMass()/2, 25);
         circle.setFill(Color.BLACK);
     }

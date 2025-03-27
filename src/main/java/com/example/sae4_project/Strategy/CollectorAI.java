@@ -30,9 +30,7 @@ public class CollectorAI implements AIStrategy{
                 closestPellet = pellet;
             }
         }
-
         if (closestPellet != null) {
-            //System.out.println("Ennemi se dirige vers un pellet !");
             enemy.moveTowards(closestPellet.getCircle().getCenterX(), closestPellet.getCircle().getCenterY());
         }
     }

@@ -63,7 +63,7 @@ public abstract class MoveableBody extends Entity {
         double dx = this.circle.getCenterX() - other.circle.getCenterX();
         double dy = this.circle.getCenterY() - other.circle.getCenterY();
         double distance = Math.sqrt(dx * dx + dy * dy);
-        return distance < (this.circle.getRadius() + other.circle.getRadius()); // Vérifie si les cercles se chevauchent
+        return distance < (this.circle.getRadius() + other.circle.getRadius());
     }
     public double calculateRadius() {
         double mass = this.mass.get();
@@ -74,38 +74,43 @@ public abstract class MoveableBody extends Entity {
         double otherMass = other.getMass();
         double myMass = this.getMass();
         double newMass = myMass + otherMass;
-
+        double finalRadius = Math.sqrt(newMass);
         double scaleFactor = Math.sqrt(newMass / myMass);
 
         Random random = new Random();
         int red = random.nextInt(256);
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
-        // Animation de la taille (croissance du cercle)
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(300), this.circle);
-        scaleTransition.setToX(scaleFactor);
-        scaleTransition.setToY(scaleFactor);
-        scaleTransition.setInterpolator(Interpolator.EASE_OUT);
 
-        // Animation de la couleur (effet d'absorption)
+        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), this.circle);
+        scaleUp.setToX(scaleFactor);
+        scaleUp.setToY(scaleFactor);
+        scaleUp.setInterpolator(Interpolator.EASE_OUT);
+
         FillTransition fillTransition = new FillTransition(Duration.millis(150), circle);
-        fillTransition.setFromValue(Color.rgb(red,green,blue));
-        fillTransition.setToValue(Color.rgb(red,green,blue));
+        fillTransition.setFromValue(Color.rgb(red, green, blue));
+        fillTransition.setToValue(Color.rgb(red, green, blue));
         fillTransition.setCycleCount(1);
         fillTransition.setAutoReverse(true);
 
-        // Quand l'animation est terminée, mettre à jour la masse et le rayon
-        scaleTransition.setOnFinished(event -> {
+        scaleUp.setOnFinished(event -> {
             this.setMass(newMass);
-            this.circle.setRadius(calculateRadius()); // Appliquer le nouveau rayon
-            this.circle.setScaleX(1); // Réinitialiser l'échelle
+            this.circle.setScaleX(1);
             this.circle.setScaleY(1);
+            this.circle.setRadius(finalRadius);
+
+            ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), this.circle);
+            scaleDown.setToX(1);
+            scaleDown.setToY(1);
+            scaleDown.setInterpolator(Interpolator.EASE_OUT);
+            scaleDown.play();
+            this.circle.setRadius(calculateRadius());
         });
-        // Lancer les animations en parallèle
-        random.setSeed(random.nextInt());
-        scaleTransition.play();
+
+        scaleUp.play();
         fillTransition.play();
     }
+
 
 }
 

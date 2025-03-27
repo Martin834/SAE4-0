@@ -19,26 +19,11 @@ public class HunterAI implements AIStrategy {
                 double playerX = player.getCircle().getCenterX();
                 double playerY = player.getCircle().getCenterY();
 
-                enemy.moveTowards(playerX, playerY);
+                enemy.moveTowards(playerX, playerY, enemy.calculateMaxSpeed());
             } else {
                 enemy.setStrategy(new CollectorAI());
             }
         }
-
-        private Pellet getClosestPellet(Enemy enemy) {
-            List<Pellet> pellets = AgarioController.getPellets();
-            Pellet closestPellet = null;
-            double minDistance = Double.MAX_VALUE;
-
-            for (Pellet pellet : pellets) {
-                double distance = enemy.getDistanceTo(pellet);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestPellet = pellet;
-                }
-            }
-            return closestPellet;
-        }
-    }
+}
 
 

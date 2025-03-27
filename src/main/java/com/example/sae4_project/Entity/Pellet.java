@@ -17,7 +17,7 @@ public class Pellet extends Entity {
         this.posX = r.nextInt(801);
         this.posY = r.nextInt(801);
         this.setMass(1);
-        circle = new Circle(this.posX, this.posY, 5);
+        circle = new Circle(this.posX, this.posY, calculateRadius());
         Random rand = new Random();
 
         double red = rand.nextDouble();
