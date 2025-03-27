@@ -1,6 +1,8 @@
 package com.example.sae4_project.Online;
 
-public class DataCircle {
+import java.io.Serializable;
+
+public class DataCircle implements Serializable {
 
     public double getCenterX() {
         return centerX;

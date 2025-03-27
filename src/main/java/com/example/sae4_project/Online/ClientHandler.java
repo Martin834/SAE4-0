@@ -21,12 +21,10 @@ public class ClientHandler extends Thread{
             while(running){
 
                 try {
-                    Object obj = in.readObject();
 
-                    if(obj instanceof DataPlayer){
-                        DataPlayer dataPlayer = (DataPlayer) obj;
-                        System.out.println("======================   " + dataPlayer + "   ==================================");
-                    }
+                    Object obj = in.readObject();
+                    DataPlayer dataPlayer = (DataPlayer) obj;
+                    System.out.println("======================   " + dataPlayer + "   ==================================");
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);

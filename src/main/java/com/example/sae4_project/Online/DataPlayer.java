@@ -3,9 +3,10 @@ package com.example.sae4_project.Online;
 import com.example.sae4_project.Entity.Player;
 import javafx.scene.shape.Circle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DataPlayer {
+public class DataPlayer implements Serializable {
     private int id;
 
     public int getId() {
