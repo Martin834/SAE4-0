@@ -4,6 +4,7 @@ import com.example.sae4_project.Application.AgarioApplication;
 import com.example.sae4_project.Online.OnlineState;
 import com.example.sae4_project.Online.Server;
 import com.example.sae4_project.Online.ServerManager;
+import com.example.sae4_project.Online.ServerMessageReceiver;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -80,6 +81,10 @@ public class ConnectionController extends Controller{
                 String hostName = ip.getText();
                 int hostPort = Integer.parseInt(port.getText());
                 client = new Socket(hostName, hostPort);
+
+                ServerMessageReceiver receiver = new ServerMessageReceiver(client);
+                receiver.start();
+
                 changeState(OnlineState.GUEST);
 
             } catch (Exception e) {

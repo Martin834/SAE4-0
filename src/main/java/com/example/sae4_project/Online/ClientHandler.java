@@ -5,7 +5,7 @@ import java.net.Socket;
 
 public class ClientHandler extends Thread{
 
-    boolean running;
+    boolean running = true;
 
     public Socket getSocket() {
         return socket;
@@ -29,13 +29,12 @@ public class ClientHandler extends Thread{
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
-        running = true;
     }
 
     @Override
     public void run() {
 
-            while(true){
+            while(running){
                 try {
                     read = this.socket.getInputStream().readAllBytes();
                 } catch (IOException e) {

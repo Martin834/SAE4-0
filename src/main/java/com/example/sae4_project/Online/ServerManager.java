@@ -30,8 +30,6 @@ public class ServerManager extends Thread {
                 System.out.println("En attente de connexion...");
                 Socket income = socket.accept();
                 this.server.addClient(income);
-
-                System.out.println("Client connecté");
             }
 
             socket.close();
@@ -45,6 +43,7 @@ public class ServerManager extends Thread {
     }
 
     public void disconnect() throws IOException {
+        socket.close();
         running = false;
     }
 
