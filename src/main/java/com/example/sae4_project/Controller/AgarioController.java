@@ -5,12 +5,18 @@ import com.example.sae4_project.QuadTree.Camera;
 import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.control.ButtonType;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
@@ -18,11 +24,10 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
-import java.math.MathContext;
+import javafx.scene.text.Text;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.random.RandomGenerator;
 
 public class AgarioController extends Controller {
     @FXML
@@ -30,50 +35,71 @@ public class AgarioController extends Controller {
     @FXML
     private Pane miniMap;
     @FXML
-    private AnchorPane globalPane;
-
-
-    private Player player;
+    private VBox leaderboard;
+    @FXML
+    private AnchorPane conteneurGlobal;
+    private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
+    private static Player player;
     private Pellet touchedPellet;
-    private ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
+    private Pellet touchedByEnemy;
+    private static ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
+    private static ArrayList<Enemy> allEnemy = new ArrayList<Enemy>();
     private double posX;
     private double posY;
 
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
 
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static List<Pellet> getPellets() {
+        return allPellets;
+    }
+
     @FXML
     private void addCircle(Circle circle) {
-
         this.terrain.getChildren().add(circle);
     }
 
+    @FXML
+    private void removeCircle(Circle circle) {
+        this.terrain.getChildren().remove(circle);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Binding the terrain's size and the globalPane's size
-        this.terrain.prefHeightProperty().bind(globalPane.heightProperty());
-        this.terrain.prefWidthProperty().bind(globalPane.widthProperty());
+        this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
+        this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
         this.terrain.setLayoutY(0);
+        this.terrain.setFocusTraversable(true);
+        this.terrain.requestFocus();
 
-        // Load pellets and display themm on the map
+        this.miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
         map.getAllPellet(map.getQuadTree(), allPellets);
         for (Pellet elm : allPellets) {
             addCircle(elm.getCircle());
         }
 
-        // Add the player on the map
+        map.getAllEnemies(map.getQuadTree(), allEnemy);
+
+        for(Enemy elm : allEnemy){
+            addCircle(elm.getCircle());
+        }
+
         this.player = new CreatorPlayer().create();
-        Circle circle = this.player.getCircle();
+        Circle circle = player.getCirclesList().get(0);
         addCircle(circle);
 
         cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
-                Bindings.divide( globalPane.widthProperty(), 2)) , circle.centerXProperty()));
+                Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
         cam.getCoordinate().YProperty().bind(Bindings.add(Bindings.multiply(-1,
-                Bindings.divide( globalPane.heightProperty(), 2)), circle.centerYProperty()));
-        cam.zoomProperty().bind(Bindings.divide(5,
-                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(10*player.massProperty().get())), player.massProperty())));
+                Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
+        cam.zoomProperty().bind(Bindings.divide(7,
+                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(Math.sqrt(6*player.massProperty().get()))), player.massProperty())));
 
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
@@ -84,46 +110,66 @@ public class AgarioController extends Controller {
         terrain.scaleXProperty().bind(cam.zoomProperty());
         terrain.scaleYProperty().bind(cam.zoomProperty());
 
-
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
-        this.terrain.addEventHandler(ScrollEvent.SCROLL, handlerScrolled);
-
-
-
-
-
-        this.gameLoop();
+        this.terrain.addEventHandler(KeyEvent.KEY_PRESSED, handlerSpace);
 
         // Setup of the minimap
         miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         // Creation of the player on the minimap
-        Circle miniPlayer = new Circle(player.getCircle().getRadius(), Color.RED);
+        Circle miniPlayer = new Circle(player.getCirclesList().get(0).getRadius(), Color.RED);
         miniMap.getChildren().add(miniPlayer);
 
-
         //Listen to the player to update the minimap
+
         updateMiniMapScale(miniPlayer);
         player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
 
+        for (Circle circle1 : player.getCirclesList()) {
+            circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+            circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+        }
+
+        leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        leaderboard.setSpacing(10);
+        leaderboard.setPadding(new Insets(10, 20, 10, 10));  // (haut, droite, bas, gauche)
+
+
+        Integer [] nombre = {1,2,3,4,5,6,7,8,9,10};
+        Label [] noms = {new Label("joli"), new Label("sobriquet"), new Label("s'éclipse"), new Label("parole"),
+                new Label("de"), new Label("moine"), new Label("dérolle"), new Label("dodécacophonique"),
+                new Label("rythmique"), new Label("globule10")};
+
+        for (int i = 0; i < 10 ; i++) {
+            Label label = new Label(nombre[i].toString() + ". " + noms[i].getText());
+            label.setPrefSize(200.0, 200.0);
+            leaderboard.getChildren().add(label);
+        }
+
+        this.gameLoop();
+
+
     }
 
-
-    EventHandler handlerMouseMoved = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            player.moveTowards( mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
+            player.moveTowards(mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
         }
     };
 
-    EventHandler handlerScrolled = new EventHandler<ScrollEvent>() {
+    EventHandler<KeyEvent> handlerSpace = new EventHandler<KeyEvent>() {
         @Override
-        public void handle(ScrollEvent scrollEvent) {
-            if (scrollEvent.getDeltaY() > 0) {
-                System.out.println("haut");
-            } else {
-                System.out.println("bas");
+        public void handle(KeyEvent keyEvent) {
+            if (keyEvent.getCode() == KeyCode.SPACE) {
+                player.divideItself();
+                for (Circle circle : player.getCirclesList()) {
+                    removeCircle(circle);
+                }
+                for (Circle circle : player.getCirclesList()) {
+                    addCircle(circle);
+                }
             }
         }
     };
@@ -132,37 +178,133 @@ public class AgarioController extends Controller {
      * Update the minimap
      */
     private void updateMiniMapScale(Circle miniPlayer) {
-        System.out.println("1:"+miniPlayer.getRadius());
         double scale = miniMap.getWidth() / Map.size;
 
 
         // Update the player on the minimap
-        miniPlayer.setRadius(player.getCircle().getRadius() * scale);
-        miniPlayer.centerXProperty().bind(player.getCircle().centerXProperty().multiply(scale));
-        miniPlayer.centerYProperty().bind(player.getCircle().centerYProperty().multiply(scale));
+        for (Circle circle : player.getCirclesList()) {
+            miniPlayer.setRadius(circle.getRadius() * scale);
+            miniPlayer.centerXProperty().bind(circle.centerXProperty().multiply(scale));
+            miniPlayer.centerYProperty().bind(circle.centerYProperty().multiply(scale));
+        }
+
 
 
     }
 
-
     private void gameLoop() {
         AnimationTimer timer = new AnimationTimer() {
             @Override
-            public void handle(long l) {
+            public void handle(long now) {
                 player.move();
-
+                Random random = new Random();
+                int enemysize = allEnemy.size();
+                if (enemysize < 15) {
+                    spawnEnemies();
+                }
+                //System.out.println(allEnemy.size());
+                int pelletsNB = allPellets.size();
+                if (pelletsNB < 1500) {
+                    spawnPellets();
+                }
+                //System.out.println(allPellets.size());
+                //.getAllEnemies(map.getQuadTree(), allEnemy);
+                //QuadTree zone = map.findQuadTree(map.getQuadTree(), new Coordinate(12,12));
+                //zone.getEntities().add(enemi);
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
-                    player.makeFatter(touchedPellet);
-                    terrain.getChildren().remove(touchedPellet.getCircle());
-                    allPellets.remove(touchedPellet);
+                    for (Circle circle : player.getCirclesList()) {
+                        if (circle.getBoundsInLocal().intersects(touchedPellet.getCircle().getBoundsInLocal())) {
+                            player.makeFatter(touchedPellet, circle);
+                            terrain.getChildren().remove(touchedPellet.getCircle());
+                            allPellets.remove(touchedPellet);
+                            break;
+                        }
+                    }
                 }
                 touchedPellet = null;
 
+                for (int i = 0; i < allEnemy.size(); i++) {
+                    Enemy enemy = allEnemy.get(i);
+                    enemy.executeStrategy(now);
+
+                    touchedByEnemy = enemy.detectPellet(allPellets);
+                    if (touchedByEnemy != null) {
+                        enemy.makeFatter(touchedByEnemy, enemy.circle);
+                        terrain.getChildren().remove(touchedByEnemy.getCircle());
+                        allPellets.remove(touchedByEnemy);
+                    }
+
+                    enemy.move();
+
+                    for (int j = i + 1; j < allEnemy.size(); j++) {
+                        Enemy otherEnemy = allEnemy.get(j);
+                        if (enemy.isColliding(otherEnemy)) {
+                            if (enemy.circle.getRadius() > otherEnemy.circle.getRadius()) {
+                                enemy.makeFatter(otherEnemy, enemy.circle);
+                                terrain.getChildren().remove(otherEnemy.getCircle());
+                                allEnemy.remove(j);
+                                j--;
+                            } else if (enemy.circle.getRadius() < otherEnemy.circle.getRadius()) {
+                                otherEnemy.makeFatter(enemy, otherEnemy.circle);
+                                terrain.getChildren().remove(enemy.getCircle());
+                                allEnemy.remove(i);
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (player.isColliding(enemy)) {
+                        double playerMass = player.getMass();
+                        double enemyMass = enemy.getMass();
+
+                        for (Circle circle : player.getCirclesList()) {
+                            String s = "joueur : "+(circle.getRadius() * circle.getRadius()) / 100 + " advsersaire = " + (enemy.getCircle().getRadius() * enemy.getCircle().getRadius()) / 100 * 1.33;
+                            System.out.println("hooooooo");
+                            if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
+                                player.makeFatter(enemy, player.circle);
+                                //player.circle.setFill(Color.BLACK);
+                                terrain.getChildren().remove(enemy.getCircle());
+                                allEnemy.remove(i);
+                                i--;
+                            } else if ((enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 >= (circle.getRadius()*circle.getRadius())/100 * 1.33) {
+                                System.out.println("Game Over ! Tu t'es fait manger.");
+                                stop();
+                                Platform.runLater(() -> {
+                                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Game Over");
+                                    alert.setHeaderText("Tu t'es fait manger !");
+                                    alert.setContentText("Dommage, tu as perdu le jeu.");
+                                    alert.showAndWait().ifPresent(response -> {
+                                        if (response == ButtonType.OK) {
+                                            System.exit(0);
+                                        }
+                                    });
+                                });
+                            }
+                        }
+
+                    }
+                }
             }
         };
         timer.start();
     }
 
+    public void eatingAnimation(double oldMass, double newMass){
 
+    }
+    public void spawnEnemies() {
+        Random random = new Random();
+        Enemy e = new CreatorEnemy().create(random.nextDouble(0,Map.size),random.nextDouble(0,Map.size));
+        allEnemy.add(e);
+        addCircle(e.getCircle());
+    }
+    public void spawnPellets() {
+        Random random = new Random();
+        Pellet p = new Pellet(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+        allPellets.add(p);
+        addCircle(p.getCircle());
+    }
 }

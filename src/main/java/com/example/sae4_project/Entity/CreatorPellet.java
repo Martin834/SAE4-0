@@ -7,8 +7,14 @@ public class CreatorPellet extends Creator  {
     public CreatorPellet() {
         this.create();
     }
+
     @Override
-    public Pellet create() {
-        return new Pellet();
+    public Entity create() {
+        return null;
+    }
+
+    @Override
+    public Entity create(double x, double y) {
+        return null;
     }
 }

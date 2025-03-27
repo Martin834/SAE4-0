@@ -7,4 +7,6 @@ public abstract class Creator  {
 
     public abstract Entity create();
 
+    public abstract Entity create(double x, double y);
+
 }
