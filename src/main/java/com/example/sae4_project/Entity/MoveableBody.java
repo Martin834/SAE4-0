@@ -85,8 +85,7 @@ public abstract class MoveableBody extends Entity {
         double otherMass = other.getMass();
         double myMass = this.getMass();
         double newMassAnim = myMass + otherMass;
-        double newMass = circle.getRadius() * circle.getRadius() + (other.getMass() * growthFactor);
-
+        double newMass = (circle.getRadius() * circle.getRadius())/100 + (other.getMass() * growthFactor);
         double scaleFactor = Math.sqrt(newMassAnim / myMass);
 
         Random random = new Random();

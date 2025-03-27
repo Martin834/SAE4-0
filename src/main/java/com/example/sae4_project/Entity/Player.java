@@ -11,8 +11,8 @@ public class Player extends MoveableBody {
 
     public Player() {
         super();
-        this.setMass(5);
-        Circle circle = new Circle(400 - this.getMass() / 2, 300 - this.getMass() / 2, 15);
+        this.setMass(3);
+            Circle circle = new Circle(400 - this.getMass() / 2, 300 - this.getMass() / 2, calculateRadius());
         circlesList.add(circle);
         circle.setFill(Color.RED);
         this.circleComposite = new CircleComposite();

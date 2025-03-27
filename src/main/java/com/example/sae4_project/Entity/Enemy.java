@@ -18,7 +18,7 @@ public class Enemy extends MoveableBody {
 
     public Enemy(double x, double y) {
         super();
-        this.setMass(5);
+        this.setMass(3);
         circle = new Circle(x,y,calculateRadius());
         Random rand = new Random();
         int r = rand.nextInt(256);
