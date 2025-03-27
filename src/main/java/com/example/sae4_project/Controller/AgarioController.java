@@ -9,6 +9,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ButtonType;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
@@ -32,18 +34,22 @@ import java.util.random.RandomGenerator;
 
 public class AgarioController extends Controller {
     private static final int MAX_ENEMIES = 20;
-    private static final int MAX_PELLETS = 500;
+    private static final int MAX_PELLETS = 1000;
     @FXML
     private Pane terrain;
     @FXML
     private Pane miniMap;
+    @FXML
+    private Label scoreLabel;
     @FXML
     private AnchorPane conteneurGlobal;
 
 
     private static Player player;
     private Pellet touchedPellet;
+    private SpecialPellets touchedSpecialPellet;
     private Pellet touchedByEnemy;
+    private static ArrayList<SpecialPellets> allSpecialPellets = new ArrayList<SpecialPellets>();
     private static ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
     private static ArrayList<Enemy> allEnemy = new ArrayList<Enemy>();
     private double posX;
@@ -58,6 +64,9 @@ public class AgarioController extends Controller {
 
     public static List<Pellet> getPellets() {
         return allPellets;
+    }
+    public static List<SpecialPellets> getSpecialPellets() {
+        return allSpecialPellets;
     }
 
     @FXML
@@ -75,16 +84,27 @@ public class AgarioController extends Controller {
         this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
         this.terrain.setLayoutY(0);
+        /*this.conteneurGlobal.setBorder(new Border(new BorderStroke(
+                Color.BLACK,
+                BorderStrokeStyle.SOLID,
+                CornerRadii.EMPTY,
+                new BorderWidths(2))));*/
+        //scoreLabel.textProperty().bind(new SimpleStringProperty());
+        //Bindings.stringValueAt(pla);
 
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         map.getAllPellet(map.getQuadTree(), allPellets);
+        map.getAllSpecialPellet(map.getQuadTree(),allSpecialPellets);
+        map.getAllEnemies(map.getQuadTree(), allEnemy);
+
+        for (SpecialPellets elm : allSpecialPellets){
+            addCircle(elm.getCircle());
+        }
 
         for(Pellet elm : allPellets){
             addCircle(elm.getCircle());
         }
-
-        map.getAllEnemies(map.getQuadTree(), allEnemy);
 
         for(Enemy elm : allEnemy){
             addCircle(elm.getCircle());
@@ -140,18 +160,32 @@ public class AgarioController extends Controller {
             @Override
             public void handle(long now) {
                 player.move();
+                System.out.println("nb Specialpellets : " + allSpecialPellets.size());
+                System.out.println("nb pellets : " + allPellets.size());
                 Random random = new Random();
                 int enemysize = allEnemy.size();
                 if (enemysize < MAX_ENEMIES){
                     spawnEnemies();
                 }
-                int pelletsNB = allPellets.size();
+
+                int pelletsNB = allPellets.size()+allSpecialPellets.size();
                 if (pelletsNB < MAX_PELLETS){
                     spawnPellets();
                 }
+
                 touchedPellet = player.detectPellet(allPellets);
-                if (touchedPellet != null) {
+                touchedSpecialPellet = player.detectSpecialPellet(allSpecialPellets);
+
+                if (touchedSpecialPellet != null) {
+                    player.makeFatter(touchedSpecialPellet);
+                    player.speed = player.calculateMaxSpeed();
+                    touchedSpecialPellet.applyEffect(player);
+                    terrain.getChildren().remove(touchedSpecialPellet.getCircle());
+                    allSpecialPellets.remove(touchedSpecialPellet);
+                }
+                if(touchedPellet != null) {
                     player.makeFatter(touchedPellet);
+                    player.speed = player.calculateMaxSpeed();
                     terrain.getChildren().remove(touchedPellet.getCircle());
                     allPellets.remove(touchedPellet);
                 }
@@ -160,10 +194,21 @@ public class AgarioController extends Controller {
                     enemy.executeStrategy(now);
 
                     touchedByEnemy = enemy.detectPellet(allPellets);
+                    touchedSpecialPellet = enemy.detectSpecialPellet(allSpecialPellets);
                     if (touchedByEnemy != null) {
                         enemy.makeFatter(touchedByEnemy);
+                        enemy.speed = enemy.calculateMaxSpeed();
+
                         terrain.getChildren().remove(touchedByEnemy.getCircle());
                         allPellets.remove(touchedByEnemy);
+                    }
+                    if (touchedSpecialPellet != null) {
+                        enemy.makeFatter(touchedByEnemy);
+                        enemy.speed = enemy.calculateMaxSpeed();
+
+                        touchedSpecialPellet.applyEffect(enemy);
+                        terrain.getChildren().remove(touchedSpecialPellet.getCircle());
+                        allPellets.remove(touchedSpecialPellet);
                     }
 
                     enemy.move();
@@ -173,11 +218,15 @@ public class AgarioController extends Controller {
                         if (enemy.isColliding(otherEnemy)) {
                             if (enemy.circle.getRadius() > otherEnemy.circle.getRadius()) {
                                 enemy.makeFatter(otherEnemy);
+                                enemy.speed = enemy.calculateMaxSpeed();
+
                                 terrain.getChildren().remove(otherEnemy.getCircle());
                                 allEnemy.remove(j);
                                 j--;
                             } else if (enemy.circle.getRadius() < otherEnemy.circle.getRadius()) {
                                 otherEnemy.makeFatter(enemy);
+                                otherEnemy.speed = enemy.calculateMaxSpeed();
+
                                 terrain.getChildren().remove(enemy.getCircle());
                                 allEnemy.remove(i);
                                 i--;
@@ -192,6 +241,8 @@ public class AgarioController extends Controller {
 
                         if (playerMass >= enemyMass * 1.33) {
                             player.makeFatter(enemy);
+                            player.speed = player.calculateMaxSpeed();
+
                             terrain.getChildren().remove(enemy.getCircle());
                             allEnemy.remove(i);
                             i--;
@@ -226,8 +277,16 @@ public class AgarioController extends Controller {
     }
     public void spawnPellets() {
         Random random = new Random();
-        Pellet p = new CreatorPellet().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
-        allPellets.add(p);
-        addCircle(p.getCircle());
+        System.out.println("-------------------------------------------");
+        if (random.nextDouble() < 0.2) {
+            SpecialPellets sp = new CreatorSpecialPellets().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+            allSpecialPellets.add(sp);
+            addCircle(sp.getCircle());
+        } else {
+            Pellet p = new CreatorPellet().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+            allPellets.add(p);
+            addCircle(p.getCircle());
+        }
     }
+
 }

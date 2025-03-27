@@ -4,6 +4,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.shape.Circle;
 
 public abstract class Entity {
+    protected int posX;
+    protected int posY;
 
     protected int identifier;
     protected SimpleDoubleProperty mass = new SimpleDoubleProperty();

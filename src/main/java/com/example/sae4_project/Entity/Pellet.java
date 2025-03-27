@@ -7,8 +7,6 @@ import javafx.scene.shape.Circle;
 import java.util.Random;
 
 public class Pellet extends Entity {
-    private int posX;
-    private int posY;
 
     public Pellet() {
         super();
@@ -16,7 +14,7 @@ public class Pellet extends Entity {
         Random r = new Random();
         this.posX = r.nextInt(801);
         this.posY = r.nextInt(801);
-        this.setMass(1);
+        this.setMass(0.1);
         circle = new Circle(this.posX, this.posY, calculateRadius());
         Random rand = new Random();
 
@@ -24,7 +22,8 @@ public class Pellet extends Entity {
         double green = rand.nextDouble();
         double blue = rand.nextDouble();
 
-        circle.setFill(new Color(red, green, blue, 1.0));
+        //circle.setFill(new Color(red, green, blue, 1.0));
+        circle.setFill(Color.GREEN);
         this.identifier = this.posX * this.posY * r.nextInt(834);
 
 
@@ -39,7 +38,8 @@ public class Pellet extends Entity {
         double green = rand.nextDouble();
         double blue = rand.nextDouble();
 
-        circle.setFill(new Color(red, green, blue, 1.0));
+        //circle.setFill(new Color(red, green, blue, 1.0));
+        circle.setFill(Color.GREEN);
     }
     public double calculateRadius() {
         double mass = this.mass.get();

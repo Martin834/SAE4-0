@@ -1,9 +1,6 @@
 package com.example.sae4_project.QuadTree;
 
-import com.example.sae4_project.Entity.CreatorEnemy;
-import com.example.sae4_project.Entity.Enemy;
-import com.example.sae4_project.Entity.Entity;
-import com.example.sae4_project.Entity.Pellet;
+import com.example.sae4_project.Entity.*;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -27,6 +24,10 @@ public class QuadTree {
     public ArrayList<Entity> getEntities() {
         return entities;
     }
+
+    /*public ArrayList<SpecialPellets> getSpecial() {
+        return sp;
+    }*/
 
     public void setEntities(ArrayList<Entity> entities) {
         this.entities = entities;
@@ -60,13 +61,13 @@ public class QuadTree {
         } else {
             Random r = new Random();
             int baobab = r.nextInt(3);
-            if (baobab == 2) {
+            if (baobab == 1) {
                 this.entities.add(new Pellet(
                         r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())
                 ));
             }
-            baobab = r.nextInt(200);
+            baobab = r.nextInt(100);
             if (baobab == 2) {
                 this.entities.add(new CreatorEnemy().create(r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())));

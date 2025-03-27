@@ -7,14 +7,21 @@
     <list default="true" id="176e3f47-130e-43a1-a17d-528c96c9f354" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/CreatorPellet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/CreatorPellet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Enemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/SpecialPellets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/SpecialPellets.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/QuadTree/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/QuadTree/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/QuadTree/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/QuadTree/QuadTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/HunterAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/HunterAI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/RandomAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/RandomAI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/sae4_project/agario-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/sae4_project/agario-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/sae4_project/agario-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/sae4_project/agario-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +62,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "Z:/SAE4/SAE4-0",
+    "last_opened_file_path": "C:/Program Files/SceneBuilder/SceneBuilder.exe",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",

@@ -6,7 +6,6 @@ import java.util.Random;
 
 public class RandomAI implements AIStrategy {
     private Random random = new Random();
-    private double dx, dy;
     private long lastChangeTime = 0;
 
     @Override

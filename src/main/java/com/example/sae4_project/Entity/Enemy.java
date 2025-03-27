@@ -80,4 +80,14 @@ public class Enemy extends MoveableBody {
         return closestPellet;
     }
 
+    public SpecialPellets detectSpecialPellet(ArrayList<SpecialPellets> all) {
+        double test = this.circle.getCenterX();
+        for (SpecialPellets Spellet : all) {
+            Shape intersect = Circle.intersect(this.circle, Spellet.getCircle());
+            if (intersect.getBoundsInLocal().getWidth() != -1) {
+                return Spellet;
+            }
+        }
+        return null;
+    }
 }

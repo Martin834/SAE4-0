@@ -3,6 +3,7 @@ package com.example.sae4_project.QuadTree;
 import com.example.sae4_project.Entity.Enemy;
 import com.example.sae4_project.Entity.Entity;
 import com.example.sae4_project.Entity.Pellet;
+import com.example.sae4_project.Entity.SpecialPellets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,21 @@ public class Map {
             getAllPellet(toFind.getChild(Orientation.NORTH_EAST), liste);
             getAllPellet(toFind.getChild(Orientation.SOUTH_WEST), liste);
             getAllPellet(toFind.getChild(Orientation.SOUTH_EAST), liste);
+        }
+
+    }
+    public void getAllSpecialPellet(QuadTree toFind, ArrayList<SpecialPellets> liste) {
+        if(toFind.getDepth() == 0){
+            for(Entity elm : toFind.getEntities()){
+                if(elm instanceof SpecialPellets){
+                    liste.add((SpecialPellets)elm);
+                }
+            }
+        } else {
+            getAllSpecialPellet(toFind.getChild(Orientation.NORTH_WEST), liste);
+            getAllSpecialPellet(toFind.getChild(Orientation.NORTH_EAST), liste);
+            getAllSpecialPellet(toFind.getChild(Orientation.SOUTH_WEST), liste);
+            getAllSpecialPellet(toFind.getChild(Orientation.SOUTH_EAST), liste);
         }
 
     }

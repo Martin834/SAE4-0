@@ -1,5 +1,6 @@
 package com.example.sae4_project.Entity;
 
+import com.example.sae4_project.QuadTree.Map;
 import javafx.animation.*;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
@@ -23,6 +24,7 @@ public abstract class MoveableBody extends Entity {
         double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1]));
         double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed);
 
+
         if (euclidianDistance > 4) {
             euclidianDistance = 4 * speed;
         }
@@ -34,9 +36,14 @@ public abstract class MoveableBody extends Entity {
     }
 
     public void move() {
-        this.circle.setCenterX(this.circle.getCenterX() + velocity[0]);
-        this.circle.setCenterY(this.circle.getCenterY() + velocity[1]);
+        if(this.circle.getCenterX() + velocity[0] >= 0 && this.circle.getCenterX() + velocity[0] <= Map.size) {
+            this.circle.setCenterX(this.circle.getCenterX() + velocity[0]);
+        }
+        if(this.circle.getCenterY() + velocity[1] >= 0 && this.circle.getCenterY() + velocity[1] <= Map.size){
+            this.circle.setCenterY(this.circle.getCenterY() + velocity[1]);
+        }
     }
+
 
     public double[] normalizeDouble(double[] array) {
         double magnitude = Math.sqrt((array[0] * array[0]) + (array[1] * array[1]));
@@ -48,6 +55,12 @@ public abstract class MoveableBody extends Entity {
     }
 
     public double getDistanceTo(Pellet pellet) {
+        double dx = this.circle.getCenterX() - pellet.getCircle().getCenterX();
+        double dy = this.circle.getCenterY() - pellet.getCircle().getCenterY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public double getDistanceTo(SpecialPellets pellet) {
         double dx = this.circle.getCenterX() - pellet.getCircle().getCenterX();
         double dy = this.circle.getCenterY() - pellet.getCircle().getCenterY();
         return Math.sqrt(dx * dx + dy * dy);
@@ -71,6 +84,7 @@ public abstract class MoveableBody extends Entity {
     }
 
     public void makeFatter(Entity other) {
+        if (other == null) return;
         double otherMass = other.getMass();
         double myMass = this.getMass();
         double newMass = myMass + otherMass;
@@ -111,6 +125,46 @@ public abstract class MoveableBody extends Entity {
         fillTransition.play();
     }
 
+    public void makeFatter(SpecialPellets other) {
+        double otherMass = other.getMass()*5;
+        double myMass = this.getMass();
+        double newMass = myMass + otherMass;
+        double finalRadius = Math.sqrt(newMass);
+        double scaleFactor = Math.sqrt(newMass / myMass);
+
+        Random random = new Random();
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+
+        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), this.circle);
+        scaleUp.setToX(scaleFactor);
+        scaleUp.setToY(scaleFactor);
+        scaleUp.setInterpolator(Interpolator.EASE_OUT);
+
+        FillTransition fillTransition = new FillTransition(Duration.millis(150), circle);
+        fillTransition.setFromValue(Color.rgb(red, green, blue));
+        fillTransition.setToValue(Color.rgb(red, green, blue));
+        fillTransition.setCycleCount(1);
+        fillTransition.setAutoReverse(true);
+
+        scaleUp.setOnFinished(event -> {
+            this.setMass(newMass);
+            this.circle.setScaleX(1);
+            this.circle.setScaleY(1);
+            this.circle.setRadius(finalRadius);
+
+            ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), this.circle);
+            scaleDown.setToX(1);
+            scaleDown.setToY(1);
+            scaleDown.setInterpolator(Interpolator.EASE_OUT);
+            scaleDown.play();
+            this.circle.setRadius(calculateRadius());
+        });
+
+        scaleUp.play();
+        fillTransition.play();
+    }
 
 }
 
