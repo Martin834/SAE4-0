@@ -193,7 +193,7 @@ public class AgarioController extends Controller {
                 player.move();
                 Random random = new Random();
                 int enemysize = allEnemy.size();
-                if (enemysize < 15) {
+                if (enemysize < 65) {
                     spawnEnemies();
                 }
                 //System.out.println(allEnemy.size());

@@ -20,6 +20,7 @@ public class Enemy extends MoveableBody {
         super();
         this.setMass(5);
         circle = new Circle(x,y,calculateRadius());
+        circlesList.add(circle);
         Random rand = new Random();
         int r = rand.nextInt(256);
         int g = rand.nextInt(256);
@@ -34,7 +35,6 @@ public class Enemy extends MoveableBody {
     public void setStrategy(AIStrategy strategy) {
         this.strategy = strategy;
     }
-
     public AIStrategy getStrategy() {
         return this.strategy;
     }
