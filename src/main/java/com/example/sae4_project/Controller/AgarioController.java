@@ -144,10 +144,10 @@ public class AgarioController extends Controller {
         playerNameText.setFill(Color.AQUA); // Couleur du texte
         playerNameText.setStyle("-fx-font-weight: bold; -fx-font-size: 10px;");
 
-        // Ajouter le texte à la scène
+        // Add the text in the scene
         terrain.getChildren().add(playerNameText);
 
-// Lier la position du texte à celle du cercle du joueur
+        // Link the position of the text to that of the player's circle
         Circle playerCircle = player.getCirclesList().get(0);
         playerNameText.xProperty().bind(playerCircle.centerXProperty().add(playerCircle.radiusProperty())); // Décalage à droite
         playerNameText.yProperty().bind(playerCircle.centerYProperty().subtract(playerCircle.radiusProperty())); // Décalage au-dessus
