@@ -48,9 +48,7 @@ public class Player extends MoveableBody {
         List<CircleComponent> tempCirclesList = new ArrayList<>();
         List<CircleComponent> temptempCirclesList = new ArrayList<>();
         for (Circle circle : circleComposite.getCircles()) {
-            System.out.println("mon rayon est de ;"+circle.getRadius());
             if (circle.getRadius() >= 10) {
-                System.out.println("je suis ajoute ;" +circle.getRadius());
                 tempCirclesList.add(new CircleLeaf(circle));
             }
         }
@@ -136,6 +134,27 @@ public class Player extends MoveableBody {
         circleComposite.move();
         adjustCirclePositions();
     }
+
+    public void rassembling() {
+        System.out.println("RASSEMBLEMENT GENERAL§/§/");
+
+        double totalMassRetain  = 0.0;
+
+        for (Circle circle1 : this.getCirclesList()) {
+            totalMassRetain += circle1.getRadius();
+        }
+
+        Circle baseCircle = this.circlesList.get(0);
+        
+        this.circlesList.clear();
+        this.circlesList.add(baseCircle);
+
+        circleComposite = new CircleComposite();
+        circleComposite.add(new CircleLeaf(baseCircle));
+
+        adjustCirclePositions();
+    }
+
    /* public void makeFatter(Entity entity) {
         this.setMass(this.getMass() +  entity.getMass());
         double radius = this.calculateRadius();

@@ -46,6 +46,10 @@ public class AgarioController extends Controller {
     private static ArrayList<Enemy> allEnemy = new ArrayList<Enemy>();
     private double posX;
     private double posY;
+    private final int constTemps = 10;
+    private long t = -1;
+    private boolean isTaskCompleted = false;
+    private double cptFrames = 0.0;
 
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
@@ -278,8 +282,22 @@ public class AgarioController extends Controller {
                                 });
                             }
                         }
-
                     }
+                }
+
+                if (player.circlesList.size() >= 2) {
+                    t = (long) getTimeBeforeRassembling(player.circlesList.get(0));
+                    AnimationTimer timer1 = new AnimationTimer() {
+                        @Override
+                        public void handle(long l) {
+                            if (cptFrames >= t * 3000) {
+                                player.rassembling();
+                            }
+                            System.out.println(cptFrames);
+                            cptFrames += 0.3;
+                        }
+                    };
+                    timer1.start();
                 }
             }
         };
@@ -289,6 +307,11 @@ public class AgarioController extends Controller {
     public void eatingAnimation(double oldMass, double newMass){
 
     }
+
+    public double getTimeBeforeRassembling(Circle dividedCircle) {
+        return this.constTemps + dividedCircle.getRadius()/100;
+    }
+
     public void spawnEnemies() {
         Random random = new Random();
         Enemy e = new CreatorEnemy().create(random.nextDouble(0,Map.size),random.nextDouble(0,Map.size));

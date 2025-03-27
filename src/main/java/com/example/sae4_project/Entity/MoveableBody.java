@@ -66,8 +66,6 @@ public abstract class MoveableBody extends Entity {
             double dx = circle1.getCenterX() - other.circle.getCenterX();
             double dy = circle1.getCenterY() - other.circle.getCenterY();
             double distance = Math.sqrt(dx * dx + dy * dy);
-            System.out.println("distance : "+distance);
-            System.out.println("ecarteent : "+ (circle1.getRadius() + other.circle.getRadius()));
             if (distance < (circle1.getRadius() + other.circle.getRadius())) {
                 return true;
             }
@@ -141,7 +139,6 @@ public abstract class MoveableBody extends Entity {
             }
         }
     }
-
 }
 
 
