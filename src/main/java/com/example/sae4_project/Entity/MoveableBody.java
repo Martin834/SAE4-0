@@ -1,6 +1,8 @@
 package com.example.sae4_project.Entity;
 
 import com.example.sae4_project.QuadTree.Map;
+import javafx.scene.shape.Circle;
+import java.util.ArrayList;
 
 public abstract class MoveableBody extends Entity {
 
@@ -9,6 +11,7 @@ public abstract class MoveableBody extends Entity {
     public double speed = 1;
 
     public double[] velocity = new double[2];
+    public ArrayList<Circle> circlesList = new ArrayList<>();
 
     public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
 
@@ -26,16 +29,12 @@ public abstract class MoveableBody extends Entity {
 
         velocity[0] *= adjustedSpeed;
         velocity[1] *= adjustedSpeed;
-
-        System.out.println(adjustedSpeed);
     }
 
     public void move() {
-        if(this.circle.getCenterX() + velocity[0] >= 0 && this.circle.getCenterX() + velocity[0] <= Map.size) {
-            this.circle.setCenterX(this.circle.getCenterX() + velocity[0]);
-        }
-        if(this.circle.getCenterY() + velocity[1] >= 0 && this.circle.getCenterY() + velocity[1] <= Map.size){
-            this.circle.setCenterY(this.circle.getCenterY() + velocity[1]);
+        for (Circle circle : this.circlesList) {
+            circle.setCenterX(circle.getCenterX() + velocity[0]);
+            circle.setCenterY(circle.getCenterY() + velocity[1]);
         }
     }
 

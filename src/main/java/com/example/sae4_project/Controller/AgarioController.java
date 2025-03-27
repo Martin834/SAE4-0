@@ -6,20 +6,17 @@ import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.math.MathContext;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -30,9 +27,9 @@ public class AgarioController extends Controller {
     @FXML
     private Pane miniMap;
     @FXML
-    private AnchorPane globalPane;
+    private AnchorPane conteneurGlobal;
 
-
+    private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
     private Player player;
     private Pellet touchedPellet;
     private ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
@@ -44,18 +41,22 @@ public class AgarioController extends Controller {
 
     @FXML
     private void addCircle(Circle circle) {
-
         this.terrain.getChildren().add(circle);
     }
 
+    @FXML
+    private void removeCircle(Circle circle) {
+        this.terrain.getChildren().remove(circle);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Binding the terrain's size and the globalPane's size
-        this.terrain.prefHeightProperty().bind(globalPane.heightProperty());
-        this.terrain.prefWidthProperty().bind(globalPane.widthProperty());
+        this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
+        this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
         this.terrain.setLayoutY(0);
+        this.terrain.setFocusTraversable(true);
+        this.terrain.requestFocus();
 
         // Load pellets and display themm on the map
         map.getAllPellet(map.getQuadTree(), allPellets);
@@ -65,15 +66,15 @@ public class AgarioController extends Controller {
 
         // Add the player on the map
         this.player = new CreatorPlayer().create();
-        Circle circle = this.player.getCircle();
+        Circle circle = player.getCirclesList().get(0);
         addCircle(circle);
 
         cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
-                Bindings.divide( globalPane.widthProperty(), 2)) , circle.centerXProperty()));
+                Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
         cam.getCoordinate().YProperty().bind(Bindings.add(Bindings.multiply(-1,
-                Bindings.divide( globalPane.heightProperty(), 2)), circle.centerYProperty()));
-        cam.zoomProperty().bind(Bindings.divide(5,
-                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(10*player.massProperty().get())), player.massProperty())));
+                Bindings.divide( conteneurGlobal.heightProperty(), 2)), circle.centerYProperty()));
+        cam.zoomProperty().bind(Bindings.divide(7,
+                Bindings.createDoubleBinding(()-> Math.sqrt(Math.sqrt(Math.sqrt(6*player.massProperty().get()))), player.massProperty())));
 
         terrain.translateXProperty().bind(Bindings.multiply(-1,cam.getCoordinate().XProperty()));
         terrain.translateYProperty().bind(Bindings.multiply(-1,cam.getCoordinate().YProperty()));
@@ -84,45 +85,45 @@ public class AgarioController extends Controller {
         terrain.scaleXProperty().bind(cam.zoomProperty());
         terrain.scaleYProperty().bind(cam.zoomProperty());
 
-
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
-        this.terrain.addEventHandler(ScrollEvent.SCROLL, handlerScrolled);
-
-
-
-
-
-        this.gameLoop();
+        this.terrain.addEventHandler(KeyEvent.KEY_PRESSED, handlerSpace);
 
         // Setup of the minimap
         miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         // Creation of the player on the minimap
-        Circle miniPlayer = new Circle(player.getCircle().getRadius(), Color.RED);
+        Circle miniPlayer = new Circle(player.getCirclesList().get(0).getRadius(), Color.RED);
         miniMap.getChildren().add(miniPlayer);
 
 
         //Listen to the player to update the minimap
-        player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
-        player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+        for (Circle circle1 : player.getCirclesList()) {
+            circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+            circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+        }
+
+        this.gameLoop();
 
     }
 
-
-    EventHandler handlerMouseMoved = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            player.moveTowards( mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
+            player.moveTowards(mouseEvent.getX(), mouseEvent.getY(), player.calculateMaxSpeed());
         }
     };
 
-    EventHandler handlerScrolled = new EventHandler<ScrollEvent>() {
+    EventHandler<KeyEvent> handlerSpace = new EventHandler<KeyEvent>() {
         @Override
-        public void handle(ScrollEvent scrollEvent) {
-            if (scrollEvent.getDeltaY() > 0) {
-                System.out.println("haut");
-            } else {
-                System.out.println("bas");
+        public void handle(KeyEvent keyEvent) {
+            if (keyEvent.getCode() == KeyCode.SPACE) {
+                player.divideItself();
+                for (Circle circle : player.getCirclesList()) {
+                    removeCircle(circle);
+                }
+                for (Circle circle : player.getCirclesList()) {
+                    addCircle(circle);
+                }
             }
         }
     };
@@ -136,13 +137,15 @@ public class AgarioController extends Controller {
 
 
         // Update the player on the minimap
-        miniPlayer.setRadius(player.getCircle().getRadius() * scale);
-        miniPlayer.centerXProperty().bind(player.getCircle().centerXProperty().multiply(scale));
-        miniPlayer.centerYProperty().bind(player.getCircle().centerYProperty().multiply(scale));
+        for (Circle circle : player.getCirclesList()) {
+            miniPlayer.setRadius(circle.getRadius() * scale);
+            miniPlayer.centerXProperty().bind(circle.centerXProperty().multiply(scale));
+            miniPlayer.centerYProperty().bind(circle.centerYProperty().multiply(scale));
+        }
+
 
 
     }
-
 
     private void gameLoop() {
         AnimationTimer timer = new AnimationTimer() {
@@ -152,16 +155,19 @@ public class AgarioController extends Controller {
 
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
-                    player.makeFatter(touchedPellet);
-                    terrain.getChildren().remove(touchedPellet.getCircle());
-                    allPellets.remove(touchedPellet);
+                    for (Circle circle : player.getCirclesList()) {
+                        if (circle.getBoundsInLocal().intersects(touchedPellet.getCircle().getBoundsInLocal())) {
+                            player.makeFatter(touchedPellet, circle);
+                            terrain.getChildren().remove(touchedPellet.getCircle());
+                            allPellets.remove(touchedPellet);
+                            break;
+                        }
+                    }
                 }
                 touchedPellet = null;
-
             }
         };
         timer.start();
     }
-
-
 }
+
