@@ -1,6 +1,11 @@
 package com.example.sae4_project.Entity;
 
+import javafx.animation.*;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
+
+import java.util.Random;
 
 public abstract class MoveableBody extends Entity {
 
@@ -68,10 +73,40 @@ public abstract class MoveableBody extends Entity {
     public void makeFatter(Entity other) {
         double otherMass = other.getMass();
         double myMass = this.getMass();
-
         double newMass = myMass + otherMass;
-        this.setMass(newMass);
-        this.circle.setRadius(calculateRadius());
+
+        double scaleFactor = Math.sqrt(newMass / myMass);
+
+        Random random = new Random();
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+        // Animation de la taille (croissance du cercle)
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(300), this.circle);
+        scaleTransition.setToX(scaleFactor);
+        scaleTransition.setToY(scaleFactor);
+        scaleTransition.setInterpolator(Interpolator.EASE_OUT);
+
+        // Animation de la couleur (effet d'absorption)
+        FillTransition fillTransition = new FillTransition(Duration.millis(150), circle);
+        fillTransition.setFromValue(Color.rgb(red,green,blue));
+        fillTransition.setToValue(Color.rgb(red,green,blue));
+        fillTransition.setCycleCount(1);
+        fillTransition.setAutoReverse(true);
+
+        // Quand l'animation est terminée, mettre à jour la masse et le rayon
+        scaleTransition.setOnFinished(event -> {
+            this.setMass(newMass);
+            this.circle.setRadius(calculateRadius()); // Appliquer le nouveau rayon
+            this.circle.setScaleX(1); // Réinitialiser l'échelle
+            this.circle.setScaleY(1);
+        });
+        // Lancer les animations en parallèle
+        random.setSeed(random.nextInt());
+        scaleTransition.play();
+        fillTransition.play();
     }
 
 }
+
+

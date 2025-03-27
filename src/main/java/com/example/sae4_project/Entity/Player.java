@@ -15,7 +15,7 @@ public class Player extends MoveableBody {
         super();
         this.setMass(5);
         circle = new Circle(400-this.getMass()/2, 300-this.getMass()/2, 25);
-        circle.setFill(Color.RED);
+        circle.setFill(Color.BLACK);
     }
 
 

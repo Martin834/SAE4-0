@@ -31,17 +31,19 @@ public class Pellet extends Entity {
     }
 
     public Pellet(double x, double y) {
-        Circle circle = new Circle(x, y, 5);
+        super();
+        this.setMass(1);
+        circle = new Circle(x, y, calculateRadius());
         Random rand = new Random();
-
         double red = rand.nextDouble();
         double green = rand.nextDouble();
         double blue = rand.nextDouble();
 
         circle.setFill(new Color(red, green, blue, 1.0));
-        this.circle = circle;
-        this.setMass(1);
-
+    }
+    public double calculateRadius() {
+        double mass = this.mass.get();
+        return 10 * Math.sqrt(mass);
     }
 
     public Circle getCircle() {

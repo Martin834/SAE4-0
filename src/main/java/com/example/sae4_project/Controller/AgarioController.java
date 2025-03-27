@@ -27,10 +27,8 @@ import javafx.scene.shape.Circle;
 
 import java.math.MathContext;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.random.RandomGenerator;
 
 public class AgarioController extends Controller {
     @FXML
@@ -90,7 +88,7 @@ public class AgarioController extends Controller {
 
         for(Enemy elm : allEnemy){
             addCircle(elm.getCircle());
-            System.out.println(elm.getStrategy());
+            //System.out.println(elm.getStrategy());
         }
 
         this.player = new CreatorPlayer().create();
@@ -146,20 +144,21 @@ public class AgarioController extends Controller {
                 Random random = new Random();
                 int enemysize = allEnemy.size();
                 if (enemysize < 15){
-                    allEnemy.add(new CreatorEnemy().create(random.nextDouble(0,Map.size),random.nextDouble(0,Map.size)));
+                    spawnEnemies();
                 }
-                System.out.println(allEnemy.size());
+                //System.out.println(allEnemy.size());
                 int pelletsNB = allPellets.size();
                 if (pelletsNB < 1500){
-                    allPellets.add(new CreatorPellet().create());
+                    spawnPellets();
                 }
-                System.out.println(allPellets.size());
+                //System.out.println(allPellets.size());
                 //.getAllEnemies(map.getQuadTree(), allEnemy);
                 //QuadTree zone = map.findQuadTree(map.getQuadTree(), new Coordinate(12,12));
                 //zone.getEntities().add(enemi);
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
                     player.makeFatter(touchedPellet);
+                    //player.circle.setFill(Color.BLACK);
                     terrain.getChildren().remove(touchedPellet.getCircle());
                     allPellets.remove(touchedPellet);
                 }
@@ -199,8 +198,9 @@ public class AgarioController extends Controller {
                         double enemyMass = enemy.getMass();
 
                         if (playerMass >= enemyMass * 1.33) {
-                           System.out.println("ssfbksdfsbdfilshfiulsshfdliifhiv");
+                           //System.out.println("ssfbksdfsbdfilshfiulsshfdliifhiv");
                             player.makeFatter(enemy);
+                            //player.circle.setFill(Color.BLACK);
                             terrain.getChildren().remove(enemy.getCircle());
                             allEnemy.remove(i);
                             i--;
@@ -208,23 +208,18 @@ public class AgarioController extends Controller {
                         else if (enemyMass >= playerMass * 1.33) {
                             System.out.println("Game Over ! Tu t'es fait manger.");
                             stop();
-                            // Création d'une pop-up pour afficher "Game Over"
                             Platform.runLater(() -> {
                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                 alert.setTitle("Game Over");
                                 alert.setHeaderText("Tu t'es fait manger !");
                                 alert.setContentText("Dommage, tu as perdu le jeu.");
 
-                                // Lorsque l'utilisateur ferme la pop-up, quitter l'application
                                 alert.showAndWait().ifPresent(response -> {
                                     if (response == ButtonType.OK) {
-                                        System.exit(0); // Quitter l'application
+                                        System.exit(0);
                                     }
                                 });
                             });
-
-                            // Arrêter le jeu après la pop-up
-
                         }
                     }
                 }
@@ -232,19 +227,19 @@ public class AgarioController extends Controller {
         };
         timer.start();
     }
+    public void eatingAnimation(double oldMass, double newMass){
 
-
-
-
-
-    public void spawnPellets(int count) {
+    }
+    public void spawnEnemies() {
         Random random = new Random();
-        for (int i = 0; i < count; i++) {
-            double x = random.nextDouble() * terrain.getWidth();
-            double y = random.nextDouble() * terrain.getHeight();
-            Pellet newPellet = new Pellet();
-            allPellets.add(newPellet);
-            terrain.getChildren().add(newPellet.getCircle());
-        }
+        Enemy e = new CreatorEnemy().create(random.nextDouble(0,Map.size),random.nextDouble(0,Map.size));
+        allEnemy.add(e);
+        addCircle(e.getCircle());
+    }
+    public void spawnPellets() {
+        Random random = new Random();
+        Pellet p = new CreatorPellet().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+        allPellets.add(p);
+        addCircle(p.getCircle());
     }
 }

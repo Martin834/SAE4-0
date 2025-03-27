@@ -11,7 +11,7 @@ public class CreatorPellet extends Creator {
     }
 
     @Override
-    public Entity create(double x, double y) {
-        return null;
+    public Pellet create(double x, double y) {
+        return new Pellet(x,y);
     }
 }

@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="176e3f47-130e-43a1-a17d-528c96c9f354" name="Changes" comment="" />
+    <list default="true" id="176e3f47-130e-43a1-a17d-528c96c9f354" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/CreatorPellet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/CreatorPellet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Strategy/CollectorAI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/sae4_project/Controller/AgarioController.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,7 +53,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "Z:/SAE4HELP/Agar.io-in-JavaFX/OFFICIAL GAR",
+    "last_opened_file_path": "Z:/SAE4/SAE4-0",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
