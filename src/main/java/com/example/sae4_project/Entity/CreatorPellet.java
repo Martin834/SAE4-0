@@ -9,4 +9,9 @@ public class CreatorPellet extends Creator {
     public Pellet create() {
         return new Pellet();
     }
+
+    @Override
+    public Pellet create(double x, double y) {
+        return new Pellet(x,y);
+    }
 }

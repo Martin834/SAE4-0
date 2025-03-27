@@ -1,5 +1,7 @@
 package com.example.sae4_project.QuadTree;
 
+import com.example.sae4_project.Entity.CreatorEnemy;
+import com.example.sae4_project.Entity.Enemy;
 import com.example.sae4_project.Entity.Entity;
 import com.example.sae4_project.Entity.Pellet;
 import javafx.scene.shape.Circle;
@@ -40,21 +42,23 @@ public class QuadTree {
         this.parent = parent;
 
         this.boundry = new Boundry(coordinate);
+
         if(this.parent == null){
             boundry.setHeight(Map.size);
             boundry.setLength(Map.size);
+            boundry.setLength(Map.size);
         } else {
-            boundry.setHeight(this.parent.boundry.getHeight()/2);
-            boundry.setLength(this.parent.boundry.getLength()/2);
+            boundry.setHeight(this.parent.boundry.getHeight() / 2);
+            boundry.setLength(this.parent.boundry.getLength() / 2);
         }
 
         this.children = new HashMap<>();
 
-        if(depth > 0){
-            this.children.put(Orientation.NORTH_EAST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX(), coordinate.getY() + this.boundry.getLength()/2)));
+        if (depth > 0) {
+            this.children.put(Orientation.NORTH_EAST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX(), coordinate.getY() + this.boundry.getLength() / 2)));
             this.children.put(Orientation.NORTH_WEST, new QuadTree(depth - 1, this, coordinate));
-            this.children.put(Orientation.SOUTH_EAST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX() + this.boundry.getLength()/2, coordinate.getY() +this.boundry.getLength()/2)));
-            this.children.put(Orientation.SOUTH_WEST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX() + this.boundry.getLength()/2, coordinate.getY())));
+            this.children.put(Orientation.SOUTH_EAST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX() + this.boundry.getLength() / 2, coordinate.getY() + this.boundry.getLength() / 2)));
+            this.children.put(Orientation.SOUTH_WEST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX() + this.boundry.getLength() / 2, coordinate.getY())));
         } else {
             Random r = new Random();
             int baobab = r.nextInt(3);
@@ -63,6 +67,11 @@ public class QuadTree {
                         r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())
                 ));
+            }
+            baobab = r.nextInt(200);
+            if (baobab == 2) {
+                this.entities.add(new CreatorEnemy().create(r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
+                        r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())));
             }
         }
     }

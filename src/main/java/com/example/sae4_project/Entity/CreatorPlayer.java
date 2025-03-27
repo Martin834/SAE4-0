@@ -10,4 +10,9 @@ public class CreatorPlayer extends Creator{
     public Player create() {
         return new Player();
     }
+
+    @Override
+    public Entity create(double x, double y) {
+        return null;
+    }
 }

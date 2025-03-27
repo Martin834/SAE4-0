@@ -8,15 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends MoveableBody {
-    private CircleComposite circleComposite;
 
     public Player() {
         super();
         this.setMass(5);
         Circle circle = new Circle(400 - this.getMass() / 2, 300 - this.getMass() / 2, 15);
         circle.setFill(Color.RED);
-        circleComposite = new CircleComposite();
-        circleComposite.add(new CircleLeaf(circle));
+        this.circleComposite = new CircleComposite();
+        this.circleComposite.add(new CircleLeaf(circle));
     }
 
     public Pellet detectPellet(ArrayList<Pellet> all) {
@@ -124,16 +123,6 @@ public class Player extends MoveableBody {
         return 0.0;
     }
 
-    public void makeFatter(Entity entity, Circle circle) {
-        double growthFactor = 5.0;
-        double newMass = circle.getRadius() * circle.getRadius() + (entity.getMass() * growthFactor);
-        double newRadius = Math.sqrt(newMass);
-        circle.setRadius(newRadius);
-        this.setMass(this.getMass() + (entity.getMass() * growthFactor));
-        adjustCirclePositions();
-    }
-
-
 
     @Override
     public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
@@ -145,4 +134,11 @@ public class Player extends MoveableBody {
         circleComposite.move();
         adjustCirclePositions();
     }
+   /* public void makeFatter(Entity entity) {
+        this.setMass(this.getMass() +  entity.getMass());
+        double radius = this.calculateRadius();
+        this.circle.setRadius(radius);
+    }*/
+
+
 }

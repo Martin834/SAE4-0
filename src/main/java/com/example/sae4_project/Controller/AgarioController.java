@@ -5,6 +5,7 @@ import com.example.sae4_project.QuadTree.Camera;
 import com.example.sae4_project.QuadTree.Coordinate;
 import com.example.sae4_project.QuadTree.Map;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,16 +14,20 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.control.ButtonType;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.random.RandomGenerator;
 
 public class AgarioController extends Controller {
     @FXML
@@ -33,16 +38,25 @@ public class AgarioController extends Controller {
     private VBox leaderboard;
     @FXML
     private AnchorPane conteneurGlobal;
-
     private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
-    private Player player;
+    private static Player player;
     private Pellet touchedPellet;
-    private ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
+    private Pellet touchedByEnemy;
+    private static ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
+    private static ArrayList<Enemy> allEnemy = new ArrayList<Enemy>();
     private double posX;
     private double posY;
 
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
+
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static List<Pellet> getPellets() {
+        return allPellets;
+    }
 
     @FXML
     private void addCircle(Circle circle) {
@@ -63,13 +77,20 @@ public class AgarioController extends Controller {
         this.terrain.setFocusTraversable(true);
         this.terrain.requestFocus();
 
-        // Load pellets and display themm on the map
+        this.miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
         map.getAllPellet(map.getQuadTree(), allPellets);
         for (Pellet elm : allPellets) {
             addCircle(elm.getCircle());
         }
 
-        // Add the player on the map
+        map.getAllEnemies(map.getQuadTree(), allEnemy);
+
+        for(Enemy elm : allEnemy){
+            addCircle(elm.getCircle());
+            //System.out.println(elm.getStrategy());
+        }
+
         this.player = new CreatorPlayer().create();
         Circle circle = player.getCirclesList().get(0);
         addCircle(circle);
@@ -170,9 +191,22 @@ public class AgarioController extends Controller {
     private void gameLoop() {
         AnimationTimer timer = new AnimationTimer() {
             @Override
-            public void handle(long l) {
+            public void handle(long now) {
                 player.move();
-
+                Random random = new Random();
+                int enemysize = allEnemy.size();
+                if (enemysize < 15) {
+                    spawnEnemies();
+                }
+                //System.out.println(allEnemy.size());
+                int pelletsNB = allPellets.size();
+                if (pelletsNB < 1500) {
+                    spawnPellets();
+                }
+                //System.out.println(allPellets.size());
+                //.getAllEnemies(map.getQuadTree(), allEnemy);
+                //QuadTree zone = map.findQuadTree(map.getQuadTree(), new Coordinate(12,12));
+                //zone.getEntities().add(enemi);
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
                     for (Circle circle : player.getCirclesList()) {
@@ -185,9 +219,87 @@ public class AgarioController extends Controller {
                     }
                 }
                 touchedPellet = null;
+
+                for (int i = 0; i < allEnemy.size(); i++) {
+                    Enemy enemy = allEnemy.get(i);
+                    enemy.executeStrategy(now);
+
+                    touchedByEnemy = enemy.detectPellet(allPellets);
+                    if (touchedByEnemy != null) {
+                        enemy.makeFatter(touchedByEnemy, enemy.circle);
+                        terrain.getChildren().remove(touchedByEnemy.getCircle());
+                        allPellets.remove(touchedByEnemy);
+                    }
+
+                    enemy.move();
+
+                    for (int j = i + 1; j < allEnemy.size(); j++) {
+                        Enemy otherEnemy = allEnemy.get(j);
+                        if (enemy.isColliding(otherEnemy)) {
+                            if (enemy.circle.getRadius() > otherEnemy.circle.getRadius()) {
+                                enemy.makeFatter(otherEnemy, enemy.circle);
+                                terrain.getChildren().remove(otherEnemy.getCircle());
+                                allEnemy.remove(j);
+                                j--;
+                            } else if (enemy.circle.getRadius() < otherEnemy.circle.getRadius()) {
+                                otherEnemy.makeFatter(enemy, otherEnemy.circle);
+                                terrain.getChildren().remove(enemy.getCircle());
+                                allEnemy.remove(i);
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (player.isColliding(enemy)) {
+                        double playerMass = player.getMass();
+                        double enemyMass = enemy.getMass();
+
+                        for (Circle circle : player.getCirclesList()) {
+                            if (circle.getRadius() >= enemy.getCircle().getRadius() * 1.33) {
+                                //System.out.println("ssfbksdfsbdfilshfiulsshfdliifhiv");
+                                player.makeFatter(enemy, player.circle);
+                                //player.circle.setFill(Color.BLACK);
+                                terrain.getChildren().remove(enemy.getCircle());
+                                allEnemy.remove(i);
+                                i--;
+                            } else if (enemy.getCircle().getRadius() >= circle.getRadius() * 1.33) {
+                                System.out.println("Game Over ! Tu t'es fait manger.");
+                                stop();
+                                Platform.runLater(() -> {
+                                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Game Over");
+                                    alert.setHeaderText("Tu t'es fait manger !");
+                                    alert.setContentText("Dommage, tu as perdu le jeu.");
+                                    alert.showAndWait().ifPresent(response -> {
+                                        if (response == ButtonType.OK) {
+                                            System.exit(0);
+                                        }
+                                    });
+                                });
+                            }
+                        }
+
+                    }
+                }
             }
         };
         timer.start();
     }
-}
 
+    public void eatingAnimation(double oldMass, double newMass){
+
+    }
+    public void spawnEnemies() {
+        Random random = new Random();
+        Enemy e = new CreatorEnemy().create(random.nextDouble(0,Map.size),random.nextDouble(0,Map.size));
+        allEnemy.add(e);
+        addCircle(e.getCircle());
+    }
+    public void spawnPellets() {
+        Random random = new Random();
+        Pellet p = new CreatorPellet().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+        allPellets.add(p);
+        addCircle(p.getCircle());
+    }
+}

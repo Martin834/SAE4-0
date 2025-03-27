@@ -18,19 +18,32 @@ public class Pellet extends Entity {
         this.posY = r.nextInt(801);
         this.setMass(2);
         circle = new Circle(this.posX, this.posY, 5);
-        circle.setFill(Color.BLUE);
+        Random rand = new Random();
 
+        double red = rand.nextDouble();
+        double green = rand.nextDouble();
+        double blue = rand.nextDouble();
+
+        circle.setFill(new Color(red, green, blue, 1.0));
         this.identifier = this.posX * this.posY * r.nextInt(834);
 
 
     }
 
     public Pellet(double x, double y) {
-        Circle circle = new Circle(x, y, 5);
-        circle.setFill(Color.BLUE);
-        this.circle = circle;
+        super();
         this.setMass(1);
+        circle = new Circle(x, y, calculateRadius());
+        Random rand = new Random();
+        double red = rand.nextDouble();
+        double green = rand.nextDouble();
+        double blue = rand.nextDouble();
 
+        circle.setFill(new Color(red, green, blue, 1.0));
+    }
+    public double calculateRadius() {
+        double mass = this.mass.get();
+        return 10 * Math.sqrt(mass);
     }
 
     public Circle getCircle() {

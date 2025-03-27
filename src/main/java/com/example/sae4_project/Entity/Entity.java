@@ -6,6 +6,8 @@ import javafx.scene.shape.Circle;
 public abstract class Entity {
 
     protected int identifier;
+    protected SimpleDoubleProperty mass = new SimpleDoubleProperty();
+    public Circle circle;
 
     public double getMass() {
         return mass.get();
@@ -18,9 +20,6 @@ public abstract class Entity {
     public void setMass(double mass) {
         this.mass.set(mass);
     }
-
-    protected SimpleDoubleProperty mass = new SimpleDoubleProperty();
-    protected Circle circle;
 
 
 
