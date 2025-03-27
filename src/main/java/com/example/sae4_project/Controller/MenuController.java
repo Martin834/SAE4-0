@@ -27,20 +27,17 @@ public class MenuController {
 
 
     public String getSpeudo(){
-        System.out.println("speudo " + pseudo.getText());
+       // System.out.println("speudo " + pseudo.getText());
 
         return  pseudo.getText();
 
     }
 
-    public void namePlayer(){
-        player.setName(pseudo.getText());
-    }
 
     @FXML
     private void playLocal(ActionEvent event) throws IOException {
-        System.out.println("lancée");
-        namePlayer();
+        //System.out.println("lancée");
+        player.setName(pseudo.getText());
         System.out.println("MenuController: " + player.getName());
         switchScene(event, "/com/example/sae4_project/agario-view.fxml");
     }

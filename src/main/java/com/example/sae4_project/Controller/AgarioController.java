@@ -139,6 +139,19 @@ public class AgarioController extends Controller {
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         }
 
+        // Display name player
+        Text playerNameText = new Text(player.getName());
+        playerNameText.setFill(Color.AQUA); // Couleur du texte
+        playerNameText.setStyle("-fx-font-weight: bold; -fx-font-size: 10px;");
+
+        // Ajouter le texte à la scène
+        terrain.getChildren().add(playerNameText);
+
+// Lier la position du texte à celle du cercle du joueur
+        Circle playerCircle = player.getCirclesList().get(0);
+        playerNameText.xProperty().bind(playerCircle.centerXProperty().add(playerCircle.radiusProperty())); // Décalage à droite
+        playerNameText.yProperty().bind(playerCircle.centerYProperty().subtract(playerCircle.radiusProperty())); // Décalage au-dessus
+
 
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         leaderboard.setSpacing(10);
