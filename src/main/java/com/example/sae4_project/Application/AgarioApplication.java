@@ -5,6 +5,7 @@ import com.example.sae4_project.Controller.ConnectionController;
 import com.example.sae4_project.Controller.Controller;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +22,7 @@ public class AgarioApplication extends Application {
 
         private static Scene scene;
         public static ArrayList<Thread> threads = new ArrayList<>();
-        private static Stage primaryStage;
+        public static Stage primaryStage;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -44,6 +45,16 @@ public class AgarioApplication extends Application {
         FXMLLoader loader = new FXMLLoader(AgarioApplication.class.getResource("/com/example/sae4_project/" + fxml + ".fxml"));
         Parent root = loader.load();
         primaryStage.getScene().setRoot(root);
+    }
+
+    private static Parent loadFXML(String fxml, Controller controller) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(AgarioApplication.class.getResource("/com/example/sae4_project/" + fxml + ".fxml"));
+        fxmlLoader.setController(controller);
+        return fxmlLoader.load();
+    }
+
+    public static void setRoot(String fxml, Controller controller) throws IOException {
+        scene.setRoot(loadFXML(fxml, controller));
     }
 
     public static void main(String[] args) {

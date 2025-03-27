@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,6 +39,7 @@ public class ConnectionController extends Controller{
 
     Server server;
     Socket client;
+    ServerMessageReceiver receiver;
 
 
     OnlineState onlineState;
@@ -82,7 +84,7 @@ public class ConnectionController extends Controller{
                 int hostPort = Integer.parseInt(port.getText());
                 client = new Socket(hostName, hostPort);
 
-                ServerMessageReceiver receiver = new ServerMessageReceiver(client);
+                receiver = new ServerMessageReceiver(client);
                 receiver.start();
 
                 changeState(OnlineState.GUEST);
@@ -118,6 +120,17 @@ public class ConnectionController extends Controller{
         @Override
         public void handle(ActionEvent event) {
 
+            switch(onlineState){
+                case HOST :
+                    break;
+                case GUEST :
+                    try {
+                        AgarioApplication.setRoot("agario-view-client", new AgarioClientController(client, receiver));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+            }
 
         }
     };

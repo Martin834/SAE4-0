@@ -13,7 +13,12 @@ public class ServerMessageReceiver extends Thread{
 
     private Socket socket;
     private boolean running = true;
-    private byte[] read = new byte[4096];
+
+    public DataMap getLastDataMap() {
+        return lastDataMap;
+    }
+
+    private DataMap lastDataMap;
 
     public ServerMessageReceiver(Socket socket) {
         this.socket = socket;
@@ -29,7 +34,7 @@ public class ServerMessageReceiver extends Thread{
                     this.sleep(33);
                     System.out.println("En attente d'un message... ");
                     Object objRecu = in.readObject();
-                    DataMap map = (DataMap) objRecu;
+                    lastDataMap = (DataMap) objRecu;
                     System.out.println(objRecu);
             }
         } catch (IOException e) {
