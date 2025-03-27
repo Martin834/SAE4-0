@@ -6,7 +6,10 @@ import javafx.scene.shape.Circle;
 
 
 public abstract class Entity  {
-
+    public int getIdentifier() {
+        return this.identifier;
+    }
+    public void setIdentifier(int identifier) { this.identifier = identifier; }
     protected int identifier;
     protected SimpleDoubleProperty mass = new SimpleDoubleProperty();
     public Circle circle;

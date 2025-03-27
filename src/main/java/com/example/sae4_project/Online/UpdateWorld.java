@@ -29,7 +29,7 @@ public class UpdateWorld extends Thread{
 
                     for(ObjectOutputStream writer : server.getClientWriters()){
                         System.out.println(writer.toString());
-                        writer.writeObject(Map.getInstance());
+                        writer.writeObject(new DataMap());
                         writer.flush();
                     }
                 }

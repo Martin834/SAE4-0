@@ -29,8 +29,6 @@ public class Pellet extends Entity  {
         return circle;
     }
 
-    public int getIdentifier() {
-        return this.identifier;
-    }
+
 
 }

@@ -123,8 +123,6 @@ public class AgarioController extends Controller {
         //Listen to the player to update the minimap
 
         updateMiniMapScale(miniPlayer);
-        player.getCircle().centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
-        player.getCircle().centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
 
         for (Circle circle1 : player.getCirclesList()) {
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));

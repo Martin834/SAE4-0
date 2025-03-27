@@ -29,7 +29,7 @@ public class ServerMessageReceiver extends Thread{
                     this.sleep(33);
                     System.out.println("En attente d'un message... ");
                     Object objRecu = in.readObject();
-                    Map id = (Map) objRecu;
+                    DataMap map = (DataMap) objRecu;
                     System.out.println(objRecu);
             }
         } catch (IOException e) {
