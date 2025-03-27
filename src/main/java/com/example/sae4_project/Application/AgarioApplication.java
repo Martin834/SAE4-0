@@ -28,7 +28,7 @@ public class AgarioApplication extends Application {
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/sae4_project/connection.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.setTitle("Agar.io - Menu");
 
         stage.setScene(scene);
