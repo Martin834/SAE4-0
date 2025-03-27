@@ -2,6 +2,7 @@ package com.example.sae4_project.Entity;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
@@ -91,37 +92,33 @@ public class SpecialPellets extends Pellet {
 
     // Applique l'effet "double speed" (augmente la vitesse du joueur)
     private void applyDoubleSpeedEffect(MoveableBody mobile) {
-        if (effectTimeline != null) {
-            effectTimeline.stop();
-        }
-
-        double originalSpeed = mobile.speed;
-        mobile.speed *= 2;
-
-        effectTimeline = new Timeline(new KeyFrame(Duration.seconds(3), e -> {
-            mobile.speed /= 2;
-        }));
-
-        effectTimeline.setCycleCount(1);
-        effectTimeline.play();
+        double originalSpeed = mobile.getMass();
+        mobile.setMass(mobile.getMass()*3);
+        mobile.calculateMaxSpeed();
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mobile.setMass(originalSpeed);
+        }).start();
     }
 
-
-
-    // Applique l'effet "half speed" (réduit la vitesse du joueur de moitié)
     private void applyHalfSpeedEffect(MoveableBody mobile) {
-        if (effectTimeline != null) {
-            effectTimeline.stop();
-        }
-        mobile.speed /= 2;
-
-        effectTimeline = new Timeline(new KeyFrame(Duration.seconds(3), e -> {
-            mobile.speed *= 2;
-        }));
-
-        effectTimeline.setCycleCount(1);
-        effectTimeline.play();
+        double originalSpeed = mobile.getMass();
+        mobile.setMass(mobile.getMass()/3);
+        mobile.calculateMaxSpeed();
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000); // Pause de 3 secondes
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mobile.setMass(originalSpeed); // Rétablit la vitesse après 3 sec
+        }).start();
     }
+
 
 
     // Accesseur pour l'effet de ce SpecialPellet

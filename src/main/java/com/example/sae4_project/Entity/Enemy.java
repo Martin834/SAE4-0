@@ -55,9 +55,9 @@ public class Enemy extends MoveableBody {
         return 10 * Math.sqrt(mass);
     }
 
-    public double calculateMaxSpeed() {
+    /*public double calculateMaxSpeed() {
         return (1 / this.massProperty().doubleValue()) * 60;
-    }
+    }*/
     public void executeStrategy(long now) {
         if (strategy != null && now - lastUpdateTime > 500_000_000L) { // 500ms entre chaque update
             strategy.execute(this);

@@ -15,14 +15,14 @@ public abstract class MoveableBody extends Entity {
     public double[] velocity = new double[2];
 
     public void moveTowards(double posXMouse, double posYMouse) {
-        moveTowards(posXMouse, posYMouse, this.speed);
+        moveTowards(posXMouse, posYMouse, this.calculateMaxSpeed());
     }
 
     public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
         velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
 
         double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1]));
-        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed);
+        double adjustedSpeed = Math.min(euclidianDistance / 100, this.calculateMaxSpeed());
 
 
         if (euclidianDistance > 4) {
@@ -34,6 +34,10 @@ public abstract class MoveableBody extends Entity {
         velocity[0] *= adjustedSpeed;
         velocity[1] *= adjustedSpeed;
     }
+    public double calculateMaxSpeed() {
+        return (1 / this.massProperty().doubleValue()) * 700;
+    }
+
 
     public void move() {
         if(this.circle.getCenterX() + velocity[0] >= 0 && this.circle.getCenterX() + velocity[0] <= Map.size) {

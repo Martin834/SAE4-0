@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Controller/AgarioController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/MoveableBody.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Pellet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sae4_project/Entity/Player.java" afterDir="false" />
