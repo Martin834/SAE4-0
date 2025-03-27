@@ -1,5 +1,6 @@
 package com.example.sae4_project.Entity;
 
+import com.example.sae4_project.QuadTree.Map;
 import javafx.scene.shape.Circle;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,7 @@ public class CircleLeaf implements CircleComponent {
 
         double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1]));
 
-        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed * (1 / (circle.getRadius() * circle.getRadius()))*15);
+        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed * (1 / (circle.getRadius() * circle.getRadius()))*1000);
 
         if (euclidianDistance > 4) {
             euclidianDistance = 4;
@@ -33,8 +34,12 @@ public class CircleLeaf implements CircleComponent {
 
     @Override
     public void move() {
-        circle.setCenterX(circle.getCenterX() + velocity[0]);
-        circle.setCenterY(circle.getCenterY() + velocity[1]);
+            if ((circle.getCenterX() + velocity[0])>=0 && (circle.getCenterX() + velocity[0])<= Map.size) {
+                circle.setCenterX(circle.getCenterX() + velocity[0]*2);
+            }
+            if ((circle.getCenterY() + velocity[1])>=0 && (circle.getCenterY() + velocity[1])<= Map.size) {
+                circle.setCenterY(circle.getCenterY() + velocity[1]*2);
+            }
     }
 
     @Override

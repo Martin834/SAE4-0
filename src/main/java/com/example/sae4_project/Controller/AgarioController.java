@@ -206,7 +206,7 @@ public class AgarioController extends Controller {
                 player.move();
                 Random random = new Random();
                 int enemysize = allEnemy.size();
-                if (enemysize < 15) {
+                if (enemysize < 20) {
                     spawnEnemies();
                 }
                 //System.out.println(allEnemy.size());
@@ -269,7 +269,7 @@ public class AgarioController extends Controller {
                         for (Circle circle : player.getCirclesList()) {
                             String s = "joueur : "+(circle.getRadius() * circle.getRadius()) / 100 + " advsersaire = " + (enemy.getCircle().getRadius() * enemy.getCircle().getRadius()) / 100 * 1.33;
                             if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
-                                player.makeFatter(enemy, player.circle);
+                                player.makeFatter(enemy,circle);
                                 //player.circle.setFill(Color.BLACK);
                                 terrain.getChildren().remove(enemy.getCircle());
                                 allEnemy.remove(i);
@@ -318,7 +318,8 @@ public class AgarioController extends Controller {
 
     public void spawnPellets() {
         Random random = new Random();
-        Pellet p = new Pellet(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+        //Pellet p = new Pellet(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
+        Pellet p = new CreatorPellet().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
         allPellets.add(p);
         addCircle(p.getCircle());
     }

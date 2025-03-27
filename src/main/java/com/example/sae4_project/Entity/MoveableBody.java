@@ -41,8 +41,12 @@ public abstract class MoveableBody extends Entity {
 
     public void move() {
         for (Circle circle : this.circlesList) {
-            circle.setCenterX(circle.getCenterX() + velocity[0]);
-            circle.setCenterY(circle.getCenterY() + velocity[1]);
+            if ((circle.getCenterX() + velocity[0])>=0 && (circle.getCenterX() + velocity[0])<= Map.size) {
+                circle.setCenterX(circle.getCenterX() + velocity[0]);
+            }
+            if ((circle.getCenterY() + velocity[1])>=0 && (circle.getCenterY() + velocity[1])<= Map.size) {
+                circle.setCenterY(circle.getCenterY() + velocity[1]);
+            }
         }
     }
 
@@ -83,7 +87,7 @@ public abstract class MoveableBody extends Entity {
         double otherMass = other.getMass();
         double myMass = this.getMass();
         double newMassAnim = myMass + otherMass;
-        double newMass = circle.getRadius() * circle.getRadius() + (other.getMass() * growthFactor);
+        double newMass = circle.getRadius() * circle.getRadius() + (other.getMass() * growthFactor)*2;
 
         double scaleFactor = Math.sqrt(newMassAnim / myMass);
 

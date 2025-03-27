@@ -20,7 +20,7 @@ public class HunterAI implements AIStrategy {
                 for (Circle circle : player.getCirclesList()) {
                     double playerX = circle.getCenterX();
                     double playerY = circle.getCenterY();
-                    enemy.moveTowards(playerX, playerY);
+                    enemy.moveTowards(playerX, playerY, enemy.calculateMaxSpeed());
                 }
 
             } else {
