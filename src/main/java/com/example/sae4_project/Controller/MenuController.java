@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,7 +15,25 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML
+    public Button playLocalButton;
+
+    @FXML
+    public TextField pseudo;
+
+    @FXML
+    private void playLocalButton(){
+
+    }
+
+    public void saveSpeudo(){
+        System.out.println("speudo " + pseudo.getText());
+    }
+
+
+    @FXML
     private void playLocal(ActionEvent event) throws IOException {
+        System.out.println("lancée");
+        saveSpeudo();
         switchScene(event, "/com/example/sae4_project/agario-view.fxml");
     }
 

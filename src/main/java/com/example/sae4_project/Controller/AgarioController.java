@@ -11,12 +11,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.control.ButtonType;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +38,10 @@ public class AgarioController extends Controller {
     private VBox leaderboard;
     @FXML
     private AnchorPane conteneurGlobal;
+
+
+
+
     private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
     private static Player player;
     private Pellet touchedPellet;
@@ -128,6 +130,7 @@ public class AgarioController extends Controller {
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         }
+
 
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         leaderboard.setSpacing(10);
@@ -308,6 +311,7 @@ public class AgarioController extends Controller {
       rectangle.setHeight(miniPlayer.getRadius() * rectangleSizeMinimap);
       rectangle.setWidth(miniPlayer.getRadius() * rectangleSizeMinimap);
     }
+
 
     public void spawnEnemies() {
         Random random = new Random();
