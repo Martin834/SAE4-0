@@ -2,14 +2,12 @@ package com.example.sae4_project.QuadTree;
 
 import com.example.sae4_project.Entity.Entity;
 import com.example.sae4_project.Entity.Pellet;
-import javafx.scene.shape.Circle;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class QuadTree implements Serializable {
+public class QuadTree  {
 
     public int getDepth() {
         return depth;

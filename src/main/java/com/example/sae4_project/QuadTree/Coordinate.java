@@ -2,9 +2,9 @@ package com.example.sae4_project.QuadTree;
 
 import javafx.beans.property.SimpleDoubleProperty;
 
-import java.io.Serializable;
 
-public class Coordinate implements Serializable {
+
+public class Coordinate  {
 
     private SimpleDoubleProperty X = new SimpleDoubleProperty();
 
