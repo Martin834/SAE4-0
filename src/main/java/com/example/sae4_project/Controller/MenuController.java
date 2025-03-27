@@ -1,5 +1,7 @@
 package com.example.sae4_project.Controller;
 
+import com.example.sae4_project.Entity.CreatorPlayer;
+import com.example.sae4_project.Entity.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,25 +17,31 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML
-    public Button playLocalButton;
+    private Button playLocalButton;
 
     @FXML
-    public TextField pseudo;
+    private TextField pseudo;
 
-    @FXML
-    private void playLocalButton(){
+    private Player player = new CreatorPlayer().create();
 
-    }
 
-    public void saveSpeudo(){
+
+    public String getSpeudo(){
         System.out.println("speudo " + pseudo.getText());
+
+        return  pseudo.getText();
+
     }
 
+    public void namePlayer(){
+        player.setName(pseudo.getText());
+    }
 
     @FXML
     private void playLocal(ActionEvent event) throws IOException {
         System.out.println("lancée");
-        saveSpeudo();
+        namePlayer();
+        System.out.println("MenuController: " + player.getName());
         switchScene(event, "/com/example/sae4_project/agario-view.fxml");
     }
 
@@ -49,10 +57,14 @@ public class MenuController {
     }
 
     private void switchScene(ActionEvent event, String fxmlFile) throws IOException {
-        // Récupérer le Stage à partir du bouton qui a déclenché l'événement
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+
+        AgarioController agarioController = new AgarioController();
+
+        agarioController.setPlayer(this.player);
         Scene scene = new Scene(loader.load(), 800, 600);
         stage.setScene(scene);
         stage.show();

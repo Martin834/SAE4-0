@@ -59,6 +59,12 @@ public class AgarioController extends Controller {
         return player;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+        //System.out.println("setter player Agario : " + player.getName());
+    }
+
+
     public static List<Pellet> getPellets() {
         return allPellets;
     }
@@ -75,6 +81,7 @@ public class AgarioController extends Controller {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("AgarioController: " + player.getName());
         this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
         this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
@@ -95,9 +102,10 @@ public class AgarioController extends Controller {
             addCircle(elm.getCircle());
         }
 
-        this.player = new CreatorPlayer().create();
+
+
         Circle circle = player.getCirclesList().get(0);
-        addCircle(circle);
+       addCircle(circle);
 
         cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
                 Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
@@ -164,6 +172,9 @@ public class AgarioController extends Controller {
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
         }
+
+
+        System.out.println("AgarioController: " + player.getName());
     }
 
     EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
