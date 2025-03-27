@@ -1,8 +1,8 @@
 package com.example.sae4_project.Entity;
 
-import java.io.Serializable;
 
-public class CreatorPlayer extends Creator implements Serializable {
+
+public class CreatorPlayer extends Creator {
 
     public CreatorPlayer() {
         this.create();

@@ -3,11 +3,10 @@ package com.example.sae4_project.QuadTree;
 import com.example.sae4_project.Entity.Entity;
 import com.example.sae4_project.Entity.Pellet;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Map implements Serializable {
+public class Map  {
 
     public QuadTree getQuadTree() {
         return quadTree;
