@@ -9,6 +9,8 @@ import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -16,6 +18,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class AgarioController extends Controller {
     private Pane terrain;
     @FXML
     private Pane miniMap;
+    @FXML
+    private VBox leaderboard;
     @FXML
     private AnchorPane conteneurGlobal;
 
@@ -95,11 +100,26 @@ public class AgarioController extends Controller {
         Circle miniPlayer = new Circle(player.getCirclesList().get(0).getRadius(), Color.RED);
         miniMap.getChildren().add(miniPlayer);
 
-
         //Listen to the player to update the minimap
         for (Circle circle1 : player.getCirclesList()) {
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+        }
+
+        leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        leaderboard.setSpacing(10);
+        leaderboard.setPadding(new Insets(10, 20, 10, 10));  // (haut, droite, bas, gauche)
+
+
+        Integer [] nombre = {1,2,3,4,5,6,7,8,9,10};
+        Label [] noms = {new Label("joli"), new Label("sobriquet"), new Label("s'éclipse"), new Label("parole"),
+                new Label("de"), new Label("moine"), new Label("dérolle"), new Label("dodécacophonique"),
+                new Label("rythmique"), new Label("globule10")};
+
+        for (int i = 0; i < 10 ; i++) {
+            Label label = new Label(nombre[i].toString() + ". " + noms[i].getText());
+            label.setPrefSize(200.0, 200.0);
+            leaderboard.getChildren().add(label);
         }
 
         this.gameLoop();
