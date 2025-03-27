@@ -89,7 +89,7 @@ public class AgarioController extends Controller {
         this.terrain.setFocusTraversable(true);
         this.terrain.requestFocus();
 
-        this.miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
 
         map.getAllPellet(map.getQuadTree(), allPellets);
         for (Pellet elm : allPellets) {
@@ -101,7 +101,6 @@ public class AgarioController extends Controller {
         for(Enemy elm : allEnemy){
             addCircle(elm.getCircle());
         }
-
 
 
         Circle circle = player.getCirclesList().get(0);
@@ -139,20 +138,11 @@ public class AgarioController extends Controller {
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         }
 
-        // Display name player
-        Text playerNameText = new Text(player.getName());
-        playerNameText.setFill(Color.AQUA); // Couleur du texte
-        playerNameText.setStyle("-fx-font-weight: bold; -fx-font-size: 10px;");
-
-        // Add the text in the scene
-        terrain.getChildren().add(playerNameText);
-
-        // Link the position of the text to that of the player's circle
-        Circle playerCircle = player.getCirclesList().get(0);
-        playerNameText.xProperty().bind(playerCircle.centerXProperty().add(playerCircle.radiusProperty())); // Décalage à droite
-        playerNameText.yProperty().bind(playerCircle.centerYProperty().subtract(playerCircle.radiusProperty())); // Décalage au-dessus
 
 
+        displayNamePlayer();
+        
+        
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         leaderboard.setSpacing(10);
         leaderboard.setPadding(new Insets(10, 20, 10, 10));  // (haut, droite, bas, gauche)
@@ -188,6 +178,21 @@ public class AgarioController extends Controller {
 
 
         System.out.println("AgarioController: " + player.getName());
+    }
+
+    private void displayNamePlayer() {
+        Text playerNameText = new Text(player.getName());
+        playerNameText.setFill(Color.AQUA);
+        playerNameText.setStyle("-fx-font-weight: bold; -fx-font-size: 10px;");
+
+        // Add the text in the scene
+        terrain.getChildren().add(playerNameText);
+
+        // Link the position of the text to that of the player's circle
+        Circle playerCircle = player.getCirclesList().get(0);
+        playerNameText.xProperty().bind(playerCircle.centerXProperty().add(playerCircle.radiusProperty())); //position X at top on right
+        playerNameText.yProperty().bind(playerCircle.centerYProperty().subtract(playerCircle.radiusProperty())); //position Y at top on right
+
     }
 
     EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
