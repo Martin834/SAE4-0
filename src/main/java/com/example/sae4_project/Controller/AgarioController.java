@@ -82,6 +82,7 @@ public class AgarioController extends Controller {
 
         this.miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
+
         map.getAllPellet(map.getQuadTree(), allPellets);
         for (Pellet elm : allPellets) {
             addCircle(elm.getCircle());
@@ -158,6 +159,8 @@ public class AgarioController extends Controller {
         miniMap.getChildren().add(rectangle);
 
         for(Circle circle1 : player.circlesList) {
+          // miniPlayer.setVisible(false);
+            // rectangle.setVisible(false);
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
         }
@@ -206,7 +209,7 @@ public class AgarioController extends Controller {
                 player.move();
                 Random random = new Random();
                 int enemysize = allEnemy.size();
-                if (enemysize < 15) {
+                if (enemysize < 0) {
                     spawnEnemies();
                 }
                 //System.out.println(allEnemy.size());
@@ -300,6 +303,8 @@ public class AgarioController extends Controller {
 
 
     public void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
+        miniPlayer.setVisible(true);
+        rectangle.setVisible(true);
     //Link the position of the rectangle with that of the miniPlayer
       rectangle.layoutXProperty().bind(miniPlayer.centerXProperty().subtract(rectangle.getWidth() / 2));
       rectangle.layoutYProperty().bind(miniPlayer.centerYProperty().subtract(rectangle.getHeight() / 2));

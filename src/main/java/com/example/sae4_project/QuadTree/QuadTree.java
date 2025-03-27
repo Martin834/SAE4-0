@@ -68,7 +68,7 @@ public class QuadTree {
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())
                 ));
             }
-            baobab = r.nextInt(200);
+            baobab = r.nextInt(20000);
             if (baobab == 2) {
                 this.entities.add(new CreatorEnemy().create(r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())));
