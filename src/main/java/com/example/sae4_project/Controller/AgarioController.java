@@ -33,6 +33,8 @@ public class AgarioController extends Controller {
     private VBox leaderboard;
     @FXML
     private AnchorPane conteneurGlobal;
+    @FXML
+    private Label massLabel;
     private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
     private static Player player;
     private Pellet touchedPellet;
@@ -122,10 +124,10 @@ public class AgarioController extends Controller {
         miniMap.getChildren().add(miniPlayer);
 
         //Listen to the player to update the minimap
-        for (Circle circle1 : player.getCirclesList()) {
+        /*for (Circle circle1 : player.getCirclesList()) {
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
-        }
+        }*/
 
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         leaderboard.setSpacing(10);
@@ -193,6 +195,9 @@ public class AgarioController extends Controller {
             @Override
             public void handle(long now) {
                 player.move();
+
+                massLabel.setText("Masse : " + player.getMass());
+
                 Random random = new Random();
                 int enemysize = allEnemy.size();
                 if (enemysize < 20) {
