@@ -14,7 +14,4 @@ public class Camera extends Boundry{
         return this.zoom;
     }
 
-    public double getZoom() {
-        return this.zoom.doubleValue();
-    }
 }
