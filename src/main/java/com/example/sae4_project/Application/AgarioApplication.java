@@ -25,7 +25,7 @@ public class AgarioApplication extends Application {
         stage.getIcons().add(icon);
         System.out.println("Icon URL: " + icon);
 
-        stage.setTitle("Agar.io - Menu");
+        stage.setTitle("Agar.io");
 
         stage.setScene(scene);
         stage.show();
