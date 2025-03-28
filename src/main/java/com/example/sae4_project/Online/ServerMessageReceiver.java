@@ -26,7 +26,6 @@ public class ServerMessageReceiver extends Thread{
     public void run() {
         super.run();
         try {
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
             while(running){

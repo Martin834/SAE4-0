@@ -13,13 +13,12 @@ public class DataMap implements Serializable {
     private ArrayList<DataPellets> dataPellets = new ArrayList<DataPellets>();
     private ArrayList<DataPlayer> dataPlayers = new ArrayList<>();
 
-    public DataMap(){
+    public DataMap(Server server){
         Map map = Map.getInstance();
 
         size = Map.size;
 
-        ArrayList<Pellet> pellets = new ArrayList<>();
-        map.getAllPellet(map.getQuadTree(), pellets);
+        ArrayList<Pellet> pellets = server.getPellets();
         for(Pellet pellet : pellets){
             dataPellets.add(new DataPellets(
                     pellet.getIdentifier(),
@@ -29,7 +28,7 @@ public class DataMap implements Serializable {
             ));
         }
 
-        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<Player> players = server.getPlayers();
 
         for(Player player : players){
             DataPlayer dataPlayer = new DataPlayer(

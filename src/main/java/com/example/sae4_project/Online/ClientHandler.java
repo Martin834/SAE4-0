@@ -1,39 +1,61 @@
 package com.example.sae4_project.Online;
 
+import com.example.sae4_project.Entity.CreatorPlayer;
+import com.example.sae4_project.Entity.Player;
+import javafx.scene.shape.Circle;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
 public class ClientHandler extends Thread{
 
+    private final Server server;
     boolean running = true;
 
     Socket socket;
 
-    public ClientHandler(Socket socket) throws IOException {
+    public ClientHandler(Server server, Socket socket) throws IOException {
         this.socket = socket;
-
+        this.server = server;
     }
 
     @Override
     public void run() {
-
+        try {
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            boolean exist = false;
             while(running){
+                    DataMessage msg = (DataMessage) in.readObject();
 
-                try {
-                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                    DataPlayer dataPlayer = (DataPlayer) in.readObject();
-                    System.out.println("======================   " + dataPlayer + "   ==================================");
+                System.out.println(server.getPlayers().size());
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                    synchronized(server.getPlayers()){
+                        for(Player player : server.getPlayers()){
+                            if(player.getIdentifier() == msg.getId()){
+                                exist = true;
+                                if(msg.isSpace()){
+                                    player.divideItself();
+                                } else {
+                                    player.moveTowards(msg.getDx(), msg.getDy(), player.calculateMaxSpeed());
+                                }
+                            }
+                        }
 
+                        if(!exist){
+                            Player newPlayer = new CreatorPlayer().create();
+                            newPlayer.setIdentifier(msg.getId());
+                            server.getPlayers().add(newPlayer);
+                        }
 
-
+                    }
+                    
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

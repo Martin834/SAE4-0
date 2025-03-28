@@ -1,6 +1,9 @@
 package com.example.sae4_project.Online;
 
 import com.example.sae4_project.Application.AgarioApplication;
+import com.example.sae4_project.Entity.Pellet;
+import com.example.sae4_project.Entity.Player;
+import com.example.sae4_project.QuadTree.Map;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -31,6 +34,19 @@ public class Server {
     private UpdateWorld updateWorld;
     private ArrayList<ObjectOutputStream> clientWriters = new ArrayList<>();
 
+
+    public ArrayList<Pellet> getPellets() {
+        return pellets;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    private ArrayList<Pellet> pellets = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
+
+
     private ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     public Server() {
 
@@ -45,6 +61,10 @@ public class Server {
         updateWorld.start();
         AgarioApplication.threads.add(updateWorld);
 
+        Map map = Map.getInstance();
+        map.getAllPellet(map.getQuadTree(), pellets);
+
+
     }
 
     public void addClient(Socket client) throws IOException {
@@ -56,9 +76,9 @@ public class Server {
             clientWriters.add(out);
         }
 
-        ClientHandler clientHandler = new ClientHandler(client);
-        clientHandler.start();
+        ClientHandler clientHandler = new ClientHandler(this, client);
         AgarioApplication.threads.add(clientHandler);
+        clientHandler.start();
     }
 
     public void disconnect() throws IOException {

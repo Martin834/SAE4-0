@@ -3,9 +3,15 @@ package com.example.sae4_project.Entity;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.shape.Circle;
 
+import java.util.Random;
 
 
 public abstract class Entity  {
+
+    public Entity() {
+        this.identifier = new Random().nextInt();
+    }
+
     public int getIdentifier() {
         return this.identifier;
     }

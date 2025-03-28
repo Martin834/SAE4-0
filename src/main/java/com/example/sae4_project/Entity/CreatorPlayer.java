@@ -29,12 +29,14 @@ public class CreatorPlayer extends Creator {
         player.setIdentifier(data.getId());
 
         player.getCirclesList().clear();
+        int i = 0;
         for(DataCircle dataCircle : data.getDataCircles()){
-            player.getCirclesList().add(new Circle(
-               dataCircle.getCenterX(),
-               dataCircle.getCenterY(),
-               dataCircle.getRadius()
-            ));
+            if(i > 0){
+                player.divideItself();
+            }
+            player.getCirclesList().get(i).setCenterX(dataCircle.getCenterX());
+            player.getCirclesList().get(i).setCenterY(dataCircle.getCenterX());
+            player.getCirclesList().get(i).setRadius(dataCircle.getRadius());
         }
 
         return player;

@@ -142,7 +142,7 @@ public class ConnectionController extends Controller{
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Connection information : ");
                 alert.setHeaderText("Succesful connection");
-                alert.setContentText("You are now hosting a game : \n IP : " + server.getServerManager().getSocket().getInetAddress() +
+                alert.setContentText("You are now hosting a game : \n IP : " + server.getServerManager().getSocket().getInetAddress().getHostAddress() +
                         "\n Port : " + server.getServerManager().getSocket().getLocalPort());
                 alert.showAndWait();
 
