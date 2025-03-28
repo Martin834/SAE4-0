@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.sae4_project.Controller.MenuController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="com.example.sae4_project.Controller.MenuController">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Label text="AGAR.IO" style="-fx-font-size: 36px; -fx-font-weight: bold;"/>
-    <Button fx:id="playLocalButton" text="Jouer en Local" onAction="#playLocal"/>
-    <Button text="Jouer en Ligne" onAction="#playOnline"/>
-    <Button text="Quitter" onAction="#exitGame"/>
+
+   
+    <Label style="-fx-font-size: 36px; -fx-font-weight: bold;" text="AGAR.IO" />
+   <ImageView fx:id="homeImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+    <Button fx:id="playLocalButton" onAction="#playLocal" text="Jouer en Local" />
+    <Button onAction="#playOnline" text="Jouer en Ligne" />
+    <Button onAction="#exitGame" text="Quitter" />
 </VBox>

@@ -5,11 +5,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MenuController {
+public class MenuController extends Controller{
+    @FXML
+    private ImageView homeImage;
 
     @FXML
     private void playLocal(ActionEvent event) throws IOException {
@@ -28,12 +34,19 @@ public class MenuController {
     }
 
     private void switchScene(ActionEvent event, String fxmlFile) throws IOException {
-        // Récupérer le Stage à partir du bouton qui a déclenché l'événement
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Scene scene = new Scene(loader.load(), 800, 600);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        homeImage.setImage(new Image(String.valueOf(getClass().getResource("/com/example/sae4_project/img/welcome.png"))));
+
     }
 }
