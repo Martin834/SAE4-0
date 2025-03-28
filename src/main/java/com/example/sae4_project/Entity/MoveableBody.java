@@ -65,16 +65,16 @@ public abstract class MoveableBody extends Entity {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public boolean isColliding(MoveableBody other) {
+    public Circle isColliding(MoveableBody other) {
         for (Circle circle1 : this.circlesList) {
             double dx = circle1.getCenterX() - other.circle.getCenterX();
             double dy = circle1.getCenterY() - other.circle.getCenterY();
             double distance = Math.sqrt(dx * dx + dy * dy);
             if (distance < (circle1.getRadius() + other.circle.getRadius())) {
-                return true;
+                return circle1;
             }
         }
-        return false;
+        return null;
 
     }
     public double calculateRadius() {

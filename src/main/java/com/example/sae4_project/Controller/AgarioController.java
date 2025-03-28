@@ -41,10 +41,8 @@ public class AgarioController extends Controller {
     private VBox leaderboard;
     @FXML
     private AnchorPane conteneurGlobal;
-
-
-
-
+    @FXML
+    private Label massLabel;
     private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
     private static Player player;
     private Pellet touchedPellet;
@@ -58,7 +56,6 @@ public class AgarioController extends Controller {
     private boolean isTaskCompleted = false;
     private double cptFrames = 0.0;
     boolean test = false;
-
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
     private  static int rectangleSizeMinimap = 10;
@@ -69,7 +66,6 @@ public class AgarioController extends Controller {
 
     public void setPlayer(Player player) {
         this.player = player;
-        //System.out.println("setter player Agario : " + player.getName());
     }
 
 
@@ -89,7 +85,6 @@ public class AgarioController extends Controller {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("AgarioController: " + player.getName());
         this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
         this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
@@ -146,9 +141,7 @@ public class AgarioController extends Controller {
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         }
 
-
         displayNamePlayer();
-        
         
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         leaderboard.setSpacing(10);
@@ -188,8 +181,6 @@ public class AgarioController extends Controller {
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
         }
 
-
-        System.out.println("AgarioController: " + player.getName());
     }
 
     private void displayNamePlayer() {
@@ -220,8 +211,8 @@ public class AgarioController extends Controller {
             if (keyEvent.getCode() == KeyCode.SPACE) {
                 for (Circle circle : player.getCirclesList()) {
                     removeCircle(circle);
-                }player.divideItself();
-
+                }
+                player.divideItself();
                 for (Circle circle : player.getCirclesList()) {
                     addCircle(circle);
                 }
@@ -249,6 +240,9 @@ public class AgarioController extends Controller {
             @Override
             public void handle(long now) {
                 player.move();
+
+                massLabel.setText("Masse : " + player.getMass());
+
                 Random random = new Random();
                 int enemysize = allEnemy.size();
                 if (enemysize < 20) {
@@ -289,7 +283,7 @@ public class AgarioController extends Controller {
 
                     for (int j = i + 1; j < allEnemy.size(); j++) {
                         Enemy otherEnemy = allEnemy.get(j);
-                        if (enemy.isColliding(otherEnemy)) {
+                        if (enemy.isColliding(otherEnemy)!= null) {
                             if (enemy.circle.getRadius() > otherEnemy.circle.getRadius()) {
                                 enemy.makeFatter(otherEnemy, enemy.circle);
                                 terrain.getChildren().remove(otherEnemy.getCircle());
@@ -305,18 +299,19 @@ public class AgarioController extends Controller {
                         }
                     }
 
-                    if (player.isColliding(enemy)) {
+                    if (player.isColliding(enemy)!=null) {
                         double playerMass = player.getMass();
                         double enemyMass = enemy.getMass();
-
-                        for (Circle circle : player.getCirclesList()) {
-                            if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
-                                player.makeFatter(enemy,circle);
-                                //player.circle.setFill(Color.BLACK);
-                                terrain.getChildren().remove(enemy.getCircle());
-                                allEnemy.remove(i);
-                                i--;
-                            } else if ((enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 >= (circle.getRadius()*circle.getRadius())/100 * 1.33) {
+                        Circle circle = player.isColliding(enemy);
+                        if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
+                            player.makeFatter(enemy,circle);
+                            //player.circle.setFill(Color.BLACK);
+                            terrain.getChildren().remove(enemy.getCircle());
+                            allEnemy.remove(i);
+                            i--;
+                        } else if ((enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 >= (circle.getRadius()*circle.getRadius())/100 * 1.33) {
+                            System.out.println("mort  : "+player.getCirclesList().size());
+                            if (player.getCirclesList().size()==1) {
                                 stop();
                                 Platform.runLater(() -> {
                                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -330,13 +325,16 @@ public class AgarioController extends Controller {
                                     });
                                 });
                             }
+                            else {
+                                player.setMass(player.getMass()-(circle.getRadius()*circle.getRadius())/100);
+                                player.getCirclesList().remove(circle);
+                                player.circlesList.remove(circle);
+                                terrain.getChildren().remove(circle);
+                            }
                         }
                     }
                 }
-                System.out.println("-0 : "+player.circlesList.toString());
-                System.out.println(player.circlesList.size());
                 if (player.circlesList.size() >= 2 && !test) {
-                    System.out.println(" list :" +player.circlesList.toString());
                     test = true;
                     double timeBeforeRassembling = getTimeBeforeRassembling(player.circlesList.get(0));
                     long startTime = System.currentTimeMillis();
@@ -344,15 +342,32 @@ public class AgarioController extends Controller {
                     AnimationTimer timer1 = new AnimationTimer() {
                         @Override
                         public void handle(long now) {
-                            if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 100) {
-                                System.out.println("1 : "+player.circlesList.toString());
-                                player.rassembling(player.circlesList.get(0),player.circlesList.get(player.circlesList.size()-1));
-                                terrain.getChildren().remove(player.circlesList.get(player.circlesList.size()-1));
-                                player.circlesList.remove(player.circlesList.get(player.circlesList.size()-1));
-                                System.out.println("2 : "+player.circlesList.toString());
-                                stop();
+                            if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 1000) {
+                                if (player.circlesList.size() == 0) {
+                                    stop();
+                                    Platform.runLater(() -> {
+                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                        alert.setTitle("Game Over");
+                                        alert.setHeaderText("Tu t'es fait manger !");
+                                        alert.setContentText("Dommage, tu as perdu le jeu.");
+                                        alert.showAndWait().ifPresent(response -> {
+                                            if (response == ButtonType.OK) {
+                                                System.exit(0);
+                                            }
+                                        });
+                                    });
+                                    stop();
+
+                                }
+
+                                if (player.circlesList.size() > 1) {
+                                    player.rassembling(player.circlesList.get(0), player.circlesList.get(player.circlesList.size() - 1));
+                                    terrain.getChildren().remove(player.circlesList.get(player.circlesList.size() - 1));
+                                    player.circlesList.remove(player.circlesList.get(player.circlesList.size() - 1));
+                                }System.out.println("la rassemble : "+player.getCirclesList().size());
                                 test = false;
                             }
+
                         }
                     };
                     timer1.start();

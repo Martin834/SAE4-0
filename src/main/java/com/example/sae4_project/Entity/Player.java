@@ -65,8 +65,6 @@ public class Player extends MoveableBody {
            // CircleComponent secondComponent = (CircleComponent) circleComposite.getCircles().get(1);
             //circleComposite.remove(secondComponent);
         }
-        System.out.println("taille apres "+ circleComposite.getCircles().size());
-        System.out.println("divise avant : "+ circleComposite.getCircles().toString());
         for (Circle circle : circleComposite.getCircles()) {
             if (circle.getRadius() >= 10) {
                 tempCirclesList.add(new CircleLeaf(circle));
@@ -104,7 +102,6 @@ public class Player extends MoveableBody {
                 circleComposite.add(circle);
             }
         }
-        System.out.println("divise apres : "+ circleComposite.getCircles().toString());
         adjustCirclePositions();
     }
 
