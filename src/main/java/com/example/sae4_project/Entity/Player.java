@@ -1,5 +1,6 @@
 package com.example.sae4_project.Entity;
 
+import com.example.sae4_project.Controller.MenuController;
 import com.example.sae4_project.QuadTree.Map;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -8,15 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends MoveableBody {
+    private  String name;
 
     public Player() {
         super();
         this.setMass(5);
+        System.out.println(getName());
         Circle circle = new Circle(400 - this.getMass() / 2, 300 - this.getMass() / 2, 15);
         circlesList.add(circle);
         circle.setFill(Color.RED);
         this.circleComposite = new CircleComposite();
         this.circleComposite.add(new CircleLeaf(circle));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Pellet detectPellet(ArrayList<Pellet> all) {

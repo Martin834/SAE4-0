@@ -15,11 +15,19 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
@@ -33,6 +41,10 @@ public class AgarioController extends Controller {
     private VBox leaderboard;
     @FXML
     private AnchorPane conteneurGlobal;
+
+
+
+
     private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
     private static Player player;
     private Pellet touchedPellet;
@@ -55,6 +67,12 @@ public class AgarioController extends Controller {
         return player;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+        //System.out.println("setter player Agario : " + player.getName());
+    }
+
+
     public static List<Pellet> getPellets() {
         return allPellets;
     }
@@ -71,6 +89,7 @@ public class AgarioController extends Controller {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("AgarioController: " + player.getName());
         this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
         this.terrain.prefWidthProperty().bind(conteneurGlobal.widthProperty());
         this.terrain.setLayoutX(0);
@@ -78,7 +97,7 @@ public class AgarioController extends Controller {
         this.terrain.setFocusTraversable(true);
         this.terrain.requestFocus();
 
-        this.miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
 
         map.getAllPellet(map.getQuadTree(), allPellets);
         for (Pellet elm : allPellets) {
@@ -91,9 +110,9 @@ public class AgarioController extends Controller {
             addCircle(elm.getCircle());
         }
 
-        this.player = new CreatorPlayer().create();
+
         Circle circle = player.getCirclesList().get(0);
-        addCircle(circle);
+       addCircle(circle);
 
         cam.getCoordinate().XProperty().bind( Bindings.add(Bindings.multiply(-1,
                 Bindings.divide( conteneurGlobal.widthProperty(), 2)) , circle.centerXProperty()));
@@ -123,10 +142,14 @@ public class AgarioController extends Controller {
 
         //Listen to the player to update the minimap
         for (Circle circle1 : player.getCirclesList()) {
-            circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
-            circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+            circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+            circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
         }
 
+
+        displayNamePlayer();
+        
+        
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         leaderboard.setSpacing(10);
         leaderboard.setPadding(new Insets(10, 20, 10, 10));  // (haut, droite, bas, gauche)
@@ -159,6 +182,24 @@ public class AgarioController extends Controller {
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
         }
+
+
+        System.out.println("AgarioController: " + player.getName());
+    }
+
+    private void displayNamePlayer() {
+        Text playerNameText = new Text(player.getName());
+        playerNameText.setFill(Color.AQUA);
+        playerNameText.setStyle("-fx-font-weight: bold; -fx-font-size: 10px;");
+
+        // Add the text in the scene
+        terrain.getChildren().add(playerNameText);
+
+        // Link the position of the text to that of the player's circle
+        Circle playerCircle = player.getCirclesList().get(0);
+        playerNameText.xProperty().bind(playerCircle.centerXProperty().add(playerCircle.radiusProperty())); //position X at top on right
+        playerNameText.yProperty().bind(playerCircle.centerYProperty().subtract(playerCircle.radiusProperty())); //position Y at top on right
+
     }
 
     EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
@@ -186,6 +227,16 @@ public class AgarioController extends Controller {
     /**
      * Update the minimap
      */
+    private void updateMiniMapScale(Circle miniPlayer) {
+        double scale = miniMap.getWidth() / Map.size;
+
+        // Update the player on the minimap
+        for (Circle circle : player.getCirclesList()) {
+            miniPlayer.setRadius(circle.getRadius() * scale);
+            miniPlayer.centerXProperty().bind(circle.centerXProperty().multiply(scale));
+            miniPlayer.centerYProperty().bind(circle.centerYProperty().multiply(scale));
+        }
+    }
 
 
     private void gameLoop() {

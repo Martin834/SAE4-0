@@ -61,13 +61,15 @@ public class QuadTree {
             this.children.put(Orientation.SOUTH_WEST, new QuadTree(depth - 1, this, new Coordinate(coordinate.getX() + this.boundry.getLength() / 2, coordinate.getY())));
         } else {
             Random r = new Random();
-
+            int baobab = r.nextInt(3);
+            if (baobab == 2) {
                 this.entities.add(new Pellet(
                         r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())
                 ));
-
-            int baobab = r.nextInt(20000);
+            baobab = r.nextInt(20000);
+            }
+            baobab = r.nextInt(200);
             if (baobab == 2) {
                 this.entities.add(new CreatorEnemy().create(r.nextDouble(boundry.getCoordinate().getX(), boundry.getCoordinate().getX() + boundry.getLength()),
                         r.nextDouble(boundry.getCoordinate().getY(), boundry.getCoordinate().getY() + boundry.getHeight())));
