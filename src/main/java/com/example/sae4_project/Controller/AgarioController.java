@@ -291,15 +291,12 @@ public class AgarioController extends Controller {
                     AnimationTimer timer1 = new AnimationTimer() {
                         @Override
                         public void handle(long now) {
-                            System.out.println("temps : "+(System.currentTimeMillis() - startTime)+"  temps : "+ timeBeforeRassembling * 1000);
                             if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 1000) {
-                                System.out.println("cc");
                                 System.out.println("1 : "+player.circlesList.toString());
                                 Circle c = player.rassembling(player.circlesList);
                                 terrain.getChildren().remove(c);
                                 player.circlesList.remove(c);
                                 System.out.println("2 : "+player.circlesList.toString());
-                                System.out.println("3 : "+player.circlesList.toString());
                                 stop();
                                 test = false;
                             }
