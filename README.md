@@ -36,6 +36,10 @@ Comment facilement démarrer l'application :
 - Mini-carte
 - Pseudonyme du joueur
 - Zoom de la caméra et mouvement de la caméra
-- Connexion entre le serveur et le client
+- Connexion entre le serveur et le client (pas de jeu en ligne)
 - IA
 - Animations
+
+# Authors / Auteurs
+
+BAZOGE Martin (Martin834), BEUVE Leopold (leopold21), DELAUNAY Alix (alix73509), DEMAIMAY Lucas (Lucas-Demaimay), POTTIER Hugo (hpottier272)
