@@ -18,7 +18,8 @@ public class CircleLeaf implements CircleComponent {
     }
 
     /**
-     * Checks where the cursor is on the screen and sets the velocity for x and y axis, to know how fast he should go
+     * Checks where the cursor is on the screen and sets the velocity for x and y axis, to know how fast the CircleLeaf
+     * should go
      * @param posXMouse
      * @param posYMouse
      * @param maxSpeed

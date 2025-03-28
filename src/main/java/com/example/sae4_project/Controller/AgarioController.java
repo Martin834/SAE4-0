@@ -291,10 +291,10 @@ public class AgarioController extends Controller {
                         }
                     }
                 }
-                System.out.println("-0 : "+player.circlesList.toString());
-                System.out.println(player.circlesList.size());
+                //System.out.println("-0 : "+player.circlesList.toString());
+                ///System.out.println(player.circlesList.size());
                 if (player.circlesList.size() >= 2 && !test) {
-                    System.out.println(" list :" +player.circlesList.toString());
+                    //System.out.println(" list :" +player.circlesList.toString());
                     test = true;
                     double timeBeforeRassembling = getTimeBeforeRassembling(player.circlesList.get(0));
                     long startTime = System.currentTimeMillis();
@@ -303,11 +303,11 @@ public class AgarioController extends Controller {
                         @Override
                         public void handle(long now) {
                             if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 1000) {
-                                System.out.println("1 : "+player.circlesList.toString());
+                                //System.out.println("1 : "+player.circlesList.toString());
                                 Circle c = player.rassembling(player.circlesList);
                                 terrain.getChildren().remove(c);
                                 player.circlesList.remove(c);
-                                System.out.println("2 : "+player.circlesList.toString());
+                                //System.out.println("2 : "+player.circlesList.toString());
                                 stop();
                                 test = false;
                             }

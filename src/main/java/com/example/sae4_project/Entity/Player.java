@@ -9,6 +9,10 @@ import java.util.List;
 
 public class Player extends MoveableBody {
 
+    /**
+     * Player object constructor. Gives it a random color and creates of circle for it according to its mass, and a
+     * radius of 15. Assigns it a CircleComposite object so that it can hold other CircleLeaf objects and be divided.
+     */
     public Player() {
         super();
         this.setMass(5);
@@ -19,6 +23,11 @@ public class Player extends MoveableBody {
         this.circleComposite.add(new CircleLeaf(circle));
     }
 
+    /**
+     * For each pellet, detects if one the player's circles touch one.
+     * @param all
+     * @return true if one the circles of the player touches a pellet, false otherwise.
+     */
     public Pellet detectPellet(ArrayList<Pellet> all) {
         for (Circle circle : circleComposite.getCircles()) {
             for (Pellet pellet : all) {
@@ -31,19 +40,30 @@ public class Player extends MoveableBody {
         return null;
     }
 
+    /**
+     * @return the Player's circlesList
+     */
     public List<Circle> getCirclesList() {
         return circleComposite.getCircles();
     }
 
+    /**
+     * @return the calculated radius
+     */
     public double calculateRadius() {
         return 10 * Math.sqrt(this.getMass());
     }
 
+    /**
+     * @return the calculated max speed
+     */
     public double calculateMaxSpeed() {
         return (1 / this.massProperty().doubleValue()) * 10000;
     }
 
-
+    /**
+     * Divides the player into two circles.
+     */
     public void divideItself() {
         List<CircleComponent> tempCirclesList = new ArrayList<CircleComponent>();
         List<CircleComponent> temptempCirclesList = new ArrayList<CircleComponent>();
@@ -96,6 +116,9 @@ public class Player extends MoveableBody {
         adjustCirclePositions();
     }
 
+    /**
+     * Adjusts the positions of the circles so they don't get in the way of each other.
+     */
     private void adjustCirclePositions() {
         List<Circle> circles = circleComposite.getCircles();
         for (int i = 0; i < circles.size(); i++) {
@@ -117,59 +140,35 @@ public class Player extends MoveableBody {
         }
     }
 
-    public boolean canEat(Player player) {
-        //TODO A IMPLEMENTER
-        return false;
-    }
-
-    public void eat(Map map) {
-        //TODO A IMPLEMENTER
-    }
-
-    public double calculateEventHorizon() {
-        //TODO A IMPLEMENTER
-        return 0.0;
-    }
-
-
+    /**
+     * Calls the moveTowards method of this player's CircleComposite attribute
+     * @param posXMouse
+     * @param posYMouse
+     * @param maxSpeed
+     */
     @Override
     public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
         circleComposite.moveTowards(posXMouse, posYMouse, maxSpeed);
     }
 
+    /**
+     * Calls the move method of this player's CircleComposite attribute and adjustCirclePositions()
+     */
     @Override
     public void move() {
         circleComposite.move();
         adjustCirclePositions();
     }
 
+    /**
+     * Reunites the divided circles
+     * @param circle
+     * @return
+     */
     public Circle rassembling(ArrayList<Circle> circle) {
         Circle c = circle.get(circle.size()-1);
-        circle.get(0).setRadius(10*Math.sqrt((this.circlesList.get(0).getRadius()*this.circlesList.get(0).getRadius())/100+(c.getRadius()*c.getRadius())/100));
-        return c ;
+        circle.get(0).setRadius(10*Math.sqrt((this.circlesList.get(0).getRadius() *
+                this.circlesList.get(0).getRadius())/100+(c.getRadius()*c.getRadius())/100));
+        return c;
     }
-        /*
-        double totalMassRetain  = 0.0;
-        for (Circle circle1 : this.getCirclesList()) {
-            totalMassRetain += circle1.getRadius();
-        }
-
-        Circle baseCircle = this.circlesList.get(0);
-        Circle newCircle = new Circle(baseCircle.getCenterX(), baseCircle.getCenterY(), totalMassRetain);
-
-        this.circlesList.clear();
-        this.circlesList.add(newCircle);
-
-        this.circle = newCircle;
-
-        circleComposite.add(new CircleLeaf(newCircle));
-    }
-
-    public void makeFatter(Entity entity) {
-        this.setMass(this.getMass() +  entity.getMass());
-        double radius = this.calculateRadius();
-        this.circle.setRadius(radius);
-    }*/
-
-
 }

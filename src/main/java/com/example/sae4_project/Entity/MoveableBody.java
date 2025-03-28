@@ -21,11 +21,23 @@ public abstract class MoveableBody extends Entity {
     public double smoothing = 80;
     public double[] velocity = new double[2];
     public ArrayList<Circle> circlesList = new ArrayList<Circle>();
-    
+
+    /**
+     * Calls the other moveTowards method
+     * @param posXMouse
+     * @param posYMouse
+     */
     public void moveTowards(double posXMouse, double posYMouse) {
         moveTowards(posXMouse, posYMouse, this.speed);
     }
 
+    /**
+     * Checks where the cursor is on the screen and sets the velocity for x and y axis, to know how fast the
+     * MoveableBody should go
+     * @param posXMouse
+     * @param posYMouse
+     * @param maxSpeed
+     */
     public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
         velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
 
@@ -42,6 +54,10 @@ public abstract class MoveableBody extends Entity {
         velocity[1] *= adjustedSpeed;
     }
 
+    /**
+     * Moves the circles of this MoveableBody in the direction that the velocity array describes, for each circle
+     * contained in the MoveableBody.
+     */
     public void move() {
         for (Circle circle : this.circlesList) {
             if ((circle.getCenterX() + velocity[0])>=0 && (circle.getCenterX() + velocity[0])<= Map.size) {
@@ -53,6 +69,11 @@ public abstract class MoveableBody extends Entity {
         }
     }
 
+    /**
+     * Normalizes an array of doubles. Related to vector normalization.
+     * @param array
+     * @return
+     */
     public double[] normalizeDouble(double[] array) {
         double magnitude = Math.sqrt((array[0] * array[0]) + (array[1] * array[1]));
 
@@ -62,15 +83,22 @@ public abstract class MoveableBody extends Entity {
         return new double[]{0, 0};
     }
 
+    /**
+     * @param pellet
+     * @return the distance from the specified Pellet parameter.
+     */
     public double getDistanceTo(Pellet pellet) {
         double dx = this.circle.getCenterX() - pellet.getCircle().getCenterX();
         double dy = this.circle.getCenterY() - pellet.getCircle().getCenterY();
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    /**
+     * @param other
+     * @return true if the MoveableBody is colliding with another, false otherwise.
+     */
     public boolean isColliding(MoveableBody other) {
         for (Circle circle1 : this.circlesList) {
-
             double dx = circle1.getCenterX() - other.circle.getCenterX();
             double dy = circle1.getCenterY() - other.circle.getCenterY();
             double distance = Math.sqrt(dx * dx + dy * dy);
@@ -78,15 +106,24 @@ public abstract class MoveableBody extends Entity {
                 return true;
             }
         }
-
         return false;
 
     }
+
+    /**
+     * @return the radius of this MoveableBody
+     */
     public double calculateRadius() {
         double mass = this.mass.get();
         return 10 * Math.sqrt(mass);
     }
 
+    /**
+     * Makes the MoveableBody fatter according to the size of the eaten Entity (other)
+     * Also does the animations.
+     * @param other
+     * @param circle
+     */
     public void makeFatter(Entity other, Circle circle) {
         double growthFactor = 5.0;
         double otherMass = other.getMass();
@@ -128,6 +165,9 @@ public abstract class MoveableBody extends Entity {
         adjustCirclePositions();
     }
 
+    /**
+     * Adjusts the positions of the circles so they don't get in the way of each other.
+     */
     private void adjustCirclePositions() {
         List<Circle> circles = circleComposite.getCircles();
         for (int i = 0; i < circles.size(); i++) {
