@@ -11,6 +11,11 @@ public class AgarioApplication extends Application {
 
     private static Stage primaryStage;
 
+    /**
+     * Launches the application.
+     * @param stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
@@ -21,6 +26,11 @@ public class AgarioApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Sets the root of the page
+     * @param fxml
+     * @throws IOException
+     */
     public static void setRoot(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader(AgarioApplication.class.getResource("/com/example/sae4_project/" + fxml + ".fxml"));
         Parent root = loader.load();

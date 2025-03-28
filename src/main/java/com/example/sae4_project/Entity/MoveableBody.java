@@ -1,11 +1,14 @@
 package com.example.sae4_project.Entity;
 
 import com.example.sae4_project.QuadTree.Map;
+import javafx.geometry.Bounds;
 import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import javafx.animation.*;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -67,6 +70,7 @@ public abstract class MoveableBody extends Entity {
 
     public boolean isColliding(MoveableBody other) {
         for (Circle circle1 : this.circlesList) {
+
             double dx = circle1.getCenterX() - other.circle.getCenterX();
             double dy = circle1.getCenterY() - other.circle.getCenterY();
             double distance = Math.sqrt(dx * dx + dy * dy);
@@ -74,6 +78,7 @@ public abstract class MoveableBody extends Entity {
                 return true;
             }
         }
+
         return false;
 
     }
