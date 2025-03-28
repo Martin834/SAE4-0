@@ -59,10 +59,11 @@ public class Player extends MoveableBody {
         List<CircleComponent> tempCirclesList = new ArrayList<CircleComponent>();
         List<CircleComponent> temptempCirclesList = new ArrayList<CircleComponent>();
         System.out.println("taille "+ circleComposite.getCircles().size());
+
         if (circleComposite.getCircles().size() >= 2) {
             this.circleComposite.getCircles().remove(1);
-           // CircleComponent secondComponent = (CircleComponent) circleComposite.getCircles().get(1); // récupérer le deuxième CircleComponent
-            //circleComposite.remove(secondComponent); // Supprimer ce CircleComponent de circleComposite
+           // CircleComponent secondComponent = (CircleComponent) circleComposite.getCircles().get(1);
+            //circleComposite.remove(secondComponent);
         }
         System.out.println("taille apres "+ circleComposite.getCircles().size());
         System.out.println("divise avant : "+ circleComposite.getCircles().toString());
@@ -154,10 +155,8 @@ public class Player extends MoveableBody {
         adjustCirclePositions();
     }
 
-    public Circle rassembling(ArrayList<Circle> circle) {
-        Circle c = circle.get(circle.size()-1);
-        circle.get(0).setRadius(10*Math.sqrt((this.circlesList.get(0).getRadius()*this.circlesList.get(0).getRadius())/100+(c.getRadius()*c.getRadius())/100));
-        return c ;
+    public void rassembling(Circle circle1, Circle circle2) {
+        circle1.setRadius(10*Math.sqrt((circle1.getRadius()*circle1.getRadius())/100+(circle2.getRadius()*circle2.getRadius())/100));
     }
         /*
         double totalMassRetain  = 0.0;

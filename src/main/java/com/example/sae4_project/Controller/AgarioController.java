@@ -213,10 +213,10 @@ public class AgarioController extends Controller {
         @Override
         public void handle(KeyEvent keyEvent) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
-                player.divideItself();
                 for (Circle circle : player.getCirclesList()) {
                     removeCircle(circle);
-                }
+                }player.divideItself();
+
                 for (Circle circle : player.getCirclesList()) {
                     addCircle(circle);
                 }
@@ -339,11 +339,11 @@ public class AgarioController extends Controller {
                     AnimationTimer timer1 = new AnimationTimer() {
                         @Override
                         public void handle(long now) {
-                            if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 1000) {
+                            if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 100) {
                                 System.out.println("1 : "+player.circlesList.toString());
-                                Circle c = player.rassembling(player.circlesList);
-                                terrain.getChildren().remove(c);
-                                player.circlesList.remove(c);
+                                player.rassembling(player.circlesList.get(0),player.circlesList.get(player.circlesList.size()-1));
+                                terrain.getChildren().remove(player.circlesList.get(player.circlesList.size()-1));
+                                player.circlesList.remove(player.circlesList.get(player.circlesList.size()-1));
                                 System.out.println("2 : "+player.circlesList.toString());
                                 stop();
                                 test = false;
