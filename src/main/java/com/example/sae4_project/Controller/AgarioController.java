@@ -157,6 +157,10 @@ public class AgarioController extends Controller {
        rectangle.setStrokeWidth(1);
         miniMap.getChildren().add(rectangle);
 
+        //at the start of the game, miniPlayer and rectangle
+       miniPlayer.setVisible(false);
+        rectangle.setVisible(false);
+
         for(Circle circle1 : player.circlesList) {
             circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
             circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
@@ -300,6 +304,9 @@ public class AgarioController extends Controller {
 
 
     public void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
+        //as soon as you start playing, the miniPlayer and the rectangle appear
+        miniPlayer.setVisible(true);
+        rectangle.setVisible(true);
     //Link the position of the rectangle with that of the miniPlayer
       rectangle.layoutXProperty().bind(miniPlayer.centerXProperty().subtract(rectangle.getWidth() / 2));
       rectangle.layoutYProperty().bind(miniPlayer.centerYProperty().subtract(rectangle.getHeight() / 2));
