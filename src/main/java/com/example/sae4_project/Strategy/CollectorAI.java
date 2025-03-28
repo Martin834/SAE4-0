@@ -10,6 +10,10 @@ import com.example.sae4_project.Entity.Player;
 import java.util.List;
 
 public class CollectorAI implements AIStrategy{
+    /**
+     * Executes the Collector behavior strategy for the AIs. They look for the closest pellets to eat.
+     * @param enemy
+     */
     @Override
     public void execute(Enemy enemy) {
         List<Pellet> pellets = AgarioController.getPellets();

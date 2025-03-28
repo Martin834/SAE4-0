@@ -9,39 +9,28 @@ import javafx.scene.shape.Circle;
 import java.util.List;
 
 public class HunterAI implements AIStrategy {
-        private static final double SIZE_THRESHOLD = 1.33;
+    private static final double SIZE_THRESHOLD = 1.33;
 
-        @Override
-        public void execute(Enemy enemy) {
-            Player player = AgarioController.getPlayer();
+    /**
+     * Executes the Hunter behavior strategy for the AIs. If the bot is 33% bigger than the player, it will chase him.
+     * @param enemy
+     */
+    @Override
+    public void execute(Enemy enemy) {
+        Player player = AgarioController.getPlayer();
 
-            if (enemy.calculateRadius() >= SIZE_THRESHOLD * player.calculateRadius()) {
+        if (enemy.calculateRadius() >= SIZE_THRESHOLD * player.calculateRadius()) {
 
-                for (Circle circle : player.getCirclesList()) {
-                    double playerX = circle.getCenterX();
-                    double playerY = circle.getCenterY();
-                    enemy.moveTowards(playerX, playerY, enemy.calculateMaxSpeed());
-                }
-
-            } else {
-                enemy.setStrategy(new CollectorAI());
+            for (Circle circle : player.getCirclesList()) {
+                double playerX = circle.getCenterX();
+                double playerY = circle.getCenterY();
+                enemy.moveTowards(playerX, playerY, enemy.calculateMaxSpeed());
             }
-        }
 
-        private Pellet getClosestPellet(Enemy enemy) {
-            List<Pellet> pellets = AgarioController.getPellets();
-            Pellet closestPellet = null;
-            double minDistance = Double.MAX_VALUE;
-
-            for (Pellet pellet : pellets) {
-                double distance = enemy.getDistanceTo(pellet);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestPellet = pellet;
-                }
-            }
-            return closestPellet;
+        } else {
+            enemy.setStrategy(new CollectorAI());
         }
     }
+}
 
 
