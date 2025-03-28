@@ -6,9 +6,6 @@ import com.example.sae4_project.Strategy.HunterAI;
 import com.example.sae4_project.Strategy.RandomAI;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -48,14 +45,6 @@ public class Enemy extends MoveableBody {
      */
     public void setStrategy(AIStrategy strategy) {
         this.strategy = strategy;
-    }
-
-    /**
-     *
-     * @return this instance's behavior strategy
-     */
-    public AIStrategy getStrategy() {
-        return this.strategy;
     }
 
     /**

@@ -20,5 +20,9 @@ public class CreatorEnemy extends Creator{
         return new Enemy( x, y);
     }
 
+    /***
+     * Creates an empty enemy
+     * @return
+     */
     public Enemy create(){return new Enemy(0,0);}
 }

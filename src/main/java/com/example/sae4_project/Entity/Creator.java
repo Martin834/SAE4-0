@@ -1,7 +1,5 @@
 package com.example.sae4_project.Entity;
 
-import com.example.sae4_project.Entity.Entity;
-
 /**
  * Defines the methods that inherited Creator classes will use
  */

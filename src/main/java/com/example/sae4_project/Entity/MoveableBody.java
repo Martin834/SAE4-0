@@ -1,16 +1,11 @@
 package com.example.sae4_project.Entity;
 
 import com.example.sae4_project.QuadTree.Map;
-import javafx.geometry.Bounds;
 import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import javafx.animation.*;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Shape;
 import javafx.util.Duration;
-
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +13,6 @@ public abstract class MoveableBody extends Entity {
 
     public CircleComposite circleComposite = new CircleComposite();
     public double speed = 5;
-    public double smoothing = 80;
     public double[] velocity = new double[2];
     public ArrayList<Circle> circlesList = new ArrayList<Circle>();
 
@@ -137,27 +131,25 @@ public abstract class MoveableBody extends Entity {
         int red = random.nextInt(256);
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
-        // Animation de la taille (croissance du cercle)
+
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(300), circle);
         scaleTransition.setToX(scaleFactor);
         scaleTransition.setToY(scaleFactor);
         scaleTransition.setInterpolator(Interpolator.EASE_OUT);
 
-        // Animation de la couleur (effet d'absorption)
         FillTransition fillTransition = new FillTransition(Duration.millis(150), circle);
         fillTransition.setFromValue(Color.rgb(red,green,blue));
         fillTransition.setToValue(Color.rgb(red,green,blue));
         fillTransition.setCycleCount(1);
         fillTransition.setAutoReverse(true);
 
-        // Quand l'animation est terminée, mettre à jour la masse et le rayon
         scaleTransition.setOnFinished(event -> {
             this.setMass(this.getMass() + (other.getMass() * growthFactor));
-            circle.setRadius(Math.sqrt(newMass)); // Appliquer le nouveau rayon
-            circle.setScaleX(1); // Réinitialiser l'échelle
+            circle.setRadius(Math.sqrt(newMass));
+            circle.setScaleX(1);
             circle.setScaleY(1);
         });
-        // Lancer les animations en parallèle
+
         random.setSeed(random.nextInt());
         scaleTransition.play();
         fillTransition.play();

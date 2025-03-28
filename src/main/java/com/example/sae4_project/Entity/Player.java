@@ -1,6 +1,5 @@
 package com.example.sae4_project.Entity;
 
-import com.example.sae4_project.QuadTree.Map;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -67,14 +66,10 @@ public class Player extends MoveableBody {
     public void divideItself() {
         List<CircleComponent> tempCirclesList = new ArrayList<CircleComponent>();
         List<CircleComponent> temptempCirclesList = new ArrayList<CircleComponent>();
-        System.out.println("taille "+ circleComposite.getCircles().size());
+
         if (circleComposite.getCircles().size() >= 2) {
             this.circleComposite.getCircles().remove(1);
-           // CircleComponent secondComponent = (CircleComponent) circleComposite.getCircles().get(1); // récupérer le deuxième CircleComponent
-            //circleComposite.remove(secondComponent); // Supprimer ce CircleComponent de circleComposite
         }
-        System.out.println("taille apres "+ circleComposite.getCircles().size());
-        System.out.println("divise avant : "+ circleComposite.getCircles().toString());
         for (Circle circle : circleComposite.getCircles()) {
             if (circle.getRadius() >= 10) {
                 tempCirclesList.add(new CircleLeaf(circle));
@@ -112,7 +107,6 @@ public class Player extends MoveableBody {
                 circleComposite.add(circle);
             }
         }
-        System.out.println("divise apres : "+ circleComposite.getCircles().toString());
         adjustCirclePositions();
     }
 
@@ -169,6 +163,7 @@ public class Player extends MoveableBody {
         Circle c = circle.get(circle.size()-1);
         circle.get(0).setRadius(10*Math.sqrt((this.circlesList.get(0).getRadius() *
                 this.circlesList.get(0).getRadius())/100+(c.getRadius()*c.getRadius())/100));
+
         return c;
     }
 }

@@ -16,14 +16,6 @@ public class CircleComposite implements CircleComponent {
     }
 
     /**
-     * Removes a CircleComponent object from this instance's list of CircleComponents.
-     * @param circleComponent
-     */
-    public void remove(CircleComponent circleComponent) {
-        circleComponents.remove(circleComponent);
-    }
-
-    /**
      * Calls the moveTowards method for every child (every item in the ArrayList) of this CircleComposite
      * @param posXMouse
      * @param posYMouse
@@ -46,6 +38,9 @@ public class CircleComposite implements CircleComponent {
         }
     }
 
+    /**
+     * Calls the makeFatter method for every child (every item in the ArrayList) of this CircleComposite
+     */
     @Override
     public void makeFatter(Entity entity , Circle circle) {
         for (CircleComponent component : circleComponents) {
@@ -53,6 +48,9 @@ public class CircleComposite implements CircleComponent {
         }
     }
 
+    /**
+     * Calls the getCircles method for every child (every item in the ArrayList) of this CircleComposite
+     */
     @Override
     public List<Circle> getCircles() {
         List<Circle> circles = new ArrayList<>();

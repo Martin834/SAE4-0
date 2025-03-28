@@ -2,11 +2,8 @@ package com.example.sae4_project.Strategy;
 
 import com.example.sae4_project.Controller.AgarioController;
 import com.example.sae4_project.Entity.Enemy;
-import com.example.sae4_project.Entity.Pellet;
 import com.example.sae4_project.Entity.Player;
 import javafx.scene.shape.Circle;
-
-import java.util.List;
 
 public class HunterAI implements AIStrategy {
     private static final double SIZE_THRESHOLD = 1.33;

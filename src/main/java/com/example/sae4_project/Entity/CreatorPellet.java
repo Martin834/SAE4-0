@@ -9,6 +9,10 @@ public class CreatorPellet extends Creator {
         this.create();
     }
 
+    /**
+     * Creates an empty Pellet object
+     * @return
+     */
     @Override
     public Pellet create() {
         return null;

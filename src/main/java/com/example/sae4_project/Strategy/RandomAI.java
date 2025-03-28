@@ -1,7 +1,6 @@
 package com.example.sae4_project.Strategy;
 
 import com.example.sae4_project.Entity.Enemy;
-
 import java.util.Random;
 
 public class RandomAI implements AIStrategy {

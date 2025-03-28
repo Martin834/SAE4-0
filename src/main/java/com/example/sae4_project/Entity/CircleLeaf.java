@@ -47,12 +47,12 @@ public class CircleLeaf implements CircleComponent {
      */
     @Override
     public void move() {
-            if ((circle.getCenterX() + velocity[0])>=0 && (circle.getCenterX() + velocity[0])<= Map.size) {
-                circle.setCenterX(circle.getCenterX() + velocity[0]*2);
-            }
-            if ((circle.getCenterY() + velocity[1])>=0 && (circle.getCenterY() + velocity[1])<= Map.size) {
-                circle.setCenterY(circle.getCenterY() + velocity[1]*2);
-            }
+        if ((circle.getCenterX() + velocity[0])>=0 && (circle.getCenterX() + velocity[0])<= Map.size) {
+            circle.setCenterX(circle.getCenterX() + velocity[0]*2);
+        }
+        if ((circle.getCenterY() + velocity[1])>=0 && (circle.getCenterY() + velocity[1])<= Map.size) {
+            circle.setCenterY(circle.getCenterY() + velocity[1]*2);
+        }
     }
 
     /**

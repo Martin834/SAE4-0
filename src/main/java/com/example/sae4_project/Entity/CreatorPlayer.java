@@ -18,6 +18,12 @@ public class CreatorPlayer extends Creator{
         return new Player();
     }
 
+    /**
+     * Creates an empty Pellet object
+     * @param x
+     * @param y
+     * @return
+     */
     @Override
     public Entity create(double x, double y) {
         return null;

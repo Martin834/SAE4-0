@@ -48,7 +48,6 @@ public class MenuController {
      * @throws IOException
      */
     private void switchScene(ActionEvent event, String fxmlFile) throws IOException {
-        // Récupérer le Stage à partir du bouton qui a déclenché l'événement
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
