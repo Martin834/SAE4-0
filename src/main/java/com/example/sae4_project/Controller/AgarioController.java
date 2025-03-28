@@ -10,26 +10,19 @@ import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.ButtonType;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.scene.shape.Rectangle;
-import java.math.MathContext;
+
 import java.net.URL;
 import java.util.*;
-import java.util.random.RandomGenerator;
 
 public class AgarioController extends Controller {
     @FXML
@@ -48,6 +41,11 @@ public class AgarioController extends Controller {
     private static ArrayList<Enemy> allEnemy = new ArrayList<Enemy>();
     private double posX;
     private double posY;
+    private final int constTemps = 10;
+    private long t = -1;
+    private boolean isTaskCompleted = false;
+    private double cptFrames = 0.0;
+    boolean test = false;
 
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
@@ -125,8 +123,8 @@ public class AgarioController extends Controller {
 
         //Listen to the player to update the minimap
         for (Circle circle1 : player.getCirclesList()) {
-            circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
-            circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer));
+            circle1.centerXProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
+            circle1.centerYProperty().addListener((obs, oldVal, newVal) -> updateMiniMapScale(miniPlayer, rectangle));
         }
 
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -188,16 +186,7 @@ public class AgarioController extends Controller {
     /**
      * Update the minimap
      */
-    private void updateMiniMapScale(Circle miniPlayer) {
-        double scale = miniMap.getWidth() / Map.size;
 
-        // Update the player on the minimap
-        for (Circle circle : player.getCirclesList()) {
-            miniPlayer.setRadius(circle.getRadius() * scale);
-            miniPlayer.centerXProperty().bind(circle.centerXProperty().multiply(scale));
-            miniPlayer.centerYProperty().bind(circle.centerYProperty().multiply(scale));
-        }
-    }
 
     private void gameLoop() {
         AnimationTimer timer = new AnimationTimer() {
@@ -209,12 +198,10 @@ public class AgarioController extends Controller {
                 if (enemysize < 20) {
                     spawnEnemies();
                 }
-                //System.out.println(allEnemy.size());
                 int pelletsNB = allPellets.size();
                 if (pelletsNB < 1500) {
                     spawnPellets();
                 }
-                //System.out.println(allPellets.size());
                 //.getAllEnemies(map.getQuadTree(), allEnemy);
                 //QuadTree zone = map.findQuadTree(map.getQuadTree(), new Coordinate(12,12));
                 //zone.getEntities().add(enemi);
@@ -267,7 +254,6 @@ public class AgarioController extends Controller {
                         double enemyMass = enemy.getMass();
 
                         for (Circle circle : player.getCirclesList()) {
-                            String s = "joueur : "+(circle.getRadius() * circle.getRadius()) / 100 + " advsersaire = " + (enemy.getCircle().getRadius() * enemy.getCircle().getRadius()) / 100 * 1.33;
                             if ((circle.getRadius()*circle.getRadius())/100 >= (enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 * 1.33) {
                                 player.makeFatter(enemy,circle);
                                 //player.circle.setFill(Color.BLACK);
@@ -275,7 +261,6 @@ public class AgarioController extends Controller {
                                 allEnemy.remove(i);
                                 i--;
                             } else if ((enemy.getCircle().getRadius()*enemy.getCircle().getRadius())/100 >= (circle.getRadius()*circle.getRadius())/100 * 1.33) {
-                                System.out.println("Game Over ! Tu t'es fait manger.");
                                 stop();
                                 Platform.runLater(() -> {
                                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -290,14 +275,42 @@ public class AgarioController extends Controller {
                                 });
                             }
                         }
-
                     }
+                }
+                System.out.println("-0 : "+player.circlesList.toString());
+                System.out.println(player.circlesList.size());
+                if (player.circlesList.size() >= 2 && !test) {
+                    System.out.println(" list :" +player.circlesList.toString());
+                    test = true;
+                    double timeBeforeRassembling = getTimeBeforeRassembling(player.circlesList.get(0));
+                    long startTime = System.currentTimeMillis();
+
+                    AnimationTimer timer1 = new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            if (System.currentTimeMillis() - startTime >= timeBeforeRassembling * 1000) {
+                                System.out.println("1 : "+player.circlesList.toString());
+                                Circle c = player.rassembling(player.circlesList);
+                                terrain.getChildren().remove(c);
+                                player.circlesList.remove(c);
+                                System.out.println("2 : "+player.circlesList.toString());
+                                stop();
+                                test = false;
+                            }
+                        }
+                    };
+                    timer1.start();
                 }
             }
         };
         timer.start();
     }
 
+    public double getTimeBeforeRassembling(Circle dividedCircle) {
+        return this.constTemps + dividedCircle.getRadius()/100;
+    }
+    public void eatingAnimation(double oldMass, double newMass) {
+    }
 
     public void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
     //Link the position of the rectangle with that of the miniPlayer
@@ -308,6 +321,7 @@ public class AgarioController extends Controller {
       rectangle.setHeight(miniPlayer.getRadius() * rectangleSizeMinimap);
       rectangle.setWidth(miniPlayer.getRadius() * rectangleSizeMinimap);
     }
+
 
     public void spawnEnemies() {
         Random random = new Random();

@@ -143,7 +143,6 @@ public abstract class MoveableBody extends Entity {
             }
         }
     }
-
 }
 
 

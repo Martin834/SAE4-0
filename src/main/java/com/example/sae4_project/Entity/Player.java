@@ -45,12 +45,18 @@ public class Player extends MoveableBody {
 
 
     public void divideItself() {
-        List<CircleComponent> tempCirclesList = new ArrayList<>();
-        List<CircleComponent> temptempCirclesList = new ArrayList<>();
+        List<CircleComponent> tempCirclesList = new ArrayList<CircleComponent>();
+        List<CircleComponent> temptempCirclesList = new ArrayList<CircleComponent>();
+        System.out.println("taille "+ circleComposite.getCircles().size());
+        if (circleComposite.getCircles().size() >= 2) {
+            this.circleComposite.getCircles().remove(1);
+           // CircleComponent secondComponent = (CircleComponent) circleComposite.getCircles().get(1); // récupérer le deuxième CircleComponent
+            //circleComposite.remove(secondComponent); // Supprimer ce CircleComponent de circleComposite
+        }
+        System.out.println("taille apres "+ circleComposite.getCircles().size());
+        System.out.println("divise avant : "+ circleComposite.getCircles().toString());
         for (Circle circle : circleComposite.getCircles()) {
-            System.out.println("mon rayon est de ;"+circle.getRadius());
             if (circle.getRadius() >= 10) {
-                System.out.println("je suis ajoute ;" +circle.getRadius());
                 tempCirclesList.add(new CircleLeaf(circle));
             }
         }
@@ -86,7 +92,7 @@ public class Player extends MoveableBody {
                 circleComposite.add(circle);
             }
         }
-
+        System.out.println("divise apres : "+ circleComposite.getCircles().toString());
         adjustCirclePositions();
     }
 
@@ -136,7 +142,30 @@ public class Player extends MoveableBody {
         circleComposite.move();
         adjustCirclePositions();
     }
-   /* public void makeFatter(Entity entity) {
+
+    public Circle rassembling(ArrayList<Circle> circle) {
+        Circle c = circle.get(circle.size()-1);
+        circle.get(0).setRadius(10*Math.sqrt((this.circlesList.get(0).getRadius()*this.circlesList.get(0).getRadius())/100+(c.getRadius()*c.getRadius())/100));
+        return c ;
+    }
+        /*
+        double totalMassRetain  = 0.0;
+        for (Circle circle1 : this.getCirclesList()) {
+            totalMassRetain += circle1.getRadius();
+        }
+
+        Circle baseCircle = this.circlesList.get(0);
+        Circle newCircle = new Circle(baseCircle.getCenterX(), baseCircle.getCenterY(), totalMassRetain);
+
+        this.circlesList.clear();
+        this.circlesList.add(newCircle);
+
+        this.circle = newCircle;
+
+        circleComposite.add(new CircleLeaf(newCircle));
+    }
+
+    public void makeFatter(Entity entity) {
         this.setMass(this.getMass() +  entity.getMass());
         double radius = this.calculateRadius();
         this.circle.setRadius(radius);
