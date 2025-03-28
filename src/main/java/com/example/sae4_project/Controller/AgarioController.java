@@ -43,18 +43,12 @@ public class AgarioController extends Controller {
     private AnchorPane conteneurGlobal;
     @FXML
     private Label massLabel;
-    private ArrayList<Circle> listCirclesPlayer = new ArrayList<Circle>();
     private static Player player;
     private Pellet touchedPellet;
     private Pellet touchedByEnemy;
     private static ArrayList<Pellet> allPellets = new ArrayList<Pellet>();
     private static ArrayList<Enemy> allEnemy = new ArrayList<Enemy>();
-    private double posX;
-    private double posY;
     private final int constTemps = 10;
-    private long t = -1;
-    private boolean isTaskCompleted = false;
-    private double cptFrames = 0.0;
     boolean test = false;
     private Map map = Map.getInstance();
     private Camera cam = new Camera(new Coordinate(0, 0));
@@ -83,6 +77,12 @@ public class AgarioController extends Controller {
         this.terrain.getChildren().remove(circle);
     }
 
+    /**
+     * This method initialize most variables needed to show what's happening on the screen, like the terrain, the map,
+     * the player, etc.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.terrain.prefHeightProperty().bind(conteneurGlobal.heightProperty());
@@ -128,14 +128,10 @@ public class AgarioController extends Controller {
         this.terrain.addEventHandler(MouseEvent.MOUSE_MOVED, handlerMouseMoved);
         this.terrain.addEventHandler(KeyEvent.KEY_PRESSED, handlerSpace);
 
-        // Setup of the minimap
         miniMap.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        // Creation of the player on the minimap
         Circle miniPlayer = new Circle(player.getCirclesList().get(0).getRadius(), Color.RED);
         miniMap.getChildren().add(miniPlayer);
-
-        //Listen to the player to update the minimap
 
         updateMiniMapScale(miniPlayer);
 
@@ -145,10 +141,10 @@ public class AgarioController extends Controller {
         }
 
         displayNamePlayer();
-        
+
         leaderboard.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         leaderboard.setSpacing(10);
-        leaderboard.setPadding(new Insets(10, 20, 10, 10));  // (haut, droite, bas, gauche)
+        leaderboard.setPadding(new Insets(10, 20, 10, 10));
 
 
         Integer [] nombre = {1,2,3,4,5,6,7,8,9,10};
@@ -165,13 +161,13 @@ public class AgarioController extends Controller {
         this.gameLoop();
 
 
-        // Creation of the rectangle representing the visible area on the minimap
-       Rectangle rectangle = new Rectangle();
+
+        Rectangle rectangle = new Rectangle();
         rectangle.setStroke(Color.BLACK);
         rectangle.setWidth(miniPlayer.getScaleX() * rectangleSizeMinimap);
         rectangle.setHeight(miniPlayer.getScaleY() * rectangleSizeMinimap);
         rectangle.setFill(Color.TRANSPARENT);
-       rectangle.setStrokeWidth(1);
+        rectangle.setStrokeWidth(1);
         miniMap.getChildren().add(rectangle);
 
         //at the start of the game, miniPlayer and rectangle
@@ -201,6 +197,9 @@ public class AgarioController extends Controller {
 
     }
 
+    /**
+     * Changes the direction of where the player goes according to the position of the cursor
+     */
     EventHandler<MouseEvent> handlerMouseMoved = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -208,6 +207,9 @@ public class AgarioController extends Controller {
         }
     };
 
+    /**
+     * When the spacebar is pressed, the player will divide itself when if it should be able to
+     */
     EventHandler<KeyEvent> handlerSpace = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent keyEvent) {
@@ -224,8 +226,10 @@ public class AgarioController extends Controller {
     };
 
     /**
-     * Update the minimap
+     * Main game method, called at the end of the initialize() method. Holds an AnimationTimer object that keeps on
+     * running its content every 33ms.
      */
+
     private void updateMiniMapScale(Circle miniPlayer) {
         double scale = miniMap.getWidth() / Map.size;
 
@@ -240,13 +244,16 @@ public class AgarioController extends Controller {
 
     private void gameLoop() {
         AnimationTimer timer = new AnimationTimer() {
+            /**
+             * Handles what happens every 33ms (30FPS)
+             * @param now
+             */
             @Override
             public void handle(long now) {
                 player.move();
 
                 massLabel.setText("Masse : " + player.getMass());
 
-                Random random = new Random();
                 int enemysize = allEnemy.size();
                 if (enemysize < 20) {
                     spawnEnemies();
@@ -255,9 +262,7 @@ public class AgarioController extends Controller {
                 if (pelletsNB < 1500) {
                     spawnPellets();
                 }
-                //.getAllEnemies(map.getQuadTree(), allEnemy);
-                //QuadTree zone = map.findQuadTree(map.getQuadTree(), new Coordinate(12,12));
-                //zone.getEntities().add(enemi);
+
                 touchedPellet = player.detectPellet(allPellets);
                 if (touchedPellet != null) {
                     for (Circle circle : player.getCirclesList()) {
@@ -302,6 +307,7 @@ public class AgarioController extends Controller {
                         }
                     }
 
+
                     if (player.isColliding(enemy)!=null) {
                         double playerMass = player.getMass();
                         double enemyMass = enemy.getMass();
@@ -337,6 +343,7 @@ public class AgarioController extends Controller {
                         }
                     }
                 }
+
                 if (player.circlesList.size() >= 2 && !test) {
                     test = true;
                     double timeBeforeRassembling = getTimeBeforeRassembling(player.circlesList.get(0));
@@ -370,7 +377,6 @@ public class AgarioController extends Controller {
                                 }System.out.println("la rassemble : "+player.getCirclesList().size());
                                 test = false;
                             }
-
                         }
                     };
                     timer1.start();
@@ -380,26 +386,37 @@ public class AgarioController extends Controller {
         timer.start();
     }
 
+    /**
+     * Calculates and returns the time before one circle should reunite with the other one
+     * @param dividedCircle
+     * @return
+     */
     public double getTimeBeforeRassembling(Circle dividedCircle) {
         return this.constTemps + dividedCircle.getRadius()/100;
     }
-    public void eatingAnimation(double oldMass, double newMass) {
-    }
 
+    /**
+     * Changes the scale of the black rectangle surrounding the player in the minimap
+     * @param miniPlayer
+     * @param rectangle
+     */
     public void updateMiniMapScale(Circle miniPlayer, Rectangle rectangle) {
+
         //as soon as you start playing, the miniPlayer and the rectangle appear
         miniPlayer.setVisible(true);
         rectangle.setVisible(true);
-    //Link the position of the rectangle with that of the miniPlayer
-      rectangle.layoutXProperty().bind(miniPlayer.centerXProperty().subtract(rectangle.getWidth() / 2));
-      rectangle.layoutYProperty().bind(miniPlayer.centerYProperty().subtract(rectangle.getHeight() / 2));
+        //Link the position of the rectangle with that of the miniPlayer
 
-      //adapt the rectangle and the player
-      rectangle.setHeight(miniPlayer.getRadius() * rectangleSizeMinimap);
-      rectangle.setWidth(miniPlayer.getRadius() * rectangleSizeMinimap);
+        rectangle.layoutXProperty().bind(miniPlayer.centerXProperty().subtract(rectangle.getWidth() / 2));
+        rectangle.layoutYProperty().bind(miniPlayer.centerYProperty().subtract(rectangle.getHeight() / 2));
+
+        rectangle.setHeight(miniPlayer.getRadius() * rectangleSizeMinimap);
+        rectangle.setWidth(miniPlayer.getRadius() * rectangleSizeMinimap);
     }
 
-
+    /**
+     * Creates an enemy object, adds it to the allEnemy ArrayList object and adds the circle to the terrain
+     */
     public void spawnEnemies() {
         Random random = new Random();
         Enemy e = new CreatorEnemy().create(random.nextDouble(0,Map.size),random.nextDouble(0,Map.size));
@@ -407,9 +424,11 @@ public class AgarioController extends Controller {
         addCircle(e.getCircle());
     }
 
+    /**
+     * Creates an pellet object, adds it to the allPellets ArrayList object and adds the circle to the terrain
+     */
     public void spawnPellets() {
         Random random = new Random();
-        //Pellet p = new Pellet(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
         Pellet p = new CreatorPellet().create(random.nextDouble(0, Map.size), random.nextDouble(0, Map.size));
         allPellets.add(p);
         addCircle(p.getCircle());

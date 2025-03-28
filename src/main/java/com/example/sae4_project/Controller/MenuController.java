@@ -17,6 +17,11 @@ import java.io.IOException;
 
 public class MenuController {
 
+    /**
+     * Sets the scene to the main agario view when the local play button is pressed.
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private Button playLocalButton;
 
@@ -43,24 +48,35 @@ public class MenuController {
         switchScene(event, "/com/example/sae4_project/agario-view.fxml");
     }
 
+    /**
+     * Sets the scene to the online menu view when the online button is pressed.
+     * @param event
+     * @throws IOException
+     */
     @FXML
     public void playOnline(ActionEvent event) throws IOException {
         AgarioApplication.setRoot("connection");
     }
 
+    /**
+     * Exits the application when the exit button is pressed.
+     * @param event
+     */
     @FXML
     public void exitGame(ActionEvent event) {
         System.exit(0);
     }
 
-    public void switchScene(ActionEvent event, String fxmlFile) throws IOException {
-
+    /**
+     * Switches the application's scene according to the fxmlFile parameter.
+     * @param event
+     * @param fxmlFile
+     * @throws IOException
+     */
+    private void switchScene(ActionEvent event, String fxmlFile) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-
         AgarioController agarioController = new AgarioController();
-
         agarioController.setPlayer(this.player);
         Scene scene = new Scene(loader.load(), 800, 600);
         stage.setScene(scene);

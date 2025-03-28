@@ -34,6 +34,11 @@ public class Coordinate  {
         return this.Y;
     }
 
+    /**
+     * Constructor for Coordinate object
+     * @param x
+     * @param y
+     */
     public Coordinate(double x, double y) {
         setX(x);
         setY(y);

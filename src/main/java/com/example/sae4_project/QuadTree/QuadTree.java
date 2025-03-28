@@ -1,10 +1,8 @@
 package com.example.sae4_project.QuadTree;
 
 import com.example.sae4_project.Entity.CreatorEnemy;
-import com.example.sae4_project.Entity.Enemy;
 import com.example.sae4_project.Entity.Entity;
 import com.example.sae4_project.Entity.Pellet;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -15,10 +13,6 @@ public class QuadTree  {
         return depth;
     }
 
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
     private int depth;
     private Boundry boundry;
     private QuadTree parent;
@@ -27,14 +21,17 @@ public class QuadTree  {
         return entities;
     }
 
-    public void setEntities(ArrayList<Entity> entities) {
-        this.entities = entities;
-    }
-
     private ArrayList<Entity> entities = new ArrayList<>();
 
     private HashMap<Orientation, QuadTree> children;
 
+    /**
+     * Constructor for the QuadTree object.
+     * Builds the QuadTree recursively
+     * @param depth
+     * @param parent
+     * @param coordinate
+     */
     public QuadTree(int depth, QuadTree parent, Coordinate coordinate) {
         this.depth = depth;
 
@@ -76,23 +73,19 @@ public class QuadTree  {
         }
     }
 
+    /**
+     *
+     * @return boundry of the QuadTree
+     */
     public Boundry getBoundry() {
         return boundry;
     }
 
-    public void setBoundry(Boundry boundry) {
-        this.boundry = boundry;
-    }
-
-    public QuadTree getParent() {
-        return parent;
-    }
-
-    public void setParent(QuadTree parent) {
-        this.parent = parent;
-    }
-
-
+    /**
+     * Check if the coordinates are located in the QuadTree
+     * @param coordinateToFind
+     * @return
+     */
     public Orientation where(Coordinate coordinateToFind){
 
         Orientation orientation = Orientation.NONE;
@@ -107,11 +100,20 @@ public class QuadTree  {
         return orientation;
     }
 
+    /**
+     * Get the QuadTree located around this QuadTree according to the specified orientation.
+     * @param orientation
+     * @return
+     */
     public QuadTree getChild(Orientation orientation){
         return this.children.get(orientation);
     }
 
 
+    /**
+     *
+     * @return toString of QuadTree
+     */
     @Override
     public String toString() {
         String texte = this.getBoundry().getCoordinate().getX() + " : " + this.getBoundry().getCoordinate().getY();

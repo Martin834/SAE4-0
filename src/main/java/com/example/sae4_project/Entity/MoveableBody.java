@@ -4,10 +4,8 @@ import com.example.sae4_project.QuadTree.Map;
 import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import javafx.animation.*;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-
 import java.util.List;
 import java.util.Random;
 
@@ -17,14 +15,25 @@ public abstract class MoveableBody extends Entity {
 
     public CircleComposite circleComposite = new CircleComposite();
     public double speed = 5;
-    public double smoothing = 80;
     public double[] velocity = new double[2];
     public ArrayList<Circle> circlesList = new ArrayList<Circle>();
 
+    /**
+     * Calls the other moveTowards method
+     * @param posXMouse
+     * @param posYMouse
+     */
     public void moveTowards(double posXMouse, double posYMouse) {
         moveTowards(posXMouse, posYMouse, this.speed);
     }
 
+    /**
+     * Checks where the cursor is on the screen and sets the velocity for x and y axis, to know how fast the
+     * MoveableBody should go
+     * @param posXMouse
+     * @param posYMouse
+     * @param maxSpeed
+     */
     public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
         velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
 
@@ -41,6 +50,10 @@ public abstract class MoveableBody extends Entity {
         velocity[1] *= adjustedSpeed;
     }
 
+    /**
+     * Moves the circles of this MoveableBody in the direction that the velocity array describes, for each circle
+     * contained in the MoveableBody.
+     */
     public void move() {
         for (Circle circle : this.circlesList) {
             if ((circle.getCenterX() + velocity[0])>=0 && (circle.getCenterX() + velocity[0])<= Map.size) {
@@ -52,6 +65,11 @@ public abstract class MoveableBody extends Entity {
         }
     }
 
+    /**
+     * Normalizes an array of doubles. Related to vector normalization.
+     * @param array
+     * @return
+     */
     public double[] normalizeDouble(double[] array) {
         double magnitude = Math.sqrt((array[0] * array[0]) + (array[1] * array[1]));
 
@@ -61,13 +79,23 @@ public abstract class MoveableBody extends Entity {
         return new double[]{0, 0};
     }
 
+    /**
+     * @param pellet
+     * @return the distance from the specified Pellet parameter.
+     */
     public double getDistanceTo(Pellet pellet) {
         double dx = this.circle.getCenterX() - pellet.getCircle().getCenterX();
         double dy = this.circle.getCenterY() - pellet.getCircle().getCenterY();
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+
+    /**
+     * @param other
+     * @return Circle if the MoveableBody is colliding with another, null otherwise.
+     */
     public Circle isColliding(MoveableBody other) {
+
         for (Circle circle1 : this.circlesList) {
             double dx = circle1.getCenterX() - other.circle.getCenterX();
             double dy = circle1.getCenterY() - other.circle.getCenterY();
@@ -79,11 +107,21 @@ public abstract class MoveableBody extends Entity {
         return null;
 
     }
+
+    /**
+     * @return the radius of this MoveableBody
+     */
     public double calculateRadius() {
         double mass = this.mass.get();
         return 10 * Math.sqrt(mass);
     }
 
+    /**
+     * Makes the MoveableBody fatter according to the size of the eaten Entity (other)
+     * Also does the animations.
+     * @param other
+     * @param circle
+     */
     public void makeFatter(Entity other, Circle circle) {
         double growthFactor = 5.0;
         double otherMass = other.getMass();
@@ -97,27 +135,25 @@ public abstract class MoveableBody extends Entity {
         int red = random.nextInt(256);
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
-        // Animation de la taille (croissance du cercle)
+
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(300), circle);
         scaleTransition.setToX(scaleFactor);
         scaleTransition.setToY(scaleFactor);
         scaleTransition.setInterpolator(Interpolator.EASE_OUT);
 
-        // Animation de la couleur (effet d'absorption)
         FillTransition fillTransition = new FillTransition(Duration.millis(150), circle);
         fillTransition.setFromValue(Color.rgb(red,green,blue));
         fillTransition.setToValue(Color.rgb(red,green,blue));
         fillTransition.setCycleCount(1);
         fillTransition.setAutoReverse(true);
 
-        // Quand l'animation est terminée, mettre à jour la masse et le rayon
         scaleTransition.setOnFinished(event -> {
             this.setMass(this.getMass() + (other.getMass() * growthFactor));
-            circle.setRadius(Math.sqrt(newMass)); // Appliquer le nouveau rayon
-            circle.setScaleX(1); // Réinitialiser l'échelle
+            circle.setRadius(Math.sqrt(newMass));
+            circle.setScaleX(1);
             circle.setScaleY(1);
         });
-        // Lancer les animations en parallèle
+
         random.setSeed(random.nextInt());
         scaleTransition.play();
         fillTransition.play();
@@ -125,6 +161,9 @@ public abstract class MoveableBody extends Entity {
         adjustCirclePositions();
     }
 
+    /**
+     * Adjusts the positions of the circles so they don't get in the way of each other.
+     */
     private void adjustCirclePositions() {
         List<Circle> circles = circleComposite.getCircles();
         for (int i = 0; i < circles.size(); i++) {
