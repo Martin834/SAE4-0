@@ -10,35 +10,21 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MenuController {
-
-    /**
-     * Sets the scene to the main agario view when the local play button is pressed.
-     * @param event
-     * @throws IOException
-     */
+public class MenuController extends Controller{
     @FXML
-    private Button playLocalButton;
+    private ImageView homeImage;
 
     @FXML
     private TextField pseudo;
 
     private Player player = new CreatorPlayer().create();
-
-
-
-    public String getSpeudo(){
-       // System.out.println("speudo " + pseudo.getText());
-
-        return  pseudo.getText();
-
-    }
-
 
     @FXML
     public void playLocal(ActionEvent event) throws IOException {
@@ -73,7 +59,7 @@ public class MenuController {
      * @param fxmlFile
      * @throws IOException
      */
-    private void switchScene(ActionEvent event, String fxmlFile) throws IOException {
+    public void switchScene(ActionEvent event, String fxmlFile) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         AgarioController agarioController = new AgarioController();
@@ -81,5 +67,11 @@ public class MenuController {
         Scene scene = new Scene(loader.load(), 800, 600);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        homeImage.setImage(new Image(String.valueOf(getClass().getResource("/com/example/sae4_project/img/welcome.png"))));
+
     }
 }
