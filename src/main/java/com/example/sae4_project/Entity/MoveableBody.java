@@ -21,7 +21,7 @@ public abstract class MoveableBody extends Entity {
     public double smoothing = 80;
     public double[] velocity = new double[2];
     public ArrayList<Circle> circlesList = new ArrayList<Circle>();
-
+    
     public void moveTowards(double posXMouse, double posYMouse) {
         moveTowards(posXMouse, posYMouse, this.speed);
     }

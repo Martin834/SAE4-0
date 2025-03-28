@@ -16,6 +16,11 @@ public class Enemy extends MoveableBody {
     private AIStrategy strategy;
     private long lastUpdateTime = 0;
 
+    /**
+     * Enemy constructor, gives them and random color, a mass of 5, and assigns them a random behavior strategy
+     * @param x
+     * @param y
+     */
     public Enemy(double x, double y) {
         super();
         this.setMass(5);
@@ -29,16 +34,33 @@ public class Enemy extends MoveableBody {
         assignRandomStrategy();
     }
 
+    /**
+     *
+     * @return this instance's circle object
+     */
     public Circle getCircle() {
         return circle;
     }
+
+    /**
+     * Sets the behavior strategy of this instance to the specified strategy
+     * @param strategy
+     */
     public void setStrategy(AIStrategy strategy) {
         this.strategy = strategy;
     }
+
+    /**
+     *
+     * @return this instance's behavior strategy
+     */
     public AIStrategy getStrategy() {
         return this.strategy;
     }
 
+    /**
+     * Assign a random behavior strategy to this instance.
+     */
     public void assignRandomStrategy() {
         Random random = new Random();
         int choice = random.nextInt(3); // 0, 1 ou 2
@@ -50,14 +72,27 @@ public class Enemy extends MoveableBody {
         }
     }
 
+    /**
+     * Calculates the radius of this instance
+     * @return
+     */
     public double calculateRadius() {
         double mass = this.mass.get();
         return 10 * Math.sqrt(mass);
     }
 
+    /**
+     * Calculates the max speed of this instance
+     * @return
+     */
     public double calculateMaxSpeed() {
         return (1 / this.massProperty().doubleValue()) * 60;
     }
+
+    /**
+     * Execute the strategy stored in this instance
+     * @param now
+     */
     public void executeStrategy(long now) {
         if (strategy != null && now - lastUpdateTime > 500_000_000L) { // 500ms entre chaque update
             strategy.execute(this);
@@ -65,6 +100,11 @@ public class Enemy extends MoveableBody {
         }
     }
 
+    /**
+     * Detects the closest pellest to the enemy
+     * @param allPellets
+     * @return
+     */
     public Pellet detectPellet(List<Pellet> allPellets) {
         Pellet closestPellet = null;
         double minDistance = Double.MAX_VALUE;

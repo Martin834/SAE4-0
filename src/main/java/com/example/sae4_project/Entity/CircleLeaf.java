@@ -9,10 +9,20 @@ public class CircleLeaf implements CircleComponent {
     private Circle circle;
     private double[] velocity = new double[2];
 
+    /**
+     * Constructor, creates a new CircleLeaf
+     * @param circle
+     */
     public CircleLeaf(Circle circle) {
         this.circle = circle;
     }
 
+    /**
+     * Checks where the cursor is on the screen and sets the velocity for x and y axis, to know how fast he should go
+     * @param posXMouse
+     * @param posYMouse
+     * @param maxSpeed
+     */
     @Override
     public void moveTowards(double posXMouse, double posYMouse, double maxSpeed) {
         velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
@@ -31,7 +41,9 @@ public class CircleLeaf implements CircleComponent {
         velocity[1] *= adjustedSpeed;
     }
 
-
+    /**
+     * Moves the circle of this CircleLeaf in the direction that the velocity array describes.
+     */
     @Override
     public void move() {
             if ((circle.getCenterX() + velocity[0])>=0 && (circle.getCenterX() + velocity[0])<= Map.size) {
@@ -42,17 +54,31 @@ public class CircleLeaf implements CircleComponent {
             }
     }
 
+    /**
+     * Calculates the new radius of the entity according to the eaten circle's radius and changes it
+     * @param entity
+     * @param circle
+     */
     @Override
     public void makeFatter(Entity entity, Circle circle) {
         double newRadius = Math.sqrt(circle.getRadius() * circle.getRadius() + entity.getMass());
         circle.setRadius(newRadius);
     }
 
+    /**
+     * Returns the List of circles
+     * @return
+     */
     @Override
     public List<Circle> getCircles() {
         return Collections.singletonList(circle);
     }
 
+    /**
+     * Normalizes an array of doubles. Related to vector normalization.
+     * @param array
+     * @return
+     */
     private double[] normalizeDouble(double[] array) {
         double magnitude = Math.sqrt((array[0] * array[0]) + (array[1] * array[1]));
         if (array[0] != 0 || array[1] != 0) {
