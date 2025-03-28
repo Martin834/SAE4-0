@@ -2,7 +2,9 @@ package com.example.sae4_project.QuadTree;
 
 import javafx.beans.property.SimpleDoubleProperty;
 
-public class Coordinate {
+
+
+public class Coordinate  {
 
     private SimpleDoubleProperty X = new SimpleDoubleProperty();
 

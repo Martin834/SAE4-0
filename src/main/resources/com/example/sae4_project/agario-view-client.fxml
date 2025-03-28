@@ -8,12 +8,10 @@
 <?import javafx.scene.layout.Pane?>
 
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane fx:id="conteneurGlobal" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sae4_project.Controller.AgarioController">
+<AnchorPane fx:id="conteneurGlobal" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
 <children>
     <Pane fx:id="terrain" layoutX="200.0" layoutY="63.0" prefHeight="200.0" prefWidth="200.0" />
     <Pane fx:id="miniMap" prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
     <VBox fx:id="leaderboard" prefHeight="300.0" prefWidth="200.0" AnchorPane.topAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-    <Label fx:id="massLabel" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0"/>
-
 </children>
 </AnchorPane>

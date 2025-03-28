@@ -1,6 +1,8 @@
 package com.example.sae4_project.QuadTree;
 
-public class Boundry {
+
+
+public class Boundry   {
 
     private QuadTree quadTree;
 

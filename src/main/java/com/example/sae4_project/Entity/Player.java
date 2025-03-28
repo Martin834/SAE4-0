@@ -46,6 +46,7 @@ public class Player extends MoveableBody {
         return circleComposite.getCircles();
     }
 
+
     public double calculateRadius() {
         return 10 * Math.sqrt(this.getMass());
     }

@@ -7,7 +7,7 @@ import com.example.sae4_project.Entity.Pellet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Map {
+public class Map  {
 
     public QuadTree getQuadTree() {
         return quadTree;

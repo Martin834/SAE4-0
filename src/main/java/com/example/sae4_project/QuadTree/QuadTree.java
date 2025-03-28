@@ -4,13 +4,12 @@ import com.example.sae4_project.Entity.CreatorEnemy;
 import com.example.sae4_project.Entity.Enemy;
 import com.example.sae4_project.Entity.Entity;
 import com.example.sae4_project.Entity.Pellet;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class QuadTree {
+public class QuadTree  {
 
     public int getDepth() {
         return depth;

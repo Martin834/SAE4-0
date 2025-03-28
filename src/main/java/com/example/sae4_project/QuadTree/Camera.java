@@ -2,7 +2,9 @@ package com.example.sae4_project.QuadTree;
 
 import javafx.beans.property.SimpleDoubleProperty;
 
-public class Camera extends Boundry{
+
+
+public class Camera extends Boundry  {
 
     private SimpleDoubleProperty zoom = new SimpleDoubleProperty();
 

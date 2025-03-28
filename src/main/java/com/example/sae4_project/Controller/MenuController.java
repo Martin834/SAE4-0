@@ -1,5 +1,6 @@
 package com.example.sae4_project.Controller;
 
+import com.example.sae4_project.Application.AgarioApplication;
 import com.example.sae4_project.Entity.CreatorPlayer;
 import com.example.sae4_project.Entity.Player;
 import javafx.event.ActionEvent;
@@ -44,8 +45,7 @@ public class MenuController {
 
     @FXML
     public void playOnline(ActionEvent event) throws IOException {
-        // TODO: Ajouter la gestion de la connexion au serveur
-        System.out.println("Mode en ligne non encore implémenté.");
+        AgarioApplication.setRoot("connection");
     }
 
     @FXML

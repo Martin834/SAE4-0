@@ -1,5 +1,7 @@
 package com.example.sae4_project.QuadTree;
 
+
+
 public enum Orientation {
     NORTH_EAST,
     NORTH_WEST,

@@ -6,7 +6,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
-public class Pellet extends Entity {
+public class Pellet extends Entity  {
     private int posX;
     private int posY;
     public Pellet(double x, double y) {
@@ -29,8 +29,6 @@ public class Pellet extends Entity {
         return circle;
     }
 
-    public int getIdentifier() {
-        return this.identifier;
-    }
+
 
 }

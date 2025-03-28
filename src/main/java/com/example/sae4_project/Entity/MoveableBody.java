@@ -11,6 +11,8 @@ import javafx.util.Duration;
 import java.util.List;
 import java.util.Random;
 
+
+
 public abstract class MoveableBody extends Entity {
 
     public CircleComposite circleComposite = new CircleComposite();
