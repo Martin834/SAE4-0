@@ -22,7 +22,7 @@ public abstract class MoveableBody extends Entity {
         velocity = new double[]{posXMouse - this.circle.getCenterX(), posYMouse - this.circle.getCenterY()};
 
         double euclidianDistance = Math.sqrt((velocity[0] * velocity[0]) + (velocity[1] * velocity[1]));
-        double adjustedSpeed = Math.min(euclidianDistance / 100, this.calculateMaxSpeed());
+        double adjustedSpeed = Math.min(euclidianDistance / 100, maxSpeed);
 
 
         if (euclidianDistance > 4) {
@@ -35,7 +35,7 @@ public abstract class MoveableBody extends Entity {
         velocity[1] *= adjustedSpeed;
     }
     public double calculateMaxSpeed() {
-        return (1 / this.massProperty().doubleValue()) * 700;
+        return (1 / this.massProperty().doubleValue()) * 400;
     }
 
 

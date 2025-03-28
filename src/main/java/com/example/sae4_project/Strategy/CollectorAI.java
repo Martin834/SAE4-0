@@ -41,7 +41,7 @@ public class CollectorAI implements AIStrategy{
             enemy.moveTowards(closestPellet.getCircle().getCenterX(), closestPellet.getCircle().getCenterY(), enemy.calculateMaxSpeed()*1.5);
         }
         else if (closestSpecialPellet != null/* && minDistance2 < minDistance1*/){
-            enemy.moveTowards(closestSpecialPellet.getCircle().getCenterX(), closestSpecialPellet.getCircle().getCenterY(), enemy.calculateMaxSpeed()*1.5);
+            enemy.moveTowards(closestSpecialPellet.getCircle().getCenterX(), closestSpecialPellet.getCircle().getCenterY(), enemy.calculateMaxSpeed()*4);
         }
     }
 
